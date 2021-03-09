@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-03-08 14:22:06
  * @LastEditors: MADAO
- * @LastEditTime: 2021-03-08 16:19:38
+ * @LastEditTime: 2021-03-09 15:28:48
  */
 import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import { Comment } from "./Comment";
@@ -21,10 +21,10 @@ export class Blog {
   content: string;
 
   @Column('timestamp')
-  createdAt: string;
+  createdAt: Date;
 
   @Column('timestamp')
-  updatedAt: string;
+  updatedAt: Date;
 
   @ManyToOne(() => User, user => user.blogs)
   author: User;

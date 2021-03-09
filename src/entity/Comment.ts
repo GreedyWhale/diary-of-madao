@@ -18,10 +18,10 @@ export class Comment {
   content: string;
 
   @Column('timestamp')
-  createdAt: string;
+  createdAt: Date;
 
   @Column('timestamp')
-  updatedAt: string;
+  updatedAt: Date;
 
   @ManyToOne(() => User, user => user.comments)
   user: User;

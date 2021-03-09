@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-03-08 14:15:42
  * @LastEditors: MADAO
- * @LastEditTime: 2021-03-08 16:20:09
+ * @LastEditTime: 2021-03-09 15:29:24
  */
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import { Blog } from './Blog'
@@ -21,10 +21,10 @@ export class User {
   passwordDigest: string;
 
   @Column('timestamp')
-  createdAt: string;
+  createdAt: Date;
 
   @Column('timestamp')
-  updatedAt: string;
+  updatedAt: Date;
 
   @OneToMany(() => Blog, Blog => Blog.author)
   blogs: Blog[];
