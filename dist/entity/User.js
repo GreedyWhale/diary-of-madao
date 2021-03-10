@@ -23,13 +23,13 @@ var _Blog = require("./Blog");
 
 var _Comment = require("./Comment");
 
-var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _temp;
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _temp;
 
 var User = (_dec = (0, _typeorm.Entity)('users'), _dec2 = (0, _typeorm.PrimaryGeneratedColumn)('increment'), _dec3 = (0, _typeorm.Column)('varchar'), _dec4 = (0, _typeorm.Column)('varchar'), _dec5 = (0, _typeorm.Column)('timestamp'), _dec6 = (0, _typeorm.Column)('timestamp'), _dec7 = (0, _typeorm.OneToMany)(function () {
   return _Blog.Blog;
-}, function (Blog) {
-  return Blog.author;
-}), _dec8 = (0, _typeorm.OneToMany)(function () {
+}, function (blog) {
+  return blog.author;
+}), _dec8 = (0, _typeorm.JoinColumn)(), _dec9 = (0, _typeorm.OneToMany)(function () {
   return _Comment.Comment;
 }, function (comment) {
   return comment.user;
@@ -68,12 +68,12 @@ var User = (_dec = (0, _typeorm.Entity)('users'), _dec2 = (0, _typeorm.PrimaryGe
   enumerable: true,
   writable: true,
   initializer: null
-}), _descriptor6 = (0, _applyDecoratedDescriptor2["default"])(_class2.prototype, "blogs", [_dec7], {
+}), _descriptor6 = (0, _applyDecoratedDescriptor2["default"])(_class2.prototype, "blogs", [_dec7, _dec8], {
   configurable: true,
   enumerable: true,
   writable: true,
   initializer: null
-}), _descriptor7 = (0, _applyDecoratedDescriptor2["default"])(_class2.prototype, "comments", [_dec8], {
+}), _descriptor7 = (0, _applyDecoratedDescriptor2["default"])(_class2.prototype, "comments", [_dec9], {
   configurable: true,
   enumerable: true,
   writable: true,

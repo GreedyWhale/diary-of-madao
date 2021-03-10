@@ -3,11 +3,14 @@
  * @Author: MADAO
  * @Date: 2021-03-08 14:22:06
  * @LastEditors: MADAO
- * @LastEditTime: 2021-03-09 15:28:48
+ * @LastEditTime: 2021-03-10 15:08:45
  */
-import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import { Comment } from "./Comment";
-import { User } from "./User";
+import {
+  Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
+import { Comment } from './Comment';
+import { User } from './User';
 
 @Entity('blogs')
 export class Blog {
@@ -26,13 +29,17 @@ export class Blog {
   @Column('timestamp')
   updatedAt: Date;
 
-  @ManyToOne(() => User, user => user.blogs)
+  @Column('integer')
+  authorId: number;
+
+  @ManyToOne(() => User, (user) => user.blogs, { nullable: true })
+  @JoinColumn({ name: 'authorId', referencedColumnName: 'id' })
   author: User;
 
-  @OneToMany(() => Comment, comment => comment.blog)
+  @OneToMany(() => Comment, (comment) => comment.blog)
   comments: Comment[];
 
-  constructor(data: Partial<Blog>){
-    data && Object.assign(this, data)
+  constructor(data: Partial<Blog>) {
+    data && Object.assign(this, data);
   }
 }

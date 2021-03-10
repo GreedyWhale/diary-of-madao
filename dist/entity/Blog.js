@@ -23,13 +23,18 @@ var _Comment = require("./Comment");
 
 var _User = require("./User");
 
-var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _temp;
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _temp;
 
-var Blog = (_dec = (0, _typeorm.Entity)('blogs'), _dec2 = (0, _typeorm.PrimaryGeneratedColumn)('increment'), _dec3 = (0, _typeorm.Column)('varchar'), _dec4 = (0, _typeorm.Column)('text'), _dec5 = (0, _typeorm.Column)('timestamp'), _dec6 = (0, _typeorm.Column)('timestamp'), _dec7 = (0, _typeorm.ManyToOne)(function () {
+var Blog = (_dec = (0, _typeorm.Entity)('blogs'), _dec2 = (0, _typeorm.PrimaryGeneratedColumn)('increment'), _dec3 = (0, _typeorm.Column)('varchar'), _dec4 = (0, _typeorm.Column)('text'), _dec5 = (0, _typeorm.Column)('timestamp'), _dec6 = (0, _typeorm.Column)('timestamp'), _dec7 = (0, _typeorm.Column)('integer'), _dec8 = (0, _typeorm.ManyToOne)(function () {
   return _User.User;
 }, function (user) {
   return user.blogs;
-}), _dec8 = (0, _typeorm.OneToMany)(function () {
+}, {
+  nullable: true
+}), _dec9 = (0, _typeorm.JoinColumn)({
+  name: 'authorId',
+  referencedColumnName: 'id'
+}), _dec10 = (0, _typeorm.OneToMany)(function () {
   return _Comment.Comment;
 }, function (comment) {
   return comment.blog;
@@ -40,8 +45,9 @@ var Blog = (_dec = (0, _typeorm.Entity)('blogs'), _dec2 = (0, _typeorm.PrimaryGe
   (0, _initializerDefineProperty2["default"])(this, "content", _descriptor3, this);
   (0, _initializerDefineProperty2["default"])(this, "createdAt", _descriptor4, this);
   (0, _initializerDefineProperty2["default"])(this, "updatedAt", _descriptor5, this);
-  (0, _initializerDefineProperty2["default"])(this, "author", _descriptor6, this);
-  (0, _initializerDefineProperty2["default"])(this, "comments", _descriptor7, this);
+  (0, _initializerDefineProperty2["default"])(this, "authorId", _descriptor6, this);
+  (0, _initializerDefineProperty2["default"])(this, "author", _descriptor7, this);
+  (0, _initializerDefineProperty2["default"])(this, "comments", _descriptor8, this);
   data && Object.assign(this, data);
 }, _temp), (_descriptor = (0, _applyDecoratedDescriptor2["default"])(_class2.prototype, "id", [_dec2], {
   configurable: true,
@@ -68,12 +74,17 @@ var Blog = (_dec = (0, _typeorm.Entity)('blogs'), _dec2 = (0, _typeorm.PrimaryGe
   enumerable: true,
   writable: true,
   initializer: null
-}), _descriptor6 = (0, _applyDecoratedDescriptor2["default"])(_class2.prototype, "author", [_dec7], {
+}), _descriptor6 = (0, _applyDecoratedDescriptor2["default"])(_class2.prototype, "authorId", [_dec7], {
   configurable: true,
   enumerable: true,
   writable: true,
   initializer: null
-}), _descriptor7 = (0, _applyDecoratedDescriptor2["default"])(_class2.prototype, "comments", [_dec8], {
+}), _descriptor7 = (0, _applyDecoratedDescriptor2["default"])(_class2.prototype, "author", [_dec8, _dec9], {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  initializer: null
+}), _descriptor8 = (0, _applyDecoratedDescriptor2["default"])(_class2.prototype, "comments", [_dec10], {
   configurable: true,
   enumerable: true,
   writable: true,
