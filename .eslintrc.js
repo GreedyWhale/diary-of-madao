@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-03-10 10:14:45
  * @LastEditors: MADAO
- * @LastEditTime: 2021-03-10 20:17:40
+ * @LastEditTime: 2021-03-11 17:00:28
  */
 module.exports = {
   env: {
@@ -45,6 +45,8 @@ module.exports = {
     'no-unused-expressions': 'off',
     'react/prop-types': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'max-len': ['error', { code: 200 }],
+    'class-methods-use-this': 'off',
   },
   settings: {
     'import/resolver': {

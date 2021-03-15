@@ -1,5 +1,5 @@
-import getConnection from 'utils/getConnection';
-import { Blog } from 'src/entity/Blog';
+import getConnection from '~/utils/getConnection';
+import { Blog } from '~/src/entity/Blog';
 
 const getBlogDetails = async (id: number) => {
   const connection = await getConnection();
