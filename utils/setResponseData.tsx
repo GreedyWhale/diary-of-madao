@@ -18,10 +18,11 @@ export default function setResponseData(
   customizableCode?: number,
   message?: string,
 ) {
-  this.status(httpStatusCode);
-  this.json({
-    code: customizableCode || httpStatusCode,
-    message: message || (customizableCode ? customizableMessage[customizableCode] : errorMap[httpStatusCode]),
-    data,
-  });
+  this
+    .status(httpStatusCode)
+    .json({
+      code: customizableCode || httpStatusCode,
+      message: message || (customizableCode ? customizableMessage[customizableCode] : errorMap[httpStatusCode]),
+      data,
+    });
 }

@@ -20,6 +20,7 @@
     "crypto-js": "^4.0.0",
     "lodash": "^4.17.21",
     "next": "10.0.7",
+    "next-iron-session": "^4.1.12",
     "pg": "^8.5.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",

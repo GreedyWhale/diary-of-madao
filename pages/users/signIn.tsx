@@ -1,6 +1,7 @@
-import axios, { AxiosError } from 'axios';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage, InferGetServerSidePropsType } from 'next';
 import React, { useCallback, useState } from 'react';
+import axios, { AxiosError } from 'axios';
+import withSession from '~/utils/withSession';
 
 const TheInput: React.FC<{
   inputConfigs: {
@@ -23,10 +24,9 @@ const TheInput: React.FC<{
   );
 };
 
-const SignUp: NextPage = () => {
+const SignIp: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [signUpResults, setSignUpResults] = useState('');
 
   const inputList = [
     {
@@ -47,17 +47,19 @@ const SignUp: NextPage = () => {
 
   const onSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    axios.post('/api/v1/users', { username, password }).then((response) => {
-      setSignUpResults(response.data.message);
-    }, (error: AxiosError) => {
-      setSignUpResults(error.response ? error.response.data.message : error.message);
-    });
+    axios.post('/api/v1/sessions', { username, password })
+      .then((res) => {
+        console.log(res);
+      }, (error: AxiosError) => {
+        console.log(error);
+      });
   }, [username, password]);
 
+  const { userId } = props;
   return (
     <div>
-      <h1>注册</h1>
-      <p>{signUpResults}</p>
+      <p>{userId}</p>
+      <h1>登录</h1>
       <form onSubmit={onSubmit}>
         {inputList.map((config) => (
           <TheInput {...config} key={config.id} />
@@ -68,4 +70,15 @@ const SignUp: NextPage = () => {
   );
 };
 
-export default SignUp;
+export const getServerSideProps: GetServerSideProps<{
+  userId: number
+}> = withSession(async (context) => {
+  const userId = context.req.session.get('currentUser') || null;
+  return {
+    props: {
+      userId,
+    },
+  };
+});
+
+export default SignIp;

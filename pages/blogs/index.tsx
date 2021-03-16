@@ -1,7 +1,7 @@
 import React from 'react';
 import type { GetServerSideProps, NextPage, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import { Blog } from 'src/entity/Blog';
+import { Blog } from '~/model/entity/Blog';
 import useBlogs from 'utils/hooks/useBlog';
 
 const BlogList: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (props) => {
