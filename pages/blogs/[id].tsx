@@ -1,6 +1,6 @@
 import React from 'react';
 import type { NextPage, GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import useBlogs from 'utils/hooks/useBlog';
+import useBlogs from '~/utils/hooks/useBlog';
 
 const BlogDetails:NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (props) => {
   const { blog } = props;
