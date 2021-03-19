@@ -3,12 +3,13 @@
  * @Author: MADAO
  * @Date: 2021-03-08 14:22:06
  * @LastEditors: MADAO
- * @LastEditTime: 2021-03-10 15:08:45
+ * @LastEditTime: 2021-03-19 22:27:00
  */
 import {
   Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,
   JoinColumn,
 } from 'typeorm';
+import { omit } from 'lodash';
 import { Comment } from './Comment';
 import { User } from './User';
 
@@ -38,6 +39,10 @@ export class Blog {
 
   @OneToMany(() => Comment, (comment) => comment.blog)
   comments: Comment[];
+
+  toJSON() {
+    return omit(this, 'author');
+  }
 
   constructor(data: Partial<Blog>) {
     data && Object.assign(this, data);
