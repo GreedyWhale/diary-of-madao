@@ -3,10 +3,9 @@
  * @Author: MADAO
  * @Date: 2021-03-12 10:29:46
  * @LastEditors: MADAO
- * @LastEditTime: 2021-03-12 12:30:11
+ * @LastEditTime: 2021-04-08 15:09:13
  */
 const nodeExternals = require('webpack-node-externals');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { join } = require('path');
 const entries = require('./tools/entries');
@@ -18,6 +17,9 @@ module.exports = {
   output: {
     path: join(__dirname, 'dist'),
     filename: '[name].js',
+    library: {
+      type: 'umd',
+    },
   },
   module: {
     rules: [
@@ -35,7 +37,6 @@ module.exports = {
     },
   },
   plugins: [
-    new ForkTsCheckerWebpackPlugin(),
     new CleanWebpackPlugin(),
   ],
   externals: [
@@ -43,5 +44,9 @@ module.exports = {
   ],
   externalsPresets: {
     node: true,
+  },
+  optimization: {
+    usedExports: false,
+    minimize: false,
   },
 };

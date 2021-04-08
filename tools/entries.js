@@ -3,10 +3,10 @@
  * @Author: MADAO
  * @Date: 2021-03-12 10:33:41
  * @LastEditors: MADAO
- * @LastEditTime: 2021-03-16 11:45:55
+ * @LastEditTime: 2021-04-08 14:08:46
  */
 const fs = require('fs');
-const { join } = require('path');
+const { join, extname } = require('path');
 
 const entries = {};
 
@@ -17,7 +17,7 @@ const getEntries = (path, prefix = '') => {
   files.forEach((file) => {
     const currentPath = join(path, file.name);
     file.isFile()
-      ? entries[join(prefix, file.name)] = currentPath
+      ? entries[join(prefix, file.name.replace(extname(file.name), ''))] = currentPath
       : getEntries(currentPath, join(prefix, file.name));
   });
 };
