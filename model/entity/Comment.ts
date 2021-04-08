@@ -1,45 +1,38 @@
 /*
- * @Description: comments 表关联实体
+ * @Description: comments 实体
  * @Author: MADAO
- * @Date: 2021-03-08 14:42:14
+ * @Date: 2021-04-08 21:13:32
  * @LastEditors: MADAO
- * @LastEditTime: 2021-03-10 15:08:37
+ * @LastEditTime: 2021-04-08 22:22:12
  */
 import {
-  Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn,
+  Column, Entity, JoinColumn, ManyToOne,
 } from 'typeorm';
-import { Blog } from './Blog';
+import { Base } from './Base';
 import { User } from './User';
+import { Post } from './Post';
 
 @Entity('comments')
-export class Comment {
-  @PrimaryGeneratedColumn('increment')
-  id: number;
-
+export class Comment extends Base {
   @Column('text')
   content: string;
-
-  @Column('timestamp')
-  createdAt: Date;
-
-  @Column('timestamp')
-  updatedAt: Date;
 
   @Column('integer')
   userId: number;
 
   @Column('integer')
-  blogId: number;
+  postId: number;
 
   @ManyToOne(() => User, (user) => user.comments)
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
 
-  @ManyToOne(() => Blog, (blog) => blog.comments)
-  @JoinColumn({ name: 'blogId', referencedColumnName: 'id' })
-  blog: Blog;
+  @ManyToOne(() => Post, (post) => post.comments)
+  @JoinColumn({ name: 'postId', referencedColumnName: 'id' })
+  post: Post;
 
   constructor(data: Partial<Comment>) {
+    super();
     data && Object.assign(this, data);
   }
 }
