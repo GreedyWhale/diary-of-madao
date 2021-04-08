@@ -1,0 +1,21 @@
+@mixin customFonts($name, $path) {
+  $newPath: '#{$path}/#{$name}';
+  @font-face {
+    font-family: $name;
+    src: url('#{$newPath}.ttf');
+    src:
+      url('#{$newPath}.eot?#font-spider') format('embedded-opentype'),
+      url('#{$newPath}.woff') format('woff'),
+      url('#{$newPath}.ttf') format('truetype'),
+      url('#{$newPath}.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
+}
+
+@mixin ellipsis($width) {
+  width: $width;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

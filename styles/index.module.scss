@@ -1,0 +1,52 @@
+@import '~/assets/scss/var.scss';
+@import '~/assets/scss/tools';
+
+@include customFonts('Comfortaa-Bold', '~/assets/fonts/Comfortaa-Bold');
+@include customFonts('RoguelandSlabBold', '~/assets/fonts/RoguelandSlabBold');
+
+.container {
+  height: 100vh;
+  background: linear-gradient(to bottom right, #7c76b5, #dc578f);
+  overflow: hidden;
+  padding: 80px 0 40px;
+  .body {
+    margin: 0 auto;
+    height: 100%;
+    background: #41325f;
+    box-shadow: 2px 3px 6px 0px #000;
+    display: flex;
+    flex-direction: column;
+    width: 1200px;
+  }
+  .content {
+    overflow-y: auto;
+    flex: 1 0 60%;
+    margin: 0 80px 0 150px;
+    color: $textColor;
+    > h1 {
+      margin-bottom: 1em;
+      font-family: 'Comfortaa-Bold';
+    }
+  }
+  .list {
+    > li {
+      display: flex;
+      align-items: baseline;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    span {
+      font-size: 16px;
+      color: $activeColor;
+      font-family: 'RoguelandSlabBold';
+      margin-right: 15px;
+      text-align: right;
+    }
+    h2 {
+      font-size: 20px;
+      max-width: 600px;
+      word-break: break-all;
+      font-weight: 400;
+    }
+  }
+}

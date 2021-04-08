@@ -1,0 +1,21 @@
+@import '~/assets/scss/var.scss';
+.container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 40px 40px 0;
+  margin-bottom: 150px;
+  color: $textColor;
+  > ul {
+    display: flex;
+    align-items: center;
+    > li {
+      padding: 0 1em;
+      cursor: pointer;
+      &:hover,
+      &.active {
+        color: $activeColor;
+      }
+    }
+  }
+}
