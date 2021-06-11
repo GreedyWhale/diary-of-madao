@@ -1,3 +1,29 @@
+:root {
+  --background-color: rgb(34, 33, 41);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --main-width: 1200px;
+  --font-size: 16px;
+  --default-theme-color: #f05454;
+}
+
 * {
   box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+body {
+  font-family: 'Fira Code', Monaco, Consolas, 'Ubuntu Mono', monospace;
+  background: var(--background-color);
+  color: #fff;
+  font-feature-settings: "liga","tnum","case","calt","zero","ss01","locl","calt";
+  font-variant-ligatures: contextual;
+  -webkit-text-size-adjust: 100%;
+  line-height: 1.54;
+  letter-spacing: 0.2em;
+  font-size: var(--font-size);
+  min-height: 100vh;
+  margin: 0;
 }
