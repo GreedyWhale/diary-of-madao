@@ -561,7 +561,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
  * @Author: MADAO
  * @Date: 2021-04-08 16:27:56
  * @LastEditors: MADAO
- * @LastEditTime: 2021-04-08 22:23:49
+ * @LastEditTime: 2021-04-08 22:28:02
  */
 
 
@@ -573,24 +573,24 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 (0,external_typeorm_.createConnection)(_objectSpread(_objectSpread({}, (ormconfig_default())), {}, {
   entities: [User.User, Post.Post, Comment.Comment]
 })).then(async connection => {
-  // const user = new User({
-  //   username: 'MADAO1',
-  //   passwordDigest: Math.random().toString(16),
-  // });
-  // await connection.manager.save(user);
-  // const post = new Post({
-  //   title: '1111',
-  //   content: '22222222',
-  //   classified: '测试',
-  //   author: user,
-  // });
-  // await connection.manager.save(post);
-  // const comment = new Comment({
-  //   content: '这是一条评论',
-  //   user,
-  //   post,
-  // });
-  // await connection.manager.save(comment);
+  const user = new User.User({
+    username: 'MADAO1',
+    passwordDigest: Math.random().toString(16)
+  });
+  await connection.manager.save(user);
+  const post = new Post.Post({
+    title: '1111',
+    content: '22222222',
+    classified: '测试',
+    author: user
+  });
+  await connection.manager.save(post);
+  const comment = new Comment.Comment({
+    content: '这是一条评论',
+    user,
+    post
+  });
+  await connection.manager.save(comment);
   const users = await connection.manager.find('users', {
     relations: ['posts']
   });
