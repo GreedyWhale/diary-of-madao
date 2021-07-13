@@ -15,11 +15,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 body {
-  font-family: 'Fira Code', Monaco, Consolas, 'Ubuntu Mono', monospace;
+  font-feature-settings: "liga" 0;
   background: var(--background-color);
   color: #fff;
-  font-feature-settings: "liga","tnum","case","calt","zero","ss01","locl","calt";
-  font-variant-ligatures: contextual;
   -webkit-text-size-adjust: 100%;
   line-height: 1.54;
   letter-spacing: 0.2em;

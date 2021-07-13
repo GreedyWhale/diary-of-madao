@@ -2,3 +2,12 @@
   display: flex;
   align-items: center;
 }
+
+@mixin zIndex($level) {
+  $levelMap: (
+    wallpaper: -1,
+    overlay: 1,
+  );
+
+  z-index: map-get($map: $levelMap, $key: $level);
+}

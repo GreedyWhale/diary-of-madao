@@ -2,33 +2,21 @@
 @import '~/styles/mixin.scss';
 
 .layout {
-  margin: 0 auto;
-  max-width: var(--main-width);
-  padding: 40px;
-  .header {
-    @include flex-center;
-    align-items: stretch;
-  }
-  .title {
-    font-size: var(--font-size);
-    font-weight: normal;
-    color: #000;
-    padding: 5px 10px;
-    background: var(--default-theme-color);
-    > a {
-      text-decoration: none;
-      &:visited {
-        color: inherit;
-      }
-    }
-  }
-  .dividingLine {
-    flex: 1;
-    background: repeating-linear-gradient(90deg, var(--default-theme-color),var(--default-theme-color) 2px,transparent 0,transparent 10px);;
-  }
-  @each $key, $value in $colors {
-    &[data-theme=#{"" + $key}] {
-      color: $value;
+  background: #040d21;
+  height: 100vh;
+  overflow: hidden;
+  .welcome {
+    padding: 10px 30px;
+    background: #0c162d;
+    border: 1px solid #202637;
+    width: 50%;
+    min-height: 70px;
+    margin: 30px auto;
+    border-radius: 8px;
+    > p {
+      font-size: 14px;
+      color: #627597;
+      margin: 0;
     }
   }
 }
