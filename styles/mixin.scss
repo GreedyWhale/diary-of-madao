@@ -3,6 +3,23 @@
   align-items: center;
 }
 
+@mixin flex-start {
+  display: flex;
+  align-items: flex-start;
+}
+
+@mixin flex-center-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 @mixin zIndex($level) {
   $levelMap: (
     wallpaper: -1,
