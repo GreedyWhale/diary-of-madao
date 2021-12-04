@@ -1,0 +1,34 @@
+@import '~/assets/styles/mixin.scss';
+
+.pagination {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  padding: 0;
+  max-width: 350px;
+  margin: 0 auto;
+  > li {
+    padding: 0 10px 4px;
+    position: relative;
+    cursor: pointer;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--theme-color);
+      display: none;
+    }
+    &[data-active="true"] {
+      color: var(--theme-color);
+      font-weight: 600;
+      &::after {
+        display: block;
+      }
+    }
+  }
+}

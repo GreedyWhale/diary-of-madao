@@ -1,0 +1,30 @@
+.postViewer,
+.bytemd-preview {
+  .markdown-body {
+    background: var(--background-color);
+    h1, h2, h3, h4, h5 {
+      color: #d6332d;
+    }
+    h1, h2 {
+      border-bottom: 1px solid #d6332d8c;
+    }
+    strong {
+      color: #e93d99;
+    }
+    blockquote {
+      background: #202627;
+      color: #5de0fb;
+      padding: 1em;
+      border-left: 1px solid #32c1de;
+    }
+    em {
+      color: #d08131;
+    }
+    code {
+      color: #8e90ed;
+    }
+    pre > code {
+      color: initial;
+    }
+  }
+}

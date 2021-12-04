@@ -1,0 +1,28 @@
+@import '~/assets/styles/mixin.scss';
+
+.header {
+  padding: 20px 0;
+  > nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .logoIcon {
+      transform: translateX(-10px);
+    }
+    .menu {
+      display: flex;
+      align-items: center;
+      > a {
+        margin-left: 20px;
+        color: var(--theme-color);
+        font-weight: 500;
+      }
+      .username {
+        max-width: 150px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+  }
+}

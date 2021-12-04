@@ -1,0 +1,23 @@
+@import "./mixin.scss";
+
+.footer {
+  margin-top: 4em;
+  border-top: 1px solid var(--border-color);
+  height: 150px;
+  padding-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  a {
+    font-size: 12px;
+  }
+  .record {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    > p {
+      margin-left: 1em;
+    }
+  }
+}

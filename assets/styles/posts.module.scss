@@ -1,0 +1,15 @@
+@import '~/assets/styles/mixin';
+
+.content {
+  padding-top: 20px;
+  color: #a2abb8;
+}
+
+.editor {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  > button:first-child {
+    margin-right: 10px;
+  }
+}

@@ -1,0 +1,64 @@
+@import '~/assets/styles/mixin.scss';
+
+.container {
+  max-width: 600px;
+  background: #0c162d;
+  border: 1px solid #202637;
+  border-radius: 8px;
+  padding: 30px 20px;
+  margin: 40px auto 0;
+  .formItem {
+    margin-bottom: 24px;
+    > label {
+      color: #00cfc8;
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .inputWrap {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #627099;
+      padding-bottom: 10px;
+      .inputPrefix {
+        margin-right: 10px;
+        color: #ea4aaa;
+      }
+      > input {
+        border: none;
+        outline: none;
+        background: transparent;
+        color: #fff;
+        flex: 1;
+      }
+      .eyesIcon {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        background: url('~/assets/images/eyes_close.png') no-repeat center / 100%;
+        &[data-visible="true"] {
+          background: url('~/assets/images/eyes_open.png') no-repeat center / 100%;
+        }
+      }
+    }
+  }
+  .errorMessage {
+    font-size: 14px;
+    color: #cb2431;
+    margin-bottom: 20px;
+    font-weight: 600;
+    opacity: 0;
+    > span {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    &[data-visible="true"] {
+      opacity: 1;
+    }
+  }
+  .tips {
+    margin: 5px 0 15px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+}

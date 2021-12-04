@@ -1,0 +1,11 @@
+@mixin zIndex($level) {
+  $levelMap: (
+    wallpaper: -1,
+    overlay: 1,
+    notification: 2,
+    loading: 3,
+    breakingThroughTheSky: 9999
+  );
+
+  z-index: map-get($map: $levelMap, $key: $level);
+}

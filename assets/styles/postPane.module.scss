@@ -1,0 +1,23 @@
+@import '~/assets/styles/mixin';
+
+.container {
+  margin-top: 20px;
+  padding: 20px 0;
+  border-top: 1px solid var(--border-color);
+  font-weight: 300;
+  color: #fff;
+  .labels {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    > li {
+      margin-right: 10px;
+      color: rgba(255,255,255,0.5);
+    }
+  }
+  .introduction {
+    margin-bottom: 30px;
+  }
+}

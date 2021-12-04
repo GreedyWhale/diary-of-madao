@@ -1,0 +1,66 @@
+@import '~/assets/styles/mixin.scss';
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.container {
+  width: 100%;
+  margin-bottom: 20px;
+  > div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .pathInfo, .command {
+    > span {
+      &:not(:first-child) {
+        padding: 0 10px;
+      }
+      &:first-of-type {
+        padding-right: 10px;
+      }
+    }
+  }
+  .pathInfo {
+    margin-bottom: 8px;
+    > span {
+      color: #a8aaad;
+      &:nth-of-type(1) {
+        color: #7e53fb;
+      }
+      &:nth-last-of-type(1) {
+        padding-left: 0px;
+      }
+    }
+    > p {
+      &:nth-of-type(1) {
+        color: #00cfc8;
+      }
+      &:nth-of-type(2) {
+        color: #ea4aaa;
+      }
+      &:nth-of-type(3) {
+        color: #f5fc96;
+        padding-right: 10px;
+      }
+    }
+  }
+  .command {
+    > span {
+      color: #fd7a76;
+    }
+    > p {
+      color: #2ffd31;
+    }
+    .inputSymbol {
+      margin-left: 10px;
+      color: white;
+      animation: fade 800ms infinite forwards;
+    }
+  }
+}

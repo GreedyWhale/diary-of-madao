@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             Int      @id              @default(autoincrement())
+  username       String   @db.VarChar(255) @unique
+  passwordDigest String   @db.VarChar(255)
+  access         String[] @db.VarChar(255)
+  posts          Post[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Post {
+  id           Int             @id              @default(autoincrement())
+  title        String          @db.VarChar(512)
+  content      String          @db.Text
+  introduction String          @db.Text
+  author       User            @relation(fields: [authorId], references: [id])
+  authorId     Int
+  labels       LabelsOnPosts[]
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+model Label {
+  id    Int             @id              @default(autoincrement())
+  name  String          @db.VarChar(256) @unique
+  posts LabelsOnPosts[]
+}
+
+model LabelsOnPosts {
+  post       Post      @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  postId     Int
+  label      Label     @relation(fields: [labelId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  labelId    Int
+  assignedAt DateTime  @default(now())
+  assignedBy String    @db.VarChar(255)
+
+  @@id([postId, labelId])
+}

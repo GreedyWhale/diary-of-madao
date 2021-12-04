@@ -1,0 +1,25 @@
+.container {
+  margin-bottom: 20px;
+  > h2 {
+    margin-top: 10px;
+    font-size: 22px;
+    padding-bottom: 15px;
+    position: relative;
+    color: var(--theme-color);
+    margin-bottom: 15px;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+      width: 100%;
+    }
+    &, &::after {
+      border-bottom: 3px dotted var(--theme-color);
+    }
+  }
+  .meta {
+    font-weight: lighter;
+    color: var(--theme-color);
+  }
+}
