@@ -8,18 +8,16 @@ interface PostTitleProps {
   metaInfo: string;
 }
 
-const PostTitle = ({ title, metaInfo }: PostTitleProps) => {
-  return (
-    <div className={styles.container}>
-      <h2>{title}</h2>
-      <div className={styles.meta}>{metaInfo}</div>
-    </div>
-  );
-};
+const PostTitle = ({ title, metaInfo }: PostTitleProps) => (
+  <div className={styles.container}>
+    <h2>{title}</h2>
+    <div className={styles.meta}>{metaInfo}</div>
+  </div>
+);
 
 PostTitle.propTypes = {
   title: PropTypes.string,
-  metaInfo: PropTypes.string
+  metaInfo: PropTypes.string,
 };
 
 export default PostTitle;

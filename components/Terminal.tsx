@@ -11,9 +11,7 @@ interface TerminalProps {
 const Terminal = (props: TerminalProps) => {
   const router = useRouter();
 
-  const _command = React.useMemo(() => {
-    return props.command || 'hello world!';
-  }, [props.command]);
+  const _command = React.useMemo(() => props.command || 'hello world!', [props.command]);
 
   return (
     <div className={styles.container}>

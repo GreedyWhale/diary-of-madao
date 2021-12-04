@@ -39,7 +39,7 @@ const Notification = (props: NotificationProps) => {
         enter: styles.notificationAnimationEnter,
         enterActive: styles.notificationAnimationEnterActive,
         exit: styles.notificationAnimationExit,
-        exitActive: styles.notificationAnimationExitActive
+        exitActive: styles.notificationAnimationExitActive,
       }}
       unmountOnExit
       onExited={() => props.onClose()}
@@ -62,7 +62,7 @@ const Notification = (props: NotificationProps) => {
 };
 
 Notification.defaultProps = {
-  delay: 3000
+  delay: 3000,
 };
 
 const NotificationWrap = (props: { onMounted: () => void }) => {
@@ -121,7 +121,7 @@ const showNotification = () => {
           mounted = 'done';
           eventHub.emit(EVENT_UPDATE_NOTIFICATION, notifications);
         }} />,
-        mountedElement
+        mountedElement,
       );
     }
 

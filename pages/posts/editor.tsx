@@ -36,7 +36,7 @@ interface PostEditorProps {
 const getInitialFrontmatterObject = () => ({
   title: '',
   introduction: '',
-  labels: []
+  labels: [],
 });
 const getLabels = (newLabels: {name: string}[], oldLabels: Label[]): RequestLabels => {
   if (!newLabels.length) {
@@ -48,22 +48,20 @@ const getLabels = (newLabels: {name: string}[], oldLabels: Label[]): RequestLabe
   }
 
   const labels = newLabels.map(value => {
-    const index = oldLabels.findIndex(subValue => {
-      return subValue.name === value.name;
-    });
+    const index = oldLabels.findIndex(subValue => subValue.name === value.name);
 
     if (index !== -1) {
       const existedLabel = oldLabels.splice(index, 1);
 
       return {
         ...existedLabel[0],
-        action: 'unchanged'
+        action: 'unchanged',
       };
     }
 
     return {
       ...value,
-      action: 'add'
+      action: 'add',
     };
   });
 
@@ -84,7 +82,7 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
   const [permissionModal, setPermissionModal] = React.useState(false);
   const [submitModal, setSubmitModal] = React.useState({
     open: false,
-    postId: -1
+    postId: -1,
   });
   const [frontmatterObject, setFrontmatterObject] = React.useState<{
     introduction: string;
@@ -94,9 +92,7 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
 
   const postBeforeUpdateRef = React.useRef<PostItem>(null);
 
-  const command = React.useMemo(() => {
-    return frontmatterObject.title ? `vim ${frontmatterObject.title}` : '请按照提示输入文章标题';
-  }, [frontmatterObject]);
+  const command = React.useMemo(() => frontmatterObject.title ? `vim ${frontmatterObject.title}` : '请按照提示输入文章标题', [frontmatterObject]);
 
   const onSubmit = async () => {
     const newLabels = frontmatterObject.labels.map(value => ({ name: value }));
@@ -107,14 +103,14 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
     const params = {
       ...frontmatterObject,
       content: value,
-      labels: getLabels(newLabels, oldLabels)
+      labels: getLabels(newLabels, oldLabels),
     };
     const isPassed = postValidator(params);
 
     if (isPassed !== true) {
       showNotification({
         content: isPassed,
-        theme: 'fail'
+        theme: 'fail',
       });
       return Promise.resolve(false);
     }
@@ -127,7 +123,7 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
       window.localStorage.removeItem(LOCAL_DRAFTS);
       setSubmitModal({
         open: true,
-        postId: postInfo.data.id
+        postId: postInfo.data.id,
       });
 
       return;
@@ -146,7 +142,7 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
     return [{
       url: `/static/images/posts/${result.data.filename}`,
       alt: result.data.filename,
-      title: result.data.filename
+      title: result.data.filename,
     }];
   };
 
@@ -217,7 +213,7 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
 
               const pickedFrontmatterObject = {
                 ...getInitialFrontmatterObject(),
-                ...pick(frontmatter, ['title', 'labels', 'introduction'])
+                ...pick(frontmatter, ['title', 'labels', 'introduction']),
               };
               if (!prev) {
                 return pickedFrontmatterObject;
@@ -226,12 +222,12 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
               const isSame = isEqual(prev, pickedFrontmatterObject);
               return isSame ? prev : pickedFrontmatterObject;
             });
-          })
+          }),
         ]}
         onChange={v => setValue(v)}
         locale={zhHansEditor}
         editorConfig={{
-          lineNumbers: true
+          lineNumbers: true,
         }}
         uploadImages={uploadImages}
       />
@@ -271,7 +267,7 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
             }}
           >
             回到首页
-          </Button>
+          </Button>,
         ]}
       />
       <Modal
@@ -303,10 +299,8 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
 
 export default PostEditor;
 
-export const getServerSideProps = withSession(async context => {
-  return {
-    props: {
-      postId: context.query.id || null
-    }
-  };
-});
+export const getServerSideProps = withSession(async context => ({
+  props: {
+    postId: context.query.id || null,
+  },
+}));

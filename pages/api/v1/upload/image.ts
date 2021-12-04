@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-10-11 16:19:59
  * @LastEditors: MADAO
- * @LastEditTime: 2021-10-14 16:55:52
+ * @LastEditTime: 2021-12-04 12:26:07
  */
 import type { NextApiHandler, NextApiRequest } from 'next';
 
@@ -37,7 +37,7 @@ const storage = multer.diskStorage({
   },
   destination: (req, file, cb) => {
     cb(null, path.join(process.cwd(), '/static/images/posts'));
-  }
+  },
 });
 
 const uploader = multer({ storage });
@@ -66,7 +66,7 @@ const image:NextApiHandler = async (req, res) => {
 
 export const config = {
   api: {
-    bodyParser: false
-  }
+    bodyParser: false,
+  },
 };
 export default withIronSession(image, sessionOptions);

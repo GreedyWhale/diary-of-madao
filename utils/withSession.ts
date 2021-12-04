@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-28 14:16:20
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-02 15:15:55
+ * @LastEditTime: 2021-12-04 12:22:31
  */
 import type { GetServerSidePropsContext, GetServerSideProps } from 'next';
 
@@ -17,11 +17,10 @@ export type WithSessionResult<T> = { userId: number } & T;
 
 export const sessionOptions = {
   cookieName: 'diary-of-madao',
-  password: process.env.COOKIE_PASSWORD,
+  password: process.env.COOKIE_PASSWORD as string,
   cookieOptions: {
-    // process.env.NODE_ENV === 'production'
-    secure: false
-  }
+    secure: process.env.NODE_ENV === 'production',
+  },
 };
 
 export const getUserIdFromCookie = (req: NextApiRequest) => {
@@ -30,25 +29,23 @@ export const getUserIdFromCookie = (req: NextApiRequest) => {
   return userId;
 };
 
-export const withSession = (handler?: GetServerSideProps) => {
-  return async (context: GetServerSidePropsContext) => {
-    let userId = -1;
-    try {
-      await applySession(context.req, context.res, sessionOptions);
-      userId = getUserIdFromCookie(context.req as NextApiRequest);
-    } catch (error) {
-      console.error(error);
-    }
+export const withSession = (handler?: GetServerSideProps) => async (context: GetServerSidePropsContext) => {
+  let userId = -1;
+  try {
+    await applySession(context.req, context.res, sessionOptions);
+    userId = getUserIdFromCookie(context.req as NextApiRequest);
+  } catch (error) {
+    console.error(error);
+  }
 
-    const serverProps = {
-      props: { userId }
-    };
-
-    if (handler) {
-      const extraProps = await handler(context);
-      return merge(serverProps, extraProps);
-    }
-
-    return serverProps;
+  const serverProps = {
+    props: { userId },
   };
+
+  if (handler) {
+    const extraProps = await handler(context);
+    return merge(serverProps, extraProps);
+  }
+
+  return serverProps;
 };

@@ -2,7 +2,7 @@
  * @Author: MADAO
  * @Date: 2021-06-10 15:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-02 15:21:54
+ * @LastEditTime: 2021-12-04 12:26:21
  * @Description: 主页
  */
 import type { NextPage } from 'next';
@@ -55,13 +55,13 @@ export const getServerSideProps = withSession(async context => {
   const { page } = context.query;
   const postInfo = await getPosts({
     page: page ? parseInt(page as string, 10) : 1,
-    pageSize: 10
+    pageSize: 10,
   });
 
   return {
     props: {
       posts: postInfo.data.list,
-      pagination: postInfo.data.pagination
-    }
+      pagination: postInfo.data.pagination,
+    },
   };
 });

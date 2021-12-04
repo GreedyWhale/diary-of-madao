@@ -11,13 +11,9 @@ interface AppButtonProps extends ButtonProps {
 const AppButton = (props: AppButtonProps) => {
   const [_loading, setLoading] = React.useState(false);
 
-  const memoizedLoading = React.useMemo(() => {
-    return props.loading || _loading;
-  }, [_loading, props.loading]);
+  const memoizedLoading = React.useMemo(() => props.loading || _loading, [_loading, props.loading]);
 
-  const buttonProps = React.useMemo(() => {
-    return omit(props, ['loading', 'onClick']);
-  }, [props]);
+  const buttonProps = React.useMemo(() => omit(props, ['loading', 'onClick']), [props]);
 
   const onClick = () => {
     if (props.disabled || memoizedLoading) {

@@ -35,16 +35,14 @@ const Posts: NextPage<WithSessionResult<PostsProps>> = props => {
   useUpdateUserId(props.userId);
   const [visibleDeleteModal, setVisibleDeleteModal] = React.useState(false);
 
-  const postMatter = React.useMemo(() => {
-    return matter(props.post.content);
-  }, [props.post]);
+  const postMatter = React.useMemo(() => matter(props.post.content), [props.post]);
 
   const onDelete = async () => {
     if (!user.access.includes(ACCESS_POST_DELETE)) {
       setVisibleDeleteModal(false);
       showNotification({
         content: '权限不足',
-        theme: 'fail'
+        theme: 'fail',
       });
       return;
     }
@@ -54,7 +52,7 @@ const Posts: NextPage<WithSessionResult<PostsProps>> = props => {
         setVisibleDeleteModal(false);
         showNotification({
           content: '删除成功',
-          theme: 'success'
+          theme: 'success',
         });
         router.replace('/');
       })
@@ -110,7 +108,7 @@ const Posts: NextPage<WithSessionResult<PostsProps>> = props => {
             onClick={() => setVisibleDeleteModal(false)}
           >
             取消
-          </Button>
+          </Button>,
         ]}
       />
     </Layout>
@@ -124,8 +122,8 @@ export const getServerSideProps = withSession(async context => {
 
   return {
     props: {
-      post: post.data
-    }
+      post: post.data,
+    },
   };
 });
 

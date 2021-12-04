@@ -53,7 +53,7 @@ const SignOutModal = (props: SignOutModalProps) => {
           onClick={_onConfirm}
         >
           <Icon name="checkmark" /> 确定
-        </Button>
+        </Button>,
       ]}
     />
   );

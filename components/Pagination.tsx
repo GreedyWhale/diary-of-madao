@@ -84,7 +84,7 @@ const Pagination = (props: PaginationProps) => {
 
 Pagination.defaultProps = {
   maxRenderItems: 7,
-  step: 5
+  step: 5,
 };
 
 export default Pagination;

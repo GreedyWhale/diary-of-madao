@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-08-07 14:11:15
  * @LastEditors: MADAO
- * @LastEditTime: 2021-10-11 16:16:46
+ * @LastEditTime: 2021-12-04 12:25:49
  */
 import type { NextApiHandler } from 'next';
 
@@ -20,6 +20,10 @@ const post: NextApiHandler = async (req, res) => {
   const userId = req.session.get<number>(STORAGE_USER_ID);
 
   if (req.method === 'POST') {
+    if (!userId) {
+      return responseData(res, formatResponse(422, null, '用户不存在'));
+    }
+
     const post = await postController.updatePost(userId, postData);
     responseData(res, post);
     return;
@@ -29,7 +33,7 @@ const post: NextApiHandler = async (req, res) => {
     const posts = await postController.getPosts({
       pageSize: parseInt(req.query.pageSize as string, 10),
       page: parseInt(req.query.page as string, 10),
-      labelId: req.query.labelId ? parseInt(req.query.labelId as string, 10) : undefined
+      labelId: req.query.labelId ? parseInt(req.query.labelId as string, 10) : undefined,
     });
 
     responseData(res, posts);

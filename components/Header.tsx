@@ -13,9 +13,7 @@ const Header = () => {
   const { user } = useUser();
   const [open, setOpen] = React.useState(false);
 
-  const username = React.useMemo(() => {
-    return user.username || '登录';
-  }, [user.username]);
+  const username = React.useMemo(() => user.username || '登录', [user.username]);
 
   const toSignIn = (event: React.MouseEvent) => {
     event.preventDefault();

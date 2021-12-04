@@ -24,14 +24,14 @@ const SignIn: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
       key: 'username',
       value: username,
       errorMessage: '用户名格式错误，用户名长度3～20位，由字母或数字组成',
-      reg: /^[\w\d]{3,20}$/
+      reg: /^[\w\d]{3,20}$/,
     },
     {
       key: 'password',
       value: password,
       errorMessage: '密码格式错误，密码长度6～15位，由字母或数字组成',
-      reg: /^[\w\d]{6,15}$/
-    }
+      reg: /^[\w\d]{6,15}$/,
+    },
   ]), [username, password]);
 
   const validator = () => {
@@ -56,7 +56,7 @@ const SignIn: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
       .then(res => {
         showNotification({
           content: res.message,
-          theme: 'success'
+          theme: 'success',
         });
 
         router.replace('/');

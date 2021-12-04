@@ -7,7 +7,7 @@ const Welcome = () => {
     currentIndex: 0,
     currentRow: 0,
     rawText: ['欢迎来到牢骚百物语!', '这里记录了我的所有技术笔记', '希望可以帮到你^_^'],
-    displayText: []
+    displayText: [],
   });
 
   React.useEffect(() => {
@@ -28,7 +28,7 @@ const Welcome = () => {
         currentIndex: currentIndex + 1,
         currentRow,
         rawText,
-        displayText
+        displayText,
       });
     }, 100);
 
