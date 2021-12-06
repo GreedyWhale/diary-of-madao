@@ -11,14 +11,15 @@ services:
       - .env.database
 
   app:
-    image: node:14
+    image: node:16
     container_name: diary-of-madao.app
     working_dir: /code
     command: >
-      sh -c "./bin/wait-for-if.sh db:5432 -- npm install
-      && npm run build
-      && npm run migrate:prod
-      && npm run start"
+      sh -c "./bin/wait-for-if.sh db:5432 -- corepack enable
+      && yarn install
+      && yarn build
+      && yarn migrate:prod
+      && yarn start"
     ports:
       - "3000:3000"
     volumes:
