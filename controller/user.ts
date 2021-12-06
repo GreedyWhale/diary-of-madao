@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-09-15 14:46:09
  * @LastEditors: MADAO
- * @LastEditTime: 2021-10-14 15:49:36
+ * @LastEditTime: 2021-12-06 10:39:11
  */
 import type { User } from '@prisma/client';
 
@@ -18,7 +18,8 @@ import {
   ACCESS_POST_EDIT,
   ACCESS_POST_DELETE,
   ACCESS_IMAGE_UPLOAD,
-  ACCESS_GIT_SYNC
+  ACCESS_GIT_SYNC,
+  ADMIN_USER,
 } from '~/utils/constants';
 
 export type UserResponse = Pick<User, 'id' | 'username' | 'access'>;
@@ -31,13 +32,13 @@ type UserInfo = {
   password: string;
 };
 
-export const ACCESS_MAP = {
-  madao: [
+export const ACCESS_MAP: Record<string, string[]> = {
+  [ADMIN_USER]: [
     ACCESS_POST_EDIT,
     ACCESS_POST_DELETE,
     ACCESS_IMAGE_UPLOAD,
-    ACCESS_GIT_SYNC
-  ]
+    ACCESS_GIT_SYNC,
+  ],
 };
 
 const userController = {
@@ -60,15 +61,15 @@ const userController = {
       data: {
         username: userInfo.username,
         passwordDigest: userController.cryptoPassword(userInfo.password),
-        access: ACCESS_MAP[userInfo.username] || []
-      }
+        access: ACCESS_MAP[userInfo.username] || [],
+      },
     }));
 
     if (error) {
       return Promise.reject(formatResponse(500, error, error.message));
     }
 
-    return formatResponse(200, userController.omitUser(user), '注册成功');
+    return formatResponse(200, userController.omitUser(user as User), '注册成功');
   },
   async getUser(condition: QueryUserCondition) {
     const [user, error] = await promiseSettled(prisma.user.findUnique({
@@ -77,8 +78,8 @@ const userController = {
         username: true,
         id: true,
         passwordDigest: true,
-        access: true
-      }
+        access: true,
+      },
     }));
 
     if (error) {
@@ -119,13 +120,17 @@ const userController = {
       return Promise.reject(sigInError);
     }
 
+    if (username !== ADMIN_USER) {
+      return Promise.reject(formatResponse(405, {}, '因为备案的原因，不支持注册，EL PSY CONGROO!'));
+    }
+
     const [newUser, signUpError] = await promiseSettled(userController.createRow(userInfo));
     if (signUpError) {
       return Promise.reject(signUpError);
     }
 
     return newUser;
-  }
+  },
 };
 
 export default userController;

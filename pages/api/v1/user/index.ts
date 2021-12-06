@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-28 09:57:52
  * @LastEditors: MADAO
- * @LastEditTime: 2021-10-11 17:02:10
+ * @LastEditTime: 2021-12-06 10:26:52
  */
 import type { NextApiHandler } from 'next';
 
@@ -40,8 +40,8 @@ const user: NextApiHandler = async (req, res) => {
       return;
     }
 
-    await setCookie(req, STORAGE_USER_ID, user.data.id);
-    responseData(res, user);
+    await setCookie(req, STORAGE_USER_ID, user!.data.id);
+    responseData(res, user!);
     return;
   }
 
@@ -53,8 +53,8 @@ const user: NextApiHandler = async (req, res) => {
       return;
     }
 
-    await setCookie(req, STORAGE_USER_ID, user.data.id);
-    responseData(res, user);
+    await setCookie(req, STORAGE_USER_ID, user!.data.id);
+    responseData(res, user!);
     return;
   }
 

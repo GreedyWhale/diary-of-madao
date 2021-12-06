@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-28 10:31:34
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-04 12:21:58
+ * @LastEditTime: 2021-12-06 10:26:24
  */
 
 export interface ResponseJson<T = Record<string, any> | null> {
@@ -20,9 +20,9 @@ const messages = {
   500: '服务器出错',
 };
 
-export const formatResponse = <T>(code: keyof typeof messages, data?: T, message?: string): ResponseJson<T> => ({
+export const formatResponse = <T>(code: number, data?: T, message?: string): ResponseJson<T> => ({
   code,
   data: data || null as any,
-  message: message || messages[code],
+  message: message || messages[code as keyof typeof messages],
 });
 
