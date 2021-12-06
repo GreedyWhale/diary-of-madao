@@ -6,8 +6,8 @@ import styles from '~/assets/styles/pagination.module.scss';
 
 type PaginationProps = API.BasePagination & {
   onClick: (_currentPage: number) => void;
-  maxRenderItems?: number;
-  step?: number;
+  maxRenderItems: number;
+  step: number;
 }
 
 const Pagination = (props: PaginationProps) => {

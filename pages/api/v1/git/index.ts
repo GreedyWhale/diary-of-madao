@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-10-14 14:36:15
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-04 12:22:45
+ * @LastEditTime: 2021-12-06 11:26:37
  */
 import type { NextApiHandler } from 'next';
 import type { SimpleGit } from 'simple-git';
@@ -23,7 +23,7 @@ const git: SimpleGit = simpleGit();
 
 const gitActions: NextApiHandler = async (req, res) => {
   if (req.method === 'POST') {
-    const validationError = (await verifyPermission(req, ACCESS_GIT_SYNC))[1];
+    const validationError = (await promiseSettled(verifyPermission(req, ACCESS_GIT_SYNC)))[1];
 
     if (validationError) {
       responseData(res, validationError);

@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-08-09 22:34:07
  * @LastEditors: MADAO
- * @LastEditTime: 2021-09-25 18:41:25
+ * @LastEditTime: 2021-12-06 12:30:18
  */
 import type { PostData, CreatePostParams } from '~/controller/post';
 
@@ -11,12 +11,12 @@ import type { PostData, CreatePostParams } from '~/controller/post';
 const postDataErrors: {[key in keyof PostData]: string} = {
   title: '文章标题不能为空',
   content: '文章内容不能为空',
-  introduction: '文章简介不能为空'
+  introduction: '文章简介不能为空',
 };
 
 const regexps = {
   username: /^[\w\d]{3,20}$/,
-  password: /^[\w\d]{6,15}$/
+  password: /^[\w\d]{6,15}$/,
 };
 
 export const postValidator = (postData: CreatePostParams) => {
@@ -27,8 +27,8 @@ export const postValidator = (postData: CreatePostParams) => {
 
   let errorMessage = '';
   Object.keys(rest).every(key => {
-    if (!postData[key]) {
-      errorMessage = postDataErrors[key];
+    if (!postData[key as keyof PostData]) {
+      errorMessage = postDataErrors[key as keyof PostData];
       return false;
     }
 

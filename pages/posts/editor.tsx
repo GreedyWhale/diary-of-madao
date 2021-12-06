@@ -90,7 +90,7 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
     title: string;
   }>(getInitialFrontmatterObject);
 
-  const postBeforeUpdateRef = React.useRef<PostItem>(null);
+  const postBeforeUpdateRef = React.useRef<PostItem | null>(null);
 
   const command = React.useMemo(() => frontmatterObject.title ? `vim ${frontmatterObject.title}` : '请按照提示输入文章标题', [frontmatterObject]);
 
@@ -135,8 +135,19 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
   const uploadImages = async (files: File[]) => {
     const [result, error] = await promiseSettled(uploadImage(files[0]));
     if (error) {
-      showNotification(error.message);
+      showNotification({
+        content: error.message,
+        theme: 'fail',
+      });
       return Promise.reject(error);
+    }
+
+    if (!result) {
+      showNotification({
+        content: '上传失败',
+        theme: 'fail',
+      });
+      return Promise.reject(new Error(`result: ${result}`));
     }
 
     return [{

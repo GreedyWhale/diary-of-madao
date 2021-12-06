@@ -22,10 +22,14 @@ const Loading = () => {
     document.body.setAttribute('data-prevent-scroll', `${showLoading}`);
   }, [showLoading]);
 
-  return showLoading && (
-    <div className="ui active dimmer">
-      <div className="ui text loader">Loading</div>
-    </div>
+  return (
+    <>
+      {showLoading && (
+        <div className="ui active dimmer">
+          <div className="ui text loader">Loading</div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-27 11:42:23
  * @LastEditors: MADAO
- * @LastEditTime: 2021-10-14 16:09:55
+ * @LastEditTime: 2021-12-06 11:32:12
  */
 import type { ResponseJson } from '~/utils/request/tools';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -31,17 +31,15 @@ export const responseData = (res: NextApiResponse, response: ResponseJson, heade
   res.json(response);
 };
 
-export const runMiddleware = (req, res, middleware) => {
-  return new Promise((resolve, reject) => {
-    middleware(req, res, result => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
+export const runMiddleware = (req: NextApiRequest, res: NextApiResponse, middleware: (..._rest: any[]) => any) => new Promise((resolve, reject) => {
+  middleware(req, res, (result: any) => {
+    if (result instanceof Error) {
+      return reject(result);
+    }
 
-      return resolve(result);
-    });
+    return resolve(result);
   });
-};
+});
 
 export const verifyPermission = async (req: NextApiRequest, permission: string) => {
   const id = req.session.get(STORAGE_USER_ID);

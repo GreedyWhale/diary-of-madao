@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-10-11 16:19:59
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-04 12:26:07
+ * @LastEditTime: 2021-12-06 11:28:13
  */
 import type { NextApiHandler, NextApiRequest } from 'next';
 
@@ -44,7 +44,7 @@ const uploader = multer({ storage });
 
 const image:NextApiHandler = async (req, res) => {
   if (req.method === 'POST') {
-    const validationError = (await verifyPermission(req, ACCESS_IMAGE_UPLOAD))[1];
+    const validationError = (await promiseSettled(verifyPermission(req, ACCESS_IMAGE_UPLOAD)))[1];
 
     if (validationError) {
       return responseData(res, validationError);

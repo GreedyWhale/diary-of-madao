@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-09-15 14:46:09
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-06 10:39:11
+ * @LastEditTime: 2021-12-06 11:09:10
  */
 import type { User } from '@prisma/client';
 
@@ -121,7 +121,7 @@ const userController = {
     }
 
     if (username !== ADMIN_USER) {
-      return Promise.reject(formatResponse(405, {}, '因为备案的原因，不支持注册，EL PSY CONGROO!'));
+      return Promise.reject(formatResponse(405, null, '因为备案的原因，不支持注册，EL PSY CONGROO!'));
     }
 
     const [newUser, signUpError] = await promiseSettled(userController.createRow(userInfo));

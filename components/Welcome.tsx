@@ -3,7 +3,12 @@ import React from 'react';
 import styles from '~/assets/styles/welcome.module.scss';
 
 const Welcome = () => {
-  const [welcomeText, setWelcomeText] = React.useState({
+  const [welcomeText, setWelcomeText] = React.useState<{
+    currentIndex: number;
+    currentRow: number;
+    rawText: string[];
+    displayText: string[];
+  }>({
     currentIndex: 0,
     currentRow: 0,
     rawText: ['欢迎来到牢骚百物语!', '这里记录了我的所有技术笔记', '希望可以帮到你^_^'],

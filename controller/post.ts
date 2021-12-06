@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-09-15 12:00:19
  * @LastEditors: MADAO
- * @LastEditTime: 2021-10-16 11:43:18
+ * @LastEditTime: 2021-12-06 11:35:47
  */
 import type { Post, User } from '@prisma/client';
 import type { GetPostsParams, GetPostsResponse } from '~/services/post';
@@ -37,8 +37,8 @@ const postController = {
 
     return prisma.user.findUnique({
       where: {
-        id: userId
-      }
+        id: userId,
+      },
     })
       .then(user => {
         if (!user) {
@@ -61,7 +61,7 @@ const postController = {
 
     return fsPromises.writeFile(
       path.join(postsDir, `${postData.title}.md`),
-      postData.content
+      postData.content,
     )
       .then(() => true)
       .catch(error => Promise.reject(formatResponse(500, error, error.message)));
@@ -74,8 +74,8 @@ const postController = {
         ...rest,
         author: {
           connect: {
-            id: user.id
-          }
+            id: user.id,
+          },
         },
         labels: {
           create: labels.map(label => ({
@@ -83,31 +83,35 @@ const postController = {
             label: {
               connectOrCreate: {
                 where: { name: label },
-                create: { name: label }
-              }
-            }
-          }))
-        }
+                create: { name: label },
+              },
+            },
+          })),
+        },
       },
       include: {
         author: {
           select: {
             username: true,
-            id: true
-          }
+            id: true,
+          },
         },
         labels: {
           select: {
-            labelId: true
-          }
-        }
-      }
+            labelId: true,
+          },
+        },
+      },
     };
   },
-  async updatePost(userId: number, postData: CreatePostParams, postId?: number): Promise<ResponseJson<Post>> {
+  async updatePost(userId: number, postData: CreatePostParams, postId: number = -1): Promise<ResponseJson<Post | null>> {
     const [user, userError] = await promiseSettled(postController.getUser(userId));
     if (userError) {
       return userError;
+    }
+
+    if (!user) {
+      return formatResponse(500, null, '用户未找到');
     }
 
     if (!user.access.includes(ACCESS_POST_EDIT)) {
@@ -121,13 +125,13 @@ const postController = {
 
     const { labels, ...rest } = postData;
     const [post, postError] = await promiseSettled(prisma.post.upsert({
-      where: { id: postId || -1 },
+      where: { id: postId },
       create: {
         ...rest,
         author: {
           connect: {
-            id: user.id
-          }
+            id: user.id,
+          },
         },
         labels: {
           create: labels.map(label => ({
@@ -135,44 +139,44 @@ const postController = {
             label: {
               connectOrCreate: {
                 where: { name: label.name },
-                create: { name: label.name }
-              }
-            }
-          }))
-        }
+                create: { name: label.name },
+              },
+            },
+          })),
+        },
       },
       update: {
         ...rest,
         author: {
           connect: {
-            id: user.id
-          }
+            id: user.id,
+          },
         },
         labels: {
           delete: labels.filter(label => label.action === 'delete').map(label => ({
             // eslint-disable-next-line camelcase
             postId_labelId: {
               postId,
-              labelId: label.id
-            }
+              labelId: label.id!,
+            },
           })),
           create: labels.filter(label => label.action === 'add').map(label => ({
             assignedBy: user.username,
             label: {
               connectOrCreate: {
                 where: { name: label.name },
-                create: { name: label.name }
-              }
-            }
-          }))
-        }
-      }
+                create: { name: label.name },
+              },
+            },
+          })),
+        },
+      },
     }));
     if (postError) {
       return formatResponse(500, postError, postError.message);
     }
 
-    const storageError = await promiseSettled(postController.storageToLocal(user.id, postData))[1];
+    const storageError = (await promiseSettled(postController.storageToLocal(user.id, postData)))[1];
     if (storageError) {
       return storageError;
     }
@@ -187,24 +191,24 @@ const postController = {
         where: params.labelId
           ? {
             labels: {
-              every: { labelId: params.labelId }
-            }
+              every: { labelId: params.labelId },
+            },
           }
           : {},
         include: {
           author: {
-            select: { username: true }
+            select: { username: true },
           },
           labels: {
-            select: { label: true }
-          }
+            select: { label: true },
+          },
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
       }),
-      prisma.post.count()
+      prisma.post.count(),
     ]));
 
-    if (error) {
+    if (error || !data) {
       return error;
     }
 
@@ -213,28 +217,28 @@ const postController = {
       pagination: {
         pageSize: params.pageSize,
         currentPage: params.page,
-        total: data[1]
-      }
+        total: data[1],
+      },
     });
   },
   async getPostDetail(id: number) {
     const [data, error] = await promiseSettled(prisma.post.findUnique({
       where: {
-        id
+        id,
       },
       include: {
         labels: {
           select: {
-            label: true
-          }
+            label: true,
+          },
         },
         author: {
           select: {
             id: true,
-            username: true
-          }
-        }
-      }
+            username: true,
+          },
+        },
+      },
     }));
 
     if (error) {
@@ -249,14 +253,18 @@ const postController = {
       return userError;
     }
 
+    if (!user) {
+      return formatResponse(500, null, '用户未找到');
+    }
+
     if (!user.access.includes(ACCESS_POST_DELETE)) {
       return formatResponse(403, null, '权限不足');
     }
 
     const [data, error] = await promiseSettled(prisma.post.delete({
       where: {
-        id
-      }
+        id,
+      },
     }));
 
     if (error) {
@@ -264,6 +272,6 @@ const postController = {
     }
 
     return formatResponse(200, data, '删除成功');
-  }
+  },
 };
 export default postController;
