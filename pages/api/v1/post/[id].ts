@@ -3,47 +3,45 @@
  * @Author: MADAO
  * @Date: 2021-09-24 17:48:28
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-06 11:33:48
+ * @LastEditTime: 2021-12-13 18:01:28
  */
 import type { NextApiHandler } from 'next';
 
-import { withIronSession } from 'next-iron-session';
-
-import postController from '~/controller/post';
-import { responseData } from '~/utils/middlewares';
+import PostController from '~/controller/post';
+import { endRequest, checkRequestMethods } from '~/utils/middlewares';
 import { formatResponse } from '~/utils/request/tools';
-import { sessionOptions } from '~/utils/withSession';
-import { STORAGE_USER_ID } from '~/utils/constants';
+import { SESSION_USER_ID } from '~/utils/constants';
+import { withSessionRoute } from '~/utils/withSession';
+
+const postController = new PostController();
 
 const postDetail:NextApiHandler = async (req, res) => {
+  await checkRequestMethods(req, res, ['GET', 'DELETE', 'PUT']);
   const { id } = req.query;
   const { postData } = req.body;
-  const userId = req.session.get<number>(STORAGE_USER_ID);
+  const userId = req.session[SESSION_USER_ID];
 
   if (typeof userId !== 'number') {
-    responseData(res, formatResponse(500, null, '用户不存在'));
+    endRequest(res, formatResponse(500, null, '用户不存在'));
     return;
   }
 
   if (req.method === 'GET') {
     const detail = await postController.getPostDetail(parseInt(id as string, 10));
-    responseData(res, detail);
+    endRequest(res, detail);
     return;
   }
 
   if (req.method === 'DELETE') {
     const result = await postController.deletePost(userId, parseInt(id as string, 10));
-    responseData(res, result);
+    endRequest(res, result);
     return;
   }
 
   if (req.method === 'PUT') {
     const result = await postController.updatePost(userId, postData, parseInt(id as string, 10));
-    responseData(res, result);
-    return;
+    endRequest(res, result);
   }
-
-  responseData(res, formatResponse(405), { Allow: 'GET, DELETE, PUT' });
 };
 
-export default withIronSession(postDetail, sessionOptions);
+export default withSessionRoute(postDetail);

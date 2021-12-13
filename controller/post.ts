@@ -3,11 +3,12 @@
  * @Author: MADAO
  * @Date: 2021-09-15 12:00:19
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-06 11:35:47
+ * @LastEditTime: 2021-12-13 18:04:31
  */
-import type { Post, User } from '@prisma/client';
+import type { Post } from '@prisma/client';
 import type { GetPostsParams, GetPostsResponse } from '~/services/post';
-import type { ResponseJson } from '~/utils/request/tools';
+import type { ResponseData } from '~/types/requestTools';
+import type { CreatePostParams } from '~/types/postController';
 
 import fsPromises from 'fs/promises';
 import { existsSync } from 'fs';
@@ -17,38 +18,9 @@ import prisma from '~/utils/prisma';
 import { formatResponse } from '~/utils/request/tools';
 import { ACCESS_POST_EDIT, ACCESS_POST_DELETE } from '~/utils/constants';
 import { postValidator } from '~/utils/validator';
-import { promiseSettled } from '~/utils/promise';
+import { promiseWithError } from '~/utils/promise';
 
-export type PostData = Pick<Post, 'title' | 'content' | 'introduction'>;
-export type RequestLabels = {
-  name: string;
-  id?: number;
-  action: 'add' | 'delete' | 'unchanged';
-}[];
-export interface CreatePostParams extends PostData {
-  labels: RequestLabels;
-}
-
-const postController = {
-  getUser(userId: number) {
-    if (!userId) {
-      return Promise.reject(formatResponse(401, null, '请先登录'));
-    }
-
-    return prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    })
-      .then(user => {
-        if (!user) {
-          return Promise.reject(formatResponse(401, null, '用户不存在'));
-        }
-
-        return user;
-      })
-      .catch(error => Promise.reject(formatResponse(500, error, error.message)));
-  },
+export default class PostController {
   async storageToLocal(userId: number, postData: CreatePostParams) {
     const postsDir = path.join(process.cwd(), `/static/posts/${userId}`);
 
@@ -65,66 +37,43 @@ const postController = {
     )
       .then(() => true)
       .catch(error => Promise.reject(formatResponse(500, error, error.message)));
-  },
-  getCreatePostParams(user: User, postData: CreatePostParams) {
-    const { labels, ...rest } = postData;
+  }
 
-    return {
-      data: {
-        ...rest,
-        author: {
-          connect: {
-            id: user.id,
-          },
-        },
-        labels: {
-          create: labels.map(label => ({
-            assignedBy: user.username,
-            label: {
-              connectOrCreate: {
-                where: { name: label },
-                create: { name: label },
-              },
-            },
-          })),
-        },
-      },
-      include: {
-        author: {
-          select: {
-            username: true,
-            id: true,
-          },
-        },
-        labels: {
-          select: {
-            labelId: true,
-          },
-        },
-      },
-    };
-  },
-  async updatePost(userId: number, postData: CreatePostParams, postId: number = -1): Promise<ResponseJson<Post | null>> {
-    const [user, userError] = await promiseSettled(postController.getUser(userId));
-    if (userError) {
-      return userError;
+  async getUser(id: number) {
+    if (!id) {
+      return Promise.reject(formatResponse(401, null, '请先登录'));
+    }
+
+    const [user, error] = await promiseWithError(prisma.user.findUnique({ where: { id } }));
+
+    if (error) {
+      Promise.reject(formatResponse(500, error, error.message));
     }
 
     if (!user) {
-      return formatResponse(500, null, '用户未找到');
+      Promise.reject(formatResponse(403, null, '用户不存在'));
     }
 
-    if (!user.access.includes(ACCESS_POST_EDIT)) {
+    return user;
+  }
+
+  async updatePost(userId: number, postData: CreatePostParams, postId: number = -1): Promise<ResponseData<Post | null>> {
+    const [user, error] = await promiseWithError(this.getUser(userId));
+    if (error || !user) {
+      return error;
+    }
+
+    if (!(user.access.includes(ACCESS_POST_EDIT))) {
       return formatResponse(403, null, '权限不足');
     }
 
-    const isPassed = postValidator(postData);
-    if (isPassed !== true) {
-      return formatResponse(422, null, isPassed);
+    const verifiedResult = postValidator(postData);
+    if (verifiedResult !== true) {
+      return formatResponse(422, null, verifiedResult);
     }
 
     const { labels, ...rest } = postData;
-    const [post, postError] = await promiseSettled(prisma.post.upsert({
+    const [post, postError] = await promiseWithError(prisma.post.upsert({
       where: { id: postId },
       create: {
         ...rest,
@@ -154,7 +103,6 @@ const postController = {
         },
         labels: {
           delete: labels.filter(label => label.action === 'delete').map(label => ({
-            // eslint-disable-next-line camelcase
             postId_labelId: {
               postId,
               labelId: label.id!,
@@ -172,19 +120,21 @@ const postController = {
         },
       },
     }));
+
     if (postError) {
       return formatResponse(500, postError, postError.message);
     }
 
-    const storageError = (await promiseSettled(postController.storageToLocal(user.id, postData)))[1];
+    const storageError = (await promiseWithError(this.storageToLocal(user.id, postData)))[1];
     if (storageError) {
       return storageError;
     }
 
     return formatResponse(200, post, postId ? '更新成功' : '发布成功');
-  },
-  async getPosts(params: GetPostsParams): Promise<ResponseJson<GetPostsResponse>> {
-    const [data, error] = await promiseSettled(prisma.$transaction([
+  }
+
+  async getPosts(params: GetPostsParams): Promise<ResponseData<GetPostsResponse>> {
+    const [data, error] = await promiseWithError(prisma.$transaction([
       prisma.post.findMany({
         skip: params.page === 1 ? 0 : params.page * params.pageSize,
         take: params.pageSize,
@@ -209,7 +159,7 @@ const postController = {
     ]));
 
     if (error || !data) {
-      return error;
+      return formatResponse(500, error, (error || {}).message);
     }
 
     return formatResponse(200, {
@@ -220,9 +170,10 @@ const postController = {
         total: data[1],
       },
     });
-  },
+  }
+
   async getPostDetail(id: number) {
-    const [data, error] = await promiseSettled(prisma.post.findUnique({
+    const [data, error] = await promiseWithError(prisma.post.findUnique({
       where: {
         id,
       },
@@ -246,25 +197,20 @@ const postController = {
     }
 
     return formatResponse(200, data);
-  },
+  }
+
   async deletePost(userId: number, id: number) {
-    const [user, userError] = await promiseSettled(postController.getUser(userId));
-    if (userError) {
-      return userError;
+    const [user, userError] = await promiseWithError(this.getUser(userId));
+    if (userError || !user) {
+      return userError || formatResponse(500, null, '获取用户信息失败');
     }
 
-    if (!user) {
-      return formatResponse(500, null, '用户未找到');
-    }
-
-    if (!user.access.includes(ACCESS_POST_DELETE)) {
+    if (!(user.access.includes(ACCESS_POST_DELETE))) {
       return formatResponse(403, null, '权限不足');
     }
 
-    const [data, error] = await promiseSettled(prisma.post.delete({
-      where: {
-        id,
-      },
+    const [data, error] = await promiseWithError(prisma.post.delete({
+      where: { id },
     }));
 
     if (error) {
@@ -272,6 +218,5 @@ const postController = {
     }
 
     return formatResponse(200, data, '删除成功');
-  },
-};
-export default postController;
+  }
+}

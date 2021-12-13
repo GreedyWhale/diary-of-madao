@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-12-04 11:52:57
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-13 15:39:09
+ * @LastEditTime: 2021-12-13 18:00:49
  */
 module.exports = {
   env: {
@@ -30,6 +30,7 @@ module.exports = {
   ],
   rules: {
     indent: 'off',
+    camelcase: 'off',
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/indent': ['error', 2],
     'object-curly-spacing': ['error', 'always'],

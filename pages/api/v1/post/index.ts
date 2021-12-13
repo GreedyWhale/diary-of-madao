@@ -1,31 +1,33 @@
 /*
- * @Description: 发布文章
+ * @Description: 发布文章 & 文章列表
  * @Author: MADAO
  * @Date: 2021-08-07 14:11:15
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-04 12:25:49
+ * @LastEditTime: 2021-12-13 17:52:11
  */
 import type { NextApiHandler } from 'next';
 
-import { withIronSession } from 'next-iron-session';
-
-import { responseData } from '~/utils/middlewares/index';
-import { STORAGE_USER_ID } from '~/utils/constants';
-import { sessionOptions } from '~/utils/withSession';
-import postController from '~/controller/post';
+import { endRequest, checkRequestMethods } from '~/utils/middlewares';
+import { SESSION_USER_ID } from '~/utils/constants';
+import PostController from '~/controller/post';
 import { formatResponse } from '~/utils/request/tools';
+import { withSessionRoute } from '~/utils/withSession';
+
+const postController = new PostController();
 
 const post: NextApiHandler = async (req, res) => {
+  await checkRequestMethods(req, res, ['POST', 'GET']);
+
   const { postData } = req.body;
-  const userId = req.session.get<number>(STORAGE_USER_ID);
+  const userId = req.session[SESSION_USER_ID];
 
   if (req.method === 'POST') {
     if (!userId) {
-      return responseData(res, formatResponse(422, null, '用户不存在'));
+      return endRequest(res, formatResponse(422, null, '用户不存在'));
     }
 
     const post = await postController.updatePost(userId, postData);
-    responseData(res, post);
+    endRequest(res, post);
     return;
   }
 
@@ -36,11 +38,8 @@ const post: NextApiHandler = async (req, res) => {
       labelId: req.query.labelId ? parseInt(req.query.labelId as string, 10) : undefined,
     });
 
-    responseData(res, posts);
-    return;
+    endRequest(res, posts);
   }
-
-  responseData(res, formatResponse(405), { Allow: 'GET, DELETE' });
 };
 
-export default withIronSession(post, sessionOptions);
+export default withSessionRoute(post);

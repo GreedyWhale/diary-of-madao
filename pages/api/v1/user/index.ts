@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-28 09:57:52
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-13 17:04:24
+ * @LastEditTime: 2021-12-13 17:13:12
  */
 import type { NextApiHandler } from 'next';
 
@@ -16,9 +16,9 @@ import { withSessionRoute } from '~/utils/withSession';
 
 const userController = new UserController();
 const user: NextApiHandler = async (req, res) => {
-  const { username, password } = req.body;
   await checkRequestMethods(req, res, ['DELETE', 'GET', 'POST']);
 
+  const { username, password } = req.body;
   if (req.method === 'DELETE') {
     req.session.destroy();
     endRequest(res, formatResponse(204, null, '退出成功'));
