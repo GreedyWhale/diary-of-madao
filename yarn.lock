@@ -462,7 +462,7 @@
     "@types/qs" "*"
     "@types/range-parser" "*"
 
-"@types/express@*":
+"@types/express@*", "@types/express@^4.17.13":
   version "4.17.13"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.13.tgz#a76e2995728999bab51a33fabce1d705a3709034"
   integrity sha512-6bSZTPaTIACxn48l50SR+axgrqm6qXFIxrdAKaG6PaJk3+zuUr35hBlgT7vOmJcum+OEaIBLtHV/qloEAFITeA==
@@ -554,6 +554,11 @@
   version "16.11.11"
   resolved "https://registry.npmjs.org/@types/node/-/node-16.11.11.tgz"
   integrity sha512-KB0sixD67CeecHC33MYn+eYARkqTheIRNuu97y2XMjR7Wu3XibO1vaY6VBV6O/a89SPI81cEUIYT87UqUWlZNw==
+
+"@types/node@^16.11.7":
+  version "16.11.12"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.12.tgz#ac7fb693ac587ee182c3780c26eb65546a1a3c10"
+  integrity sha512-+2Iggwg7PxoO5Kyhvsq9VarmPbIelXP070HMImEpbtGCoyWNINQj4wzjbQCXzdHTRXnqufutJb5KAURZANNBAw==
 
 "@types/parse5@^5.0.0":
   version "5.0.3"
@@ -839,7 +844,7 @@ array-union@^2.1.0:
   resolved "https://registry.npmjs.org/array-union/-/array-union-2.1.0.tgz"
   integrity sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==
 
-array.prototype.flat@^1.2.4, array.prototype.flat@^1.2.5:
+array.prototype.flat@^1.2.5:
   version "1.2.5"
   resolved "https://registry.npmjs.org/array.prototype.flat/-/array.prototype.flat-1.2.5.tgz"
   integrity sha512-KaYU+S+ndVqyUnignHftkwc58o3uVU1jzczILJ1tN2YaIZpFIKBiP/x/j97E5MVPsaCloPbqWLB/8qCTVvT2qg==
@@ -1233,11 +1238,6 @@ classnames@2.2.6:
   version "2.2.6"
   resolved "https://registry.npmjs.org/classnames/-/classnames-2.2.6.tgz"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
-
-clone@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
-  integrity sha1-G39Ln1kfHo+DZwQBYANFoCiHQ18=
 
 clsx@^1.1.1:
   version "1.1.1"
@@ -3159,13 +3159,16 @@ internal-slot@^1.0.3:
   resolved "https://registry.yarnpkg.com/internmap/-/internmap-2.0.3.tgz#6685f23755e43c524e251d29cbc97248e3061009"
   integrity sha512-5Hh7Y1wQbvY5ooGgPbDaL5iYLAPzMTUrjMulskHLH6wnv/A+1q5rgEaiuqEjB+oxGXIVZs1FF+R/KPN3ZSQYYg==
 
-iron-store@^1.3.0:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/iron-store/-/iron-store-1.3.5.tgz#62709c6381af72206d8a00ad7de76d011aeb65a4"
-  integrity sha512-3RBkmVA6AZ3jezmLeX5H0lX1yS3fa90MFU9pL9vyhbpzXCRgAS7DLAfERXDPJEkT3jMZfxnVTTUwwfpB85ml7w==
+iron-session@^6.0.4:
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/iron-session/-/iron-session-6.0.4.tgz#503c354676b60a30b494504b6719713a51640333"
+  integrity sha512-q8+gtHuuV9fvWlsMWcaKAk3FFFMzMqk9NvUqRfs98FTM6AKpv0Jz7dAbats5/wyQcCkbk1SiCy8Qt7PQfWtd8Q==
   dependencies:
     "@hapi/iron" "^6.0.0"
-    clone "^2.1.2"
+    "@types/cookie" "^0.4.0"
+    "@types/express" "^4.17.13"
+    "@types/node" "^16.11.7"
+    cookie "^0.4.1"
 
 is-alphabetical@^1.0.0:
   version "1.0.4"
@@ -3994,18 +3997,6 @@ negotiator@0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
   integrity sha512-hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==
-
-next-iron-session@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/next-iron-session/-/next-iron-session-4.2.0.tgz#cad971389b0845ab4517d8b096dea817b022830f"
-  integrity sha512-RzdbAmB77HJYXPdWrOjsPPE/b6yiSDAwhXEnX5z6mSYUMh22vR1iJD/CeBjs3FWxL39qO78CsLtIjpcojFz4DA==
-  dependencies:
-    "@types/cookie" "^0.4.0"
-    array.prototype.flat "^1.2.4"
-    clone "^2.1.2"
-    cookie "^0.4.1"
-    debug "^4.3.1"
-    iron-store "^1.3.0"
 
 next@^12.0.7:
   version "12.0.7"

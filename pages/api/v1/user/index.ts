@@ -3,62 +3,59 @@
  * @Author: MADAO
  * @Date: 2021-07-28 09:57:52
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-06 10:26:52
+ * @LastEditTime: 2021-12-13 17:04:24
  */
 import type { NextApiHandler } from 'next';
 
-import { withIronSession } from 'next-iron-session';
-
-import { responseData, setCookie } from '~/utils/middlewares/index';
-import userController from '~/controller/user';
-import { STORAGE_USER_ID } from '~/utils/constants';
-import { sessionOptions } from '~/utils/withSession';
+import { endRequest, setCookie, checkRequestMethods } from '~/utils/middlewares';
+import UserController from '~/controller/user';
+import { SESSION_USER_ID } from '~/utils/constants';
 import { formatResponse } from '~/utils/request/tools';
-import { promiseSettled } from '~/utils/promise';
+import { promiseWithError } from '~/utils/promise';
+import { withSessionRoute } from '~/utils/withSession';
 
+const userController = new UserController();
 const user: NextApiHandler = async (req, res) => {
   const { username, password } = req.body;
+  await checkRequestMethods(req, res, ['DELETE', 'GET', 'POST']);
 
   if (req.method === 'DELETE') {
     req.session.destroy();
-    responseData(res, formatResponse(204, null, '退出成功'));
+    endRequest(res, formatResponse(204, null, '退出成功'));
     return;
   }
 
   if (req.method === 'GET') {
-    const id = req.session.get(STORAGE_USER_ID);
+    const id = req.session[SESSION_USER_ID];
     if (!id) {
       req.session.destroy();
-      responseData(res, formatResponse(401, null, '用户身份验证失败'));
+      endRequest(res, formatResponse(401, null, '用户身份验证失败'));
       return;
     }
 
-    const [user, sigInError] = await promiseSettled(userController.signIn({ id }));
-    if (sigInError) {
+    const [user, error] = await promiseWithError(userController.signIn(id));
+    if (error) {
       req.session.destroy();
-      responseData(res, sigInError);
+      endRequest(res, error);
       return;
     }
 
-    await setCookie(req, STORAGE_USER_ID, user!.data.id);
-    responseData(res, user!);
+    await setCookie(req, SESSION_USER_ID, user!.data.id);
+    endRequest(res, user!);
     return;
   }
 
   if (req.method === 'POST') {
-    const [user, signUpError] = await promiseSettled(userController.signUp(username, password));
-    if (signUpError) {
+    const [user, error] = await promiseWithError(userController.signUp(username, password));
+    if (error) {
       req.session.destroy();
-      responseData(res, signUpError);
+      endRequest(res, error);
       return;
     }
 
-    await setCookie(req, STORAGE_USER_ID, user!.data.id);
-    responseData(res, user!);
-    return;
+    await setCookie(req, SESSION_USER_ID, user!.data.id);
+    endRequest(res, user);
   }
-
-  responseData(res, formatResponse(405), { Allow: 'GET, DELETE, GET' });
 };
 
-export default withIronSession(user, sessionOptions);
+export default withSessionRoute(user);

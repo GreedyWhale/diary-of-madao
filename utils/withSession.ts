@@ -3,17 +3,14 @@
  * @Author: MADAO
  * @Date: 2021-07-28 14:16:20
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-04 12:22:31
+ * @LastEditTime: 2021-12-13 16:21:23
  */
-import type { GetServerSidePropsContext, GetServerSideProps } from 'next';
+import type { WithSessionRoute, WithSessionSsr } from '~/types/withSession';
 
 import { NextApiRequest } from 'next';
-import { applySession } from 'next-iron-session';
-import { merge } from 'lodash';
+import { withIronSessionApiRoute, withIronSessionSsr } from 'iron-session/next';
 
-import { STORAGE_USER_ID } from '~/utils/constants';
-
-export type WithSessionResult<T> = { userId: number } & T;
+import { SESSION_USER_ID } from '~/utils/constants';
 
 export const sessionOptions = {
   cookieName: 'diary-of-madao',
@@ -24,28 +21,9 @@ export const sessionOptions = {
 };
 
 export const getUserIdFromCookie = (req: NextApiRequest) => {
-  const userId = req.session.get<number>(STORAGE_USER_ID) || -1;
-
+  const userId = req.session[SESSION_USER_ID] || -1;
   return userId;
 };
 
-export const withSession = (handler?: GetServerSideProps) => async (context: GetServerSidePropsContext) => {
-  let userId = -1;
-  try {
-    await applySession(context.req, context.res, sessionOptions);
-    userId = getUserIdFromCookie(context.req as NextApiRequest);
-  } catch (error) {
-    console.error(error);
-  }
-
-  const serverProps = {
-    props: { userId },
-  };
-
-  if (handler) {
-    const extraProps = await handler(context);
-    return merge(serverProps, extraProps);
-  }
-
-  return serverProps;
-};
+export const withSessionRoute: WithSessionRoute = handler => withIronSessionApiRoute(handler, sessionOptions);
+export const withSessionSsr: WithSessionSsr = handler => withIronSessionSsr(handler, sessionOptions);

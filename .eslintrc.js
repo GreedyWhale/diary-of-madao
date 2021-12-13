@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-12-04 11:52:57
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-04 11:54:43
+ * @LastEditTime: 2021-12-13 15:39:09
  */
 module.exports = {
   env: {
@@ -46,4 +46,13 @@ module.exports = {
       version: 'detect',
     },
   },
+  overrides: [
+    {
+      files: ['**/*.d.ts'],
+      rules: {
+        'no-undef': 'off',
+        'no-unused-vars': 'off',
+      },
+    },
+  ],
 };
