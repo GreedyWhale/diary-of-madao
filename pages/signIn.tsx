@@ -1,4 +1,4 @@
-import type { NextPage, InferGetServerSidePropsType } from 'next';
+import type { NextPage, InferGetServerSidePropsType, NextApiRequest } from 'next';
 
 import React from 'react';
 import { useRouter } from 'next/router';
@@ -10,7 +10,7 @@ import SignOutModal from '~/components/SignOutModal';
 
 import { signIn } from '~/services/user';
 import showNotification from '~/components/Notification';
-import { withSession } from '~/utils/withSession';
+import { withSessionSsr, getUserIdFromCookie } from '~/utils/withSession';
 
 const SignIn: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   const router = useRouter();
@@ -55,7 +55,7 @@ const SignIn: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
     await signIn({ username, password })
       .then(res => {
         showNotification({
-          content: res.message,
+          content: res.data.message,
           theme: 'success',
         });
 
@@ -126,4 +126,8 @@ const SignIn: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
 
 export default SignIn;
 
-export const getServerSideProps = withSession();
+export const getServerSideProps = withSessionSsr(async context => ({
+  props: {
+    userId: getUserIdFromCookie(context.req as NextApiRequest),
+  },
+}));

@@ -3,12 +3,12 @@
  * @Author: MADAO
  * @Date: 2021-09-15 12:00:19
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-13 18:04:31
+ * @LastEditTime: 2021-12-14 14:21:37
  */
 import type { Post } from '@prisma/client';
-import type { GetPostsParams, GetPostsResponse } from '~/services/post';
-import type { ResponseData } from '~/types/requestTools';
-import type { CreatePostParams } from '~/types/postController';
+import type { GetPostsParams, GetPostsResponse } from '~/types/services/post';
+import type { API } from '~/types/API';
+import type { CreatePostParams } from '~/types/controller/post';
 
 import fsPromises from 'fs/promises';
 import { existsSync } from 'fs';
@@ -57,7 +57,7 @@ export default class PostController {
     return user;
   }
 
-  async updatePost(userId: number, postData: CreatePostParams, postId: number = -1): Promise<ResponseData<Post | null>> {
+  async updatePost(userId: number, postData: CreatePostParams, postId: number = -1): Promise<API.ResponseData<Post | null>> {
     const [user, error] = await promiseWithError(this.getUser(userId));
     if (error || !user) {
       return error;
@@ -133,7 +133,7 @@ export default class PostController {
     return formatResponse(200, post, postId ? '更新成功' : '发布成功');
   }
 
-  async getPosts(params: GetPostsParams): Promise<ResponseData<GetPostsResponse>> {
+  async getPosts(params: GetPostsParams): Promise<API.ResponseData<GetPostsResponse>> {
     const [data, error] = await promiseWithError(prisma.$transaction([
       prisma.post.findMany({
         skip: params.page === 1 ? 0 : params.page * params.pageSize,

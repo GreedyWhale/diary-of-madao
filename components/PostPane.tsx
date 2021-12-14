@@ -1,4 +1,4 @@
-import type { GetPostsResponse } from '~/services/post';
+import type { GetPostsResponse } from '~/types/services/post';
 
 import React from 'react';
 import Link from 'next/link';

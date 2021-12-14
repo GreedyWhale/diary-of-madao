@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-29 22:05:08
  * @LastEditors: MADAO
- * @LastEditTime: 2021-10-11 16:48:18
+ * @LastEditTime: 2021-12-14 14:36:14
  */
 import React from 'react';
 import useSWR, { useSWRConfig } from 'swr';
@@ -16,7 +16,7 @@ import { updateUserId } from '~/store/slice/user';
 const initialUser = {
   id: -1,
   username: '',
-  access: []
+  access: [],
 };
 
 export const useUpdateUserId = (userId: number) => {
@@ -49,13 +49,13 @@ const useUser = () => {
   const { data: response, error } = useSWR(
     userId === -1 ? null : apiUser,
     getUserInfo,
-    { shouldRetryOnError: false }
+    { shouldRetryOnError: false },
   );
 
   return {
-    user: (response && response.data) ? response.data : initialUser,
+    user: (response && response.data) ? response.data.data : initialUser,
     isLoading: (!error && !response) && userId !== -1,
-    isError: error
+    isError: error,
   };
 };
 

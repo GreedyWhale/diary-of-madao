@@ -3,32 +3,22 @@
  * @Author: MADAO
  * @Date: 2021-10-11 16:19:59
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-06 11:28:13
+ * @LastEditTime: 2021-12-14 14:19:51
  */
-import type { NextApiHandler, NextApiRequest } from 'next';
+import type { NextApiHandler } from 'next';
+import type { NextApiRequestWithFiles } from '~/types/api/uploadImage';
 
-import { withIronSession } from 'next-iron-session';
 import multer from 'multer';
 import path from 'path';
 
-import { sessionOptions } from '~/utils/withSession';
-import { ACCESS_IMAGE_UPLOAD } from '~/utils/constants';
-import { responseData, runMiddleware, verifyPermission } from '~/utils/middlewares/index';
+import { ACCESS_IMAGE_UPLOAD, SESSION_USER_ID } from '~/utils/constants';
+import { endRequest, runMiddleware, checkRequestMethods } from '~/utils/middlewares';
 import { formatResponse } from '~/utils/request/tools';
-import { promiseSettled } from '~/utils/promise';
+import { promiseWithError } from '~/utils/promise';
+import { withSessionRoute } from '~/utils/withSession';
+import UserController from '~/controller/user';
 
-type NextApiRequestWithFiles = NextApiRequest & {
-  files: {
-    fieldname: string;
-    originalname: string;
-    encoding: string;
-    mimetype: string;
-    destination: string;
-    filename: string;
-    path: string;
-    size: number;
-  }[];
-}
+const userController = new UserController();
 
 const storage = multer.diskStorage({
   filename: (req, file, cb) => {
@@ -43,25 +33,24 @@ const storage = multer.diskStorage({
 const uploader = multer({ storage });
 
 const image:NextApiHandler = async (req, res) => {
+  await checkRequestMethods(req, res, ['POST']);
+
   if (req.method === 'POST') {
-    const validationError = (await promiseSettled(verifyPermission(req, ACCESS_IMAGE_UPLOAD)))[1];
+    const validationError = (await promiseWithError(userController.permissionValidator(req.session[SESSION_USER_ID], ACCESS_IMAGE_UPLOAD)))[1];
 
     if (validationError) {
-      return responseData(res, validationError);
+      return endRequest(res, validationError);
     }
 
-    const fileError = (await promiseSettled(runMiddleware(req, res, uploader.any())))[1];
+    const fileError = (await promiseWithError(runMiddleware(req, res, uploader.any())))[1];
 
     if (fileError) {
-      responseData(res, formatResponse(500, fileError, fileError.message));
+      endRequest(res, formatResponse(500, fileError, fileError.message));
       return;
     }
 
-    responseData(res, formatResponse(200, (req as NextApiRequestWithFiles).files[0], '上传成功'));
-    return;
+    endRequest(res, formatResponse(200, (req as NextApiRequestWithFiles).files[0], '上传成功'));
   }
-
-  responseData(res, formatResponse(405), { Allow: 'POST' });
 };
 
 export const config = {
@@ -69,4 +58,4 @@ export const config = {
     bodyParser: false,
   },
 };
-export default withIronSession(image, sessionOptions);
+export default withSessionRoute(image);

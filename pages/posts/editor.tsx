@@ -1,8 +1,7 @@
-import type { NextPage } from 'next';
-import type { WithSessionResult } from '~/utils/withSession';
-import type { PostItem } from '~/services/post';
+import type { NextPage, InferGetServerSidePropsType, NextApiRequest } from 'next';
+import type { PostItem } from '~/types/services/post';
 import type { Label } from '@prisma/client';
-import type { RequestLabels } from '~/controller/post';
+import type { RequestLabels } from '~/types/controller/post';
 
 import React from 'react';
 import { useRouter } from 'next/router';
@@ -22,16 +21,12 @@ import { createPost, getPostDetail, updatePost } from '~/services/post';
 import { syncToGithub } from '~/services/git';
 import { uploadImage } from '~/services/upload';
 import { postValidator } from '~/utils/validator';
-import { withSession } from '~/utils/withSession';
-import { promiseSettled } from '~/utils/promise';
+import { withSessionSsr, getUserIdFromCookie } from '~/utils/withSession';
+import { promiseWithError } from '~/utils/promise';
 import { useMarkdownPlugins } from '~/utils/hooks/useMarkdown';
 import { LOCAL_DRAFTS } from '~/utils/constants';
 
 import showNotification from '~/components/Notification';
-
-interface PostEditorProps {
-  postId: string | undefined;
-}
 
 const getInitialFrontmatterObject = () => ({
   title: '',
@@ -72,7 +67,7 @@ let lastStorageTime = 0;
 // eslint-disable-next-line quotes
 const initialFrontmatter = "---\ntitle: '文章标题'\nlabels: ['标签一', '标签二']\nintroduction: '文章简介'\n---";
 
-const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
+const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUpdateUserId(props.userId);
   const router = useRouter();
   const { user } = useUser();
@@ -116,14 +111,14 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
     }
 
     const [postInfo, postInfoError] = props.postId
-      ? await promiseSettled(updatePost(props.postId, params))
-      : await promiseSettled(createPost(params));
+      ? await promiseWithError(updatePost(props.postId as string, params))
+      : await promiseWithError(createPost(params));
 
     if (postInfo) {
       window.localStorage.removeItem(LOCAL_DRAFTS);
       setSubmitModal({
         open: true,
-        postId: postInfo.data.id,
+        postId: postInfo.data.data.id,
       });
 
       return;
@@ -133,7 +128,7 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
   };
 
   const uploadImages = async (files: File[]) => {
-    const [result, error] = await promiseSettled(uploadImage(files[0]));
+    const [result, error] = await promiseWithError(uploadImage(files[0]));
     if (error) {
       showNotification({
         content: error.message,
@@ -186,10 +181,10 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
 
   React.useEffect(() => {
     if (props.postId) {
-      getPostDetail(props.postId)
+      getPostDetail(props.postId as string)
         .then(result => {
-          setValue(result.data.content);
-          postBeforeUpdateRef.current = result.data;
+          setValue(result.data.data.content);
+          postBeforeUpdateRef.current = result.data.data;
         });
 
       return;
@@ -310,8 +305,9 @@ const PostEditor: NextPage<WithSessionResult<PostEditorProps>> = props => {
 
 export default PostEditor;
 
-export const getServerSideProps = withSession(async context => ({
+export const getServerSideProps = withSessionSsr(async context => ({
   props: {
     postId: context.query.id || null,
+    userId: getUserIdFromCookie(context.req as NextApiRequest),
   },
 }));

@@ -3,34 +3,34 @@
  * @Author: MADAO
  * @Date: 2021-10-14 14:36:15
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-06 11:26:37
+ * @LastEditTime: 2021-12-14 11:22:14
  */
 import type { NextApiHandler } from 'next';
 import type { SimpleGit } from 'simple-git';
 
 import simpleGit from 'simple-git';
 import path from 'path';
-import { withIronSession } from 'next-iron-session';
 
 import { formatResponse } from '~/utils/request/tools';
-import { responseData } from '~/utils/middlewares/index';
-import { ACCESS_GIT_SYNC } from '~/utils/constants';
-import { verifyPermission } from '~/utils/middlewares';
-import { promiseSettled } from '~/utils/promise';
-import { sessionOptions } from '~/utils/withSession';
+import { endRequest, checkRequestMethods } from '~/utils/middlewares';
+import { ACCESS_GIT_SYNC, SESSION_USER_ID } from '~/utils/constants';
+import { promiseWithError } from '~/utils/promise';
+import UserController from '~/controller/user';
+import { withSessionRoute } from '~/utils/withSession';
 
 const git: SimpleGit = simpleGit();
-
+const userController = new UserController();
 const gitActions: NextApiHandler = async (req, res) => {
+  await checkRequestMethods(req, res, ['POSt']);
   if (req.method === 'POST') {
-    const validationError = (await promiseSettled(verifyPermission(req, ACCESS_GIT_SYNC)))[1];
+    const validationError = (await promiseWithError(userController.permissionValidator(req.session[SESSION_USER_ID], ACCESS_GIT_SYNC)))[1];
 
     if (validationError) {
-      responseData(res, validationError);
+      endRequest(res, validationError);
       return;
     }
 
-    const [syncResult, syncError] = await promiseSettled(
+    const [syncResult, syncError] = await promiseWithError(
       git
         .add(path.join(process.cwd(), '/static'))
         .commit('update：更新static目录')
@@ -38,14 +38,12 @@ const gitActions: NextApiHandler = async (req, res) => {
     );
 
     if (syncError) {
-      responseData(res, formatResponse(500, null, syncError.message));
+      endRequest(res, formatResponse(500, null, syncError.message));
       return;
     }
 
-    return responseData(res, formatResponse(200, syncResult, '同步成功'));
+    endRequest(res, formatResponse(200, syncResult, '同步成功'));
   }
-
-  responseData(res, formatResponse(405), { Allow: 'POST' });
 };
 
-export default withIronSession(gitActions, sessionOptions);
+export default withSessionRoute(gitActions);

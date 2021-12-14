@@ -2,12 +2,10 @@
  * @Author: MADAO
  * @Date: 2021-06-10 15:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-04 12:26:21
+ * @LastEditTime: 2021-12-14 12:56:49
  * @Description: 主页
  */
-import type { NextPage } from 'next';
-import type { GetPostsResponse } from '~/services/post';
-import type { WithSessionResult } from '~/utils/withSession';
+import type { NextPage, InferGetServerSidePropsType, NextApiRequest } from 'next';
 
 import React from 'react';
 
@@ -18,14 +16,11 @@ import Welcome from '~/components/Welcome';
 import Pagination from '~/components/Pagination';
 import styles from '~/assets/styles/index.module.scss';
 
-import { withSession } from '~/utils/withSession';
+import { withSessionSsr, getUserIdFromCookie } from '~/utils/withSession';
 import { useUpdateUserId } from '~/utils/hooks/useUser';
 import { getPosts } from '~/services/post';
 
-const Home: NextPage<WithSessionResult<{
-  posts: GetPostsResponse['list'];
-  pagination: GetPostsResponse['pagination'];
-}>> = props => {
+const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUpdateUserId(props.userId);
 
   const [currentPage, setCurrentPage] = React.useState(props.pagination.currentPage);
@@ -51,7 +46,7 @@ const Home: NextPage<WithSessionResult<{
 
 export default Home;
 
-export const getServerSideProps = withSession(async context => {
+export const getServerSideProps = withSessionSsr(async context => {
   const { page } = context.query;
   const postInfo = await getPosts({
     page: page ? parseInt(page as string, 10) : 1,
@@ -60,8 +55,9 @@ export const getServerSideProps = withSession(async context => {
 
   return {
     props: {
-      posts: postInfo.data.list,
-      pagination: postInfo.data.pagination,
+      pagination: postInfo.data.data.pagination,
+      posts: postInfo.data.data.list,
+      userId: getUserIdFromCookie(context.req as NextApiRequest),
     },
   };
 });

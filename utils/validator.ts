@@ -3,9 +3,9 @@
  * @Author: MADAO
  * @Date: 2021-08-09 22:34:07
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-06 12:30:18
+ * @LastEditTime: 2021-12-14 14:57:34
  */
-import type { PostData, CreatePostParams } from '~/controller/post';
+import type { PostData, CreatePostParams } from '~/types/controller/post';
 
 // eslint-disable-next-line no-unused-vars
 const postDataErrors: {[key in keyof PostData]: string} = {

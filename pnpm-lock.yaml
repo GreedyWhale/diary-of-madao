@@ -24,6 +24,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.5.0
   '@typescript-eslint/parser': ^5.5.0
   axios: ^0.24.0
+  bytemd: ^1.10.13
   crypto-js: ^4.1.1
   eslint: ^8.4.0
   eslint-config-next: 12.0.5
@@ -34,6 +35,7 @@ specifiers:
   iron-session: ^6.0.4
   koa: ^2.13.4
   koa-send: ^5.0.1
+  lodash: ^4.17.21
   moment: ^2.29.1
   multer: ^1.4.3
   next: ^12.0.7
@@ -52,25 +54,27 @@ specifiers:
   typescript: 4.5.2
 
 dependencies:
-  '@bytemd/plugin-breaks': 1.10.13
-  '@bytemd/plugin-footnotes': 1.10.13
-  '@bytemd/plugin-frontmatter': 1.10.13
-  '@bytemd/plugin-gemoji': 1.10.13
-  '@bytemd/plugin-gfm': 1.10.13
-  '@bytemd/plugin-highlight': 1.10.13
-  '@bytemd/plugin-math': 1.10.13
-  '@bytemd/plugin-medium-zoom': 1.10.13
-  '@bytemd/plugin-mermaid': 1.10.13
+  '@bytemd/plugin-breaks': 1.10.13_bytemd@1.10.13
+  '@bytemd/plugin-footnotes': 1.10.13_bytemd@1.10.13
+  '@bytemd/plugin-frontmatter': 1.10.13_bytemd@1.10.13
+  '@bytemd/plugin-gemoji': 1.10.13_bytemd@1.10.13
+  '@bytemd/plugin-gfm': 1.10.13_bytemd@1.10.13
+  '@bytemd/plugin-highlight': 1.10.13_bytemd@1.10.13
+  '@bytemd/plugin-math': 1.10.13_bytemd@1.10.13
+  '@bytemd/plugin-medium-zoom': 1.10.13_bytemd@1.10.13
+  '@bytemd/plugin-mermaid': 1.10.13_bytemd@1.10.13
   '@bytemd/react': 1.10.13_react@17.0.2
   '@prisma/client': 3.6.0_prisma@3.6.0
   '@reduxjs/toolkit': 1.7.0_react-redux@7.2.6+react@17.0.2
   axios: 0.24.0
+  bytemd: 1.10.13
   crypto-js: 4.1.1
   github-markdown-css: 5.1.0
   gray-matter: 4.0.3
   iron-session: 6.0.4_next@12.0.7
   koa: 2.13.4
   koa-send: 5.0.1
+  lodash: 4.17.21
   moment: 2.29.1
   multer: 1.4.4
   next: 12.0.7_56f80e3d7f33890c0a22e3eb64e13f43
@@ -173,86 +177,95 @@ packages:
     resolution: {integrity: sha512-GcIY79elgB+azP74j8vqkiXz8xLFfIzbQJdlwOPisgbKT00tviJQuEghOXSMVxJ00HoYJbGswr4kcllUc4xCcg==}
     dev: false
 
-  /@bytemd/plugin-breaks/1.10.13:
+  /@bytemd/plugin-breaks/1.10.13_bytemd@1.10.13:
     resolution: {integrity: sha512-Ah6TNbs6uFpnyr8jhAwNUAIeuzZ1liNtbGkuEzzjwG48VTfqYt3ISF7pTMVSnFpuJXXBjVpZ7ACLpru7soGiXA==}
     peerDependencies:
       bytemd: ^1.5.0
     dependencies:
+      bytemd: 1.10.13
       remark-breaks: 2.0.2
     dev: false
 
-  /@bytemd/plugin-footnotes/1.10.13:
+  /@bytemd/plugin-footnotes/1.10.13_bytemd@1.10.13:
     resolution: {integrity: sha512-57uflspnrJR11nLDxYjyBZJ7LzCGQoMuexJ+t2FxMdOH1HMg4Bt5t3V9waKzK06zfCjoD1nePedF+aqn0xxDow==}
     peerDependencies:
       bytemd: ^1.5.0
     dependencies:
+      bytemd: 1.10.13
       remark-footnotes: 3.0.0
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /@bytemd/plugin-frontmatter/1.10.13:
+  /@bytemd/plugin-frontmatter/1.10.13_bytemd@1.10.13:
     resolution: {integrity: sha512-jMMt6mCEE0dN7rug9u9o+09jEe+i/xf/d/5iVoG76hy8oy60bo5F/RzuQoi31vcVfFBvZEpYbVlg3CZdGzwCDw==}
     peerDependencies:
       bytemd: ^1.5.0
     dependencies:
       '@types/js-yaml': 3.12.7
+      bytemd: 1.10.13
       js-yaml: 3.14.1
       remark-frontmatter: 3.0.0
     dev: false
 
-  /@bytemd/plugin-gemoji/1.10.13:
+  /@bytemd/plugin-gemoji/1.10.13_bytemd@1.10.13:
     resolution: {integrity: sha512-wrdIsIJcdYPlu2TVWI5yKdFHbaBMnAGwV/IcvfMuJRVgrbJgazEUVL2p4PtFAs0DVkrkb9AcJTkmhc1f9jRyOQ==}
     peerDependencies:
       bytemd: ^1.5.0
     dependencies:
+      bytemd: 1.10.13
       remark-gemoji: 6.0.0
     dev: false
 
-  /@bytemd/plugin-gfm/1.10.13:
+  /@bytemd/plugin-gfm/1.10.13_bytemd@1.10.13:
     resolution: {integrity: sha512-6S3dLePqKRok9QP+ReNPaQY4XvXcsPUR+9R/KczNu/gqZv+GwXRYNSkmC4HS7mID2umvSni69d8xwE0Hc09wnQ==}
     peerDependencies:
       bytemd: ^1.5.0
     dependencies:
+      bytemd: 1.10.13
       remark-gfm: 1.0.0
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /@bytemd/plugin-highlight/1.10.13:
+  /@bytemd/plugin-highlight/1.10.13_bytemd@1.10.13:
     resolution: {integrity: sha512-dQJnxXrh6Z/3meF/3UOlWNkKRw9C2pBGFRs9ijN26b1GrgYsuVgWRBc6lvmPVnzKWoJnaL32yUeMzUtQO/evXA==}
     peerDependencies:
       bytemd: ^1.5.0
     dependencies:
+      bytemd: 1.10.13
       highlight.js: 10.7.3
     dev: false
 
-  /@bytemd/plugin-math/1.10.13:
+  /@bytemd/plugin-math/1.10.13_bytemd@1.10.13:
     resolution: {integrity: sha512-bcCc9QfMUaEEQQ2oPbhaqcFgJ0gsI1AodpNi1oB1S/fauGOzDxUE5K+rsw0ChZDUc8wZgR9uhX/wJ9kZ+vfSPg==}
     peerDependencies:
       bytemd: ^1.5.0
     dependencies:
       '@types/katex': 0.11.1
+      bytemd: 1.10.13
       katex: 0.12.0
       remark-math: 4.0.0
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /@bytemd/plugin-medium-zoom/1.10.13:
+  /@bytemd/plugin-medium-zoom/1.10.13_bytemd@1.10.13:
     resolution: {integrity: sha512-4Bfa/HpBTmhdkRqxhjXc8zZdGxiHbdLFLIcwlc2Vb3qmdASXmjbbsYiQ875MB/DeshelFsKz3roR4sBCFcvM9g==}
     peerDependencies:
       bytemd: ^1.5.0
     dependencies:
+      bytemd: 1.10.13
       medium-zoom: 1.0.6
     dev: false
 
-  /@bytemd/plugin-mermaid/1.10.13:
+  /@bytemd/plugin-mermaid/1.10.13_bytemd@1.10.13:
     resolution: {integrity: sha512-g3w9p7FcKJqaDESc6Y+wzaQGSeUjj4aiHhPvtmMKImy7LTd5801NEIX8TvRoE5/zVgFv65VGCwzOKNYNbzsW1A==}
     peerDependencies:
       bytemd: ^1.5.0
     dependencies:
       '@types/mermaid': 8.2.7
+      bytemd: 1.10.13
       mermaid: 8.13.5
     dev: false
 

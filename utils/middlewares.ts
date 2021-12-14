@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-12-13 14:58:11
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-13 15:52:54
+ * @LastEditTime: 2021-12-14 11:15:43
  */
 import type {
   RunMiddleware,
@@ -18,7 +18,7 @@ import { formatResponse } from '~/utils/request/tools';
  * @see https://nextjs.org/docs/api-routes/api-middlewares
  */
 export const runMiddleware: RunMiddleware = (req, res, middleware) => new Promise((resolve, reject) => {
-  middleware(req, res, result => {
+  middleware(req, res, (result: any) => {
     if (result instanceof Error) {
       return reject(result);
     }

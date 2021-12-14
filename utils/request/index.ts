@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-24 10:45:07
  * @LastEditors: MADAO
- * @LastEditTime: 2021-09-28 10:02:51
+ * @LastEditTime: 2021-12-14 13:01:40
  */
 import axios from 'axios';
 
@@ -14,10 +14,10 @@ const axiosInstance = axios.create({
   baseURL: ENV_IS_BROWSER ? '' : 'http://localhost:3000',
   retry: 0,
   retryDelay: 0,
-  showErrorNotification: true
+  showErrorNotification: true,
 });
 
-axiosInstance.interceptors.response.use(response => response.data, error => {
+axiosInstance.interceptors.response.use(response => response, error => {
   const { config = {}, response } = error;
   const errorData = response ? response.data : { message: '请求失败' };
 
@@ -44,7 +44,7 @@ axiosInstance.interceptors.response.use(response => response.data, error => {
     showNotification({
       content: errorData.message,
       theme: 'fail',
-      delay: 0
+      delay: 0,
     });
   }
 

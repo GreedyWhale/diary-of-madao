@@ -3,9 +3,9 @@
  * @Author: MADAO
  * @Date: 2021-09-15 14:46:09
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-13 17:08:22
+ * @LastEditTime: 2021-12-14 14:22:29
  */
-import type { UserQueryConditions, AccessMap } from '~/types/userController';
+import type { UserQueryConditions, AccessMap } from '~/types/controller/user';
 
 import sha3 from 'crypto-js/sha3';
 import { omit } from 'lodash';
@@ -108,5 +108,26 @@ export default class UserController {
     }
 
     return formatResponse(200, omit(newUser, ['passwordDigest']), '注册成功');
+  }
+
+  async permissionValidator(userId: number, permission: string) {
+    if (!userId) {
+      return Promise.reject(formatResponse(401, null, '用户身份验证失败'));
+    }
+
+    const [user, error] = await promiseWithError(this.getUser({ id: userId }));
+
+    if (error || !user) {
+      return error
+        ? Promise.reject(formatResponse(500, null, error.message))
+        : Promise.reject(formatResponse(404, null, '用户不存在'));
+    }
+
+    const isPassed = user.access.some(value => value === permission);
+    if (!isPassed) {
+      return Promise.reject(formatResponse(403, null, '权限不足'));
+    }
+
+    return isPassed;
   }
 }

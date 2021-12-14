@@ -3,13 +3,10 @@
  * @Author: MADAO
  * @Date: 2021-12-13 15:21:02
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-13 15:57:30
+ * @LastEditTime: 2021-12-14 12:38:46
  */
-export type ResponseData<T> = {
-  code: ResponseStatusCode;
-  data: T;
-  message: string;
-}
+import type { API } from '~/types/API';
+
 export type ResponseStatusCode = 200
 | 204
 | 401
@@ -26,4 +23,4 @@ export type FormatResponse = <T = Record<string, any> | null>(
   code: ResponseStatusCode,
   data?: T,
   message?: string
-) => ResponseData<T>;
+) => API.ResponseData<T>;

@@ -1,6 +1,4 @@
-import type { NextPage } from 'next';
-import type { PostItem } from '~/services/post';
-import type { WithSessionResult } from '~/utils/withSession';
+import type { NextPage, InferGetServerSidePropsType, NextApiRequest } from 'next';
 
 import React from 'react';
 import moment from 'moment';
@@ -11,7 +9,7 @@ import { Modal, Button } from 'semantic-ui-react';
 import { Viewer } from '@bytemd/react';
 
 import { getPostDetail, deletePost } from '~/services/post';
-import { withSession } from '~/utils/withSession';
+import { withSessionSsr, getUserIdFromCookie } from '~/utils/withSession';
 import { useUpdateUserId } from '~/utils/hooks/useUser';
 import { ACCESS_POST_DELETE } from '~/utils/constants';
 import useUser from '~/utils/hooks/useUser';
@@ -23,11 +21,7 @@ import PostTitle from '~/components/PostTitle';
 import Terminal from '~/components/Terminal';
 import showNotification from '~/components/Notification';
 
-interface PostsProps {
-  post: PostItem;
-}
-
-const Posts: NextPage<WithSessionResult<PostsProps>> = props => {
+const Posts: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   const router = useRouter();
   const { user } = useUser();
   const plugins = useMarkdownPlugins();
@@ -117,12 +111,13 @@ const Posts: NextPage<WithSessionResult<PostsProps>> = props => {
 
 export default Posts;
 
-export const getServerSideProps = withSession(async context => {
+export const getServerSideProps = withSessionSsr(async context => {
   const post = await getPostDetail(context.query.id as string);
 
   return {
     props: {
-      post: post.data,
+      post: post.data.data,
+      userId: getUserIdFromCookie(context.req as NextApiRequest),
     },
   };
 });
