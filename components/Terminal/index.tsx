@@ -1,12 +1,10 @@
+import type { TerminalProps } from './type';
+
 import React from 'react';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 
-import styles from '~/assets/styles/terminal.module.scss';
-
-interface TerminalProps {
-  command?: string;
-}
+import styles from './index.module.scss';
 
 const Terminal = (props: TerminalProps) => {
   const router = useRouter();

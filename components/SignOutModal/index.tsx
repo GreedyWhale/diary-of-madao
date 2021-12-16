@@ -1,14 +1,9 @@
-import type { ModalProps } from 'semantic-ui-react';
+import type { SignOutModalProps } from './type';
 
 import React from 'react';
 import { Modal, Header as SemanticUIHeader, Icon, Button } from 'semantic-ui-react';
 
 import { useSignOut } from '~/utils/hooks/useUser';
-
-type SignOutModalProps = ModalProps & {
-  onCancel?: () => void;
-  onConfirm?: () => void;
-}
 
 const SignOutModal = (props: SignOutModalProps) => {
   const { onCancel, onConfirm, ...rest } = props;

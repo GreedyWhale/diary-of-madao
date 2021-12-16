@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-28 10:31:34
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-16 15:40:14
+ * @LastEditTime: 2021-12-16 16:26:39
  */
 import type { FormatResponse, ResponseMessageMap, RequestError } from '~/types/requestTools';
 
@@ -32,5 +32,5 @@ export const getErrorInfo = (error: RequestError | null) => {
     };
   }
 
-  return undefined;
+  return null;
 };

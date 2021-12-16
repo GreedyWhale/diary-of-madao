@@ -1,15 +1,11 @@
-import type { GetPostsResponse } from '~/types/services/post';
+import type { PostPaneProps } from './type';
 
 import React from 'react';
 import Link from 'next/link';
 import moment from 'moment';
 
-import styles from '~/assets/styles/postPane.module.scss';
+import styles from './index.module.scss';
 import PostTitle from '~/components/PostTitle';
-
-interface PostPaneProps {
-  post: GetPostsResponse['list'][number];
-}
 
 const PostPane = (props: PostPaneProps) => (
   <article className={styles.container}>

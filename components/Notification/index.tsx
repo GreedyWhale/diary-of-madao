@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 
-import styles from '~/assets/styles/notification.module.scss';
+import styles from './index.module.scss';
 
 import { EVENT_UPDATE_NOTIFICATION } from '~/utils/constants';
 import eventHub from '~/utils/eventHub';

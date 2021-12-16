@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import styles from '~/assets/styles/header.module.scss';
+import styles from './index.module.scss';
 
 import useUser from '~/utils/hooks/useUser';
 import SignOutModal from '~/components/SignOutModal';

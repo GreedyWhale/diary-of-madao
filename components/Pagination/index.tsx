@@ -1,14 +1,8 @@
-import type { API } from '~/types/API';
+import type { PaginationProps } from './type';
 
 import React from 'react';
 
-import styles from '~/assets/styles/pagination.module.scss';
-
-type PaginationProps = API.BasePagination & {
-  onClick: (_currentPage: number) => void;
-  maxRenderItems: number;
-  step: number;
-}
+import styles from './index.module.scss';
 
 const Pagination = (props: PaginationProps) => {
   const paginationItems = React.useMemo(() => {

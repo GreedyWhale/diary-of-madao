@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from '~/assets/styles/welcome.module.scss';
+import styles from './index.module.scss';
 
 const Welcome = () => {
   const [welcomeText, setWelcomeText] = React.useState<{
