@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-12-13 14:58:11
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-14 11:15:43
+ * @LastEditTime: 2021-12-16 17:59:53
  */
 import type {
   RunMiddleware,
@@ -51,6 +51,6 @@ export const endRequest: EndRequest = (res, data, headers?) => {
 };
 
 export const setCookie: SetCookie = async (req, key: string, value: any) => {
-  req.session.set(key, value);
+  req.session[key] = value;
   await req.session.save();
 };

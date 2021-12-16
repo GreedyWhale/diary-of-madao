@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-28 09:57:52
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-13 17:13:12
+ * @LastEditTime: 2021-12-16 17:56:22
  */
 import type { NextApiHandler } from 'next';
 
@@ -33,7 +33,7 @@ const user: NextApiHandler = async (req, res) => {
       return;
     }
 
-    const [user, error] = await promiseWithError(userController.signIn(id));
+    const [user, error] = await promiseWithError(userController.signIn({ id }));
     if (error) {
       req.session.destroy();
       endRequest(res, error);

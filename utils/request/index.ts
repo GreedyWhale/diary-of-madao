@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-24 10:45:07
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-16 15:33:18
+ * @LastEditTime: 2021-12-16 18:00:03
  */
 import type { AxiosError } from 'axios';
 
@@ -23,7 +23,7 @@ axiosInstance.interceptors.response.use(response => response, (error: AxiosError
   const { config = {}, response } = error;
   const message = error.message || '请求失败';
   const errorData = response
-    ? { ...response, message: response?.statusText || message }
+    ? { ...response, message: response.data.message || (response.statusText || message) }
     : { message, status: 502 };
 
   if (config.retry) {

@@ -1,5 +1,7 @@
+@import '~/assets/styles/mixin.scss';
+
 .container {
-  max-width: 600px;
+  width: 600px;
   background: #0c162d;
   border: 1px solid #202637;
   border-radius: 8px;
@@ -58,5 +60,12 @@
     margin: 5px 0 15px;
     font-size: 12px;
     color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+@include mobile {
+  .container {
+    max-width: 600px;
+    width: 100%;
   }
 }

@@ -14,3 +14,9 @@
   $zIndex: list.nth($zIndexList, $stage);
   z-index: $zIndex;
 }
+
+@mixin mobile {
+  @media screen and (max-width: 1199px) {
+    @content;
+  }
+}

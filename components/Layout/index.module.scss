@@ -1,3 +1,5 @@
+@import '~/assets/styles/mixin.scss';
+
 .layout {
   max-width: var(--main-width);
   margin: 0 auto;
@@ -5,4 +7,11 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+@include mobile {
+  .layout {
+    max-width: 100%;
+    width: 100%;
+  }
 }

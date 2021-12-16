@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import styles from '~/assets/styles/signIn.module.scss';
 import Layout from '~/components/Layout';
-import CustomButton from '~/components/Button';
+import Button from '~/components/Button';
 import SignOutModal from '~/components/SignOutModal';
 
 import { signIn } from '~/services/user';
@@ -110,10 +110,10 @@ const SignIn: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
         >
           <span>✕</span>{errorMessage}
         </p>
-        <p className={styles.tips}>* 首次登录会默认注册账号</p>
-        <CustomButton onClick={onSubmit} inverted color="green">
+        <p className={styles.tips}>* 首次登录会默认注册账号（但是由于备案原因，暂不开放注册）</p>
+        <Button onClick={onSubmit} color="primary">
           登录
-        </CustomButton>
+        </Button>
       </div>
       <SignOutModal
         open={open}
