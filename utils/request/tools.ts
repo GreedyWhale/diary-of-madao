@@ -3,9 +3,9 @@
  * @Author: MADAO
  * @Date: 2021-07-28 10:31:34
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-13 15:57:48
+ * @LastEditTime: 2021-12-16 15:40:14
  */
-import type { FormatResponse, ResponseMessageMap } from '~/types/requestTools';
+import type { FormatResponse, ResponseMessageMap, RequestError } from '~/types/requestTools';
 
 const messages: ResponseMessageMap = {
   200: '请求成功',
@@ -24,3 +24,13 @@ export const formatResponse: FormatResponse = (code, data?, message?) => ({
   message: message || messages[code],
 });
 
+export const getErrorInfo = (error: RequestError | null) => {
+  if (error) {
+    return {
+      errorCode: error.response ? error.response.status : error.status,
+      errorMessage: error.response ? error.response.statusText : error.message,
+    };
+  }
+
+  return undefined;
+};

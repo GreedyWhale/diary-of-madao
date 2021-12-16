@@ -1,0 +1,97 @@
+.btn {
+  padding: 0.5em 1em;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.75;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+  $colors: (
+    'primary': (
+      'main': #1e847f,
+      'dark': #155c58,
+      'light': #4b9c98,
+    ),
+    'secondary': (
+      'main': #035397,
+      'dark': #023a69,
+      'light': #3575ab,
+    ),
+    'success': (
+      'main': #4E9F3D,
+      'dark': #366f2a,
+      'light': #71b263,
+    ),
+    'error': (
+      'main': #e91e63,
+      'dark': #a31545,
+      'light': #ed4b82,
+    ),
+    'warning': (
+      'main': #ffc107,
+      'dark': #b28704,
+      'light': #ffcd38,
+    )
+  );
+  @each $key, $color in $colors {
+    &[data-color="#{$key}"] {
+      &[data-variant="contained"] {
+        border: none;
+        background: map-get($map: $color, $key: 'main');
+        box-shadow: rgb(0 0 0 / 20%) 0px 3px 1px -2px,
+        rgb(0 0 0 / 14%) 0px 2px 2px 0px,
+        rgb(0 0 0 / 12%) 0px 1px 5px 0px;
+        color: #fff;
+        &:hover {
+          background: map-get($map: $color, $key: 'dark');
+        }
+        &:active {
+          background: map-get($map: $color, $key: 'light');
+        }
+      }
+      &[data-variant="outlined"] {
+        border: 1px solid map-get($map: $color, $key: 'light');
+        background: transparent;
+        color: map-get($map: $color, $key: 'main');
+        &:hover {
+          border-color: map-get($map: $color, $key: 'dark');
+          background: rgba(map-get($map: $color, $key: 'light'), 0.2);
+        }
+        &:active {
+          background: rgba(map-get($map: $color, $key: 'light'), 0.4);
+        }
+      }
+      &[data-variant="text"] {
+        border: none;
+        background: transparent;
+        color: map-get($map: $color, $key: 'main');
+        &:hover {
+          background: rgba(map-get($map: $color, $key: 'dark'), 0.3);
+        }
+        &:active {
+          background: rgba(map-get($map: $color, $key: 'light'), 0.4);
+        }
+      }
+      &[data-loading="true"] {
+        opacity: 0.5;
+        pointer-events: none;
+        .content {
+          margin-left: 10px;
+        }
+      }
+      &[aria-disabled="true"] {
+        background: rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.3);
+        border: none;
+        cursor: not-allowed;
+        &:hover,
+        &:active {
+          background: rgba(255, 255, 255, 0.12);
+        }
+      }
+    }
+  }
+}

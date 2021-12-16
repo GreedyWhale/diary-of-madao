@@ -4,12 +4,6 @@
   --main-width: 1200px;
   --font-size: 16px;
   --theme-color: #FFA900;
-  --theme-color-green: rgb(13,148,136);
-  --theme-color-orange: rgb(245,158,11);
-  --theme-color-red: rgb(225,29,72);
-  --theme-color-purple: rgb(124,58,237);
-  --theme-color-pink: rgb(219,39,119);
-  --theme-color-blue: rgb(8,145,178);
 }
 
 * {
@@ -34,15 +28,11 @@ body {
   }
 }
 
-button:active {
-  opacity: 0.6;
-}
-
 a {
   text-decoration: none;
   &,
   &:active,
   &:visited {
-    color: var(--theme-color-blue);
+    color: rgb(8,145,178);
   }
 }

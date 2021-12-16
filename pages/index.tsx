@@ -2,7 +2,7 @@
  * @Author: MADAO
  * @Date: 2021-06-10 15:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-14 12:56:49
+ * @LastEditTime: 2021-12-16 15:40:06
  * @Description: 主页
  */
 import type { NextPage, InferGetServerSidePropsType, NextApiRequest } from 'next';
@@ -19,6 +19,8 @@ import styles from '~/assets/styles/index.module.scss';
 import { withSessionSsr, getUserIdFromCookie } from '~/utils/withSession';
 import { useUpdateUserId } from '~/utils/hooks/useUser';
 import { getPosts } from '~/services/post';
+import { promiseWithError } from '~/utils/promise';
+import { getErrorInfo } from '~/utils/request/tools';
 
 const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUpdateUserId(props.userId);
@@ -26,7 +28,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
   const [currentPage, setCurrentPage] = React.useState(props.pagination.currentPage);
 
   return (
-    <Layout>
+    <Layout errorInfo={props.errorInfo}>
       <Welcome />
       <Terminal command="ls -a" />
       <div className={styles.posts}>
@@ -48,16 +50,21 @@ export default Home;
 
 export const getServerSideProps = withSessionSsr(async context => {
   const { page } = context.query;
-  const postInfo = await getPosts({
+  const [postInfo, error] = await promiseWithError(getPosts({
     page: page ? parseInt(page as string, 10) : 1,
     pageSize: 10,
-  });
+  }));
 
   return {
     props: {
-      pagination: postInfo.data.data.pagination,
-      posts: postInfo.data.data.list,
+      pagination: postInfo ? postInfo.data.data.pagination : {
+        pageSize: 10,
+        currentPage: 1,
+        total: 1,
+      },
+      posts: postInfo ? postInfo.data.data.list : [],
       userId: getUserIdFromCookie(context.req as NextApiRequest),
+      errorInfo: getErrorInfo(error),
     },
   };
 });

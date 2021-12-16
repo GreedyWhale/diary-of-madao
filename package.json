@@ -41,8 +41,6 @@
     "react-redux": "^7.2.6",
     "react-transition-group": "^4.4.2",
     "redux-logger": "^3.0.6",
-    "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^2.0.4",
     "sharp": "^0.29.3",
     "simple-git": "^2.48.0",
     "swr": "^1.1.0"

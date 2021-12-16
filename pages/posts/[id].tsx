@@ -14,6 +14,8 @@ import { useUpdateUserId } from '~/utils/hooks/useUser';
 import { ACCESS_POST_DELETE } from '~/utils/constants';
 import useUser from '~/utils/hooks/useUser';
 import { useMarkdownPlugins } from '~/utils/hooks/useMarkdown';
+import { promiseWithError } from '~/utils/promise';
+import { getErrorInfo } from '~/utils/request/tools';
 
 import styles from '~/assets/styles/posts.module.scss';
 import Layout from '~/components/Layout';
@@ -54,7 +56,7 @@ const Posts: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
   };
 
   return (
-    <Layout>
+    <Layout errorInfo={props.errorInfo}>
       <div>
         <Terminal command={`cat ${props.post.title}`} />
         <PostTitle
@@ -112,12 +114,25 @@ const Posts: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
 export default Posts;
 
 export const getServerSideProps = withSessionSsr(async context => {
-  const post = await getPostDetail(context.query.id as string);
+  const [post, error] = await promiseWithError(getPostDetail(context.query.id as string));
 
   return {
     props: {
-      post: post.data.data,
+      post: post ? post.data.data : {
+        author: {
+          username: '',
+        },
+        labels: [],
+        id: 0,
+        title: '',
+        content: '',
+        introduction: '',
+        authorId: '',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
       userId: getUserIdFromCookie(context.req as NextApiRequest),
+      errorInfo: getErrorInfo(error),
     },
   };
 });

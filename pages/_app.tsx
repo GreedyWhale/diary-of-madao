@@ -2,7 +2,7 @@
  * @Author: MADAO
  * @Date: 2021-06-10 15:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2021-11-29 15:55:01
+ * @LastEditTime: 2021-12-16 10:35:42
  * @Description: 入口文件
  */
 import type { AppProps } from 'next/app';
@@ -11,9 +11,9 @@ import React from 'react';
 import Head from 'next/head';
 import { Provider } from 'react-redux';
 
+import 'normalize.css';
 import '~/assets/styles/globals.scss';
 import '~/assets/styles/markdown.scss';
-import '~/assets/styles/library.scss';
 import Loading from '~/components/Loading';
 
 import createStore from '~/store';
@@ -28,7 +28,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon-16x16.png" />
         <link rel="icon" type="image/png" href="/images/logo/favicon.ico" />
         <link rel="manifest" href="/images/logo/site.webmanifest" />
-        <link rel="mask-icon" href="/images/logo/safari-pinned-tab.svg" color="#ff8a26" />
+        <link rel="mask-icon" href="/images/logo/safari-pinned-tab.svg" color="#ffffff" />
+        <meta name="description" content="Programming, notes" />
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="theme-color" content="#ffffff" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

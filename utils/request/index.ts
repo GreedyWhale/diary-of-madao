@@ -3,8 +3,10 @@
  * @Author: MADAO
  * @Date: 2021-07-24 10:45:07
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-14 13:01:40
+ * @LastEditTime: 2021-12-16 15:33:18
  */
+import type { AxiosError } from 'axios';
+
 import axios from 'axios';
 
 import showNotification from '~/components/Notification';
@@ -17,9 +19,12 @@ const axiosInstance = axios.create({
   showErrorNotification: true,
 });
 
-axiosInstance.interceptors.response.use(response => response, error => {
+axiosInstance.interceptors.response.use(response => response, (error: AxiosError) => {
   const { config = {}, response } = error;
-  const errorData = response ? response.data : { message: '请求失败' };
+  const message = error.message || '请求失败';
+  const errorData = response
+    ? { ...response, message: response?.statusText || message }
+    : { message, status: 502 };
 
   if (config.retry) {
     config.__retry = config.__retry || 0;
