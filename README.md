@@ -7,5 +7,5 @@
       有可能是权限不足的问题
       ```
       docker-compose down
-      docker-compose up -d
+      sudo docker-compose up -d
       ```

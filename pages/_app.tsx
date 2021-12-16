@@ -2,7 +2,7 @@
  * @Author: MADAO
  * @Date: 2021-06-10 15:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-16 10:35:42
+ * @LastEditTime: 2021-12-16 16:05:21
  * @Description: 入口文件
  */
 import type { AppProps } from 'next/app';
@@ -14,7 +14,7 @@ import { Provider } from 'react-redux';
 import 'normalize.css';
 import '~/assets/styles/globals.scss';
 import '~/assets/styles/markdown.scss';
-import Loading from '~/components/Loading';
+import Backdrop from '~/components/Backdrop';
 
 import createStore from '~/store';
 
@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="theme-color" content="#ffffff" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Loading />
+      <Backdrop />
       <Component {...pageProps} />
     </Provider>
   );

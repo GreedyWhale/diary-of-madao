@@ -17,7 +17,7 @@ $easeOutSine: cubic-bezier(0.39, 0.575, 0.565, 1);
   position: fixed;
   right: 0;
   top: 40px;
-  @include zIndex(breakingThroughTheSky);
+  @include zIndex(breakingThroughTheSky, 1);
   .notification {
     background: #2a274d;
     padding: 5px 25px;

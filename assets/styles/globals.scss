@@ -23,9 +23,6 @@ body {
   font-size: var(--font-size);
   min-height: 100vh;
   margin: 0;
-  &[data-prevent-scroll="true"] {
-    overflow: hidden;
-  }
 }
 
 a {
