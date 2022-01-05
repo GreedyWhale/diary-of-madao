@@ -1,4 +1,4 @@
-import type { LayoutProps } from './type';
+import type { LayoutProps } from '~/types/components/layout';
 
 import React from 'react';
 import Error from 'next/error';

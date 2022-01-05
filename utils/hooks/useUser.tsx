@@ -3,8 +3,10 @@
  * @Author: MADAO
  * @Date: 2021-07-29 22:05:08
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-14 14:36:14
+ * @LastEditTime: 2022-01-05 22:32:11
  */
+import type { SignOutDialogProps } from '~/types/useUser';
+
 import React from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 
@@ -12,6 +14,9 @@ import { getUserInfo, signOut } from '~/services/user';
 import { apiUser } from '~/services/api';
 import { useAppDispatch, useAppSelector } from '~/utils/hooks/useRedux';
 import { updateUserId } from '~/store/slice/user';
+
+import Dialog from '~/components/Dialog';
+import Button from '~/components/Button';
 
 const initialUser = {
   id: -1,
@@ -41,7 +46,31 @@ export const useSignOut = () => {
       });
   };
 
-  return doSignOut;
+  const SignOutDialog: React.FC<SignOutDialogProps> = props => {
+    const handleCancel = async () => props.onCancel();
+    const handleConfirm = async () => {
+      await doSignOut();
+      props.onConfirm();
+    };
+
+    return (
+      <Dialog
+        open={props.open}
+        title="退出登录"
+        content="是否退出当前账号？"
+        onClose={props.onCancel}
+        actions={[
+          <Button key="cancel" variant="outlined" color="secondary" onClick={handleCancel}>取消</Button>,
+          <Button key="confirm" variant="contained" color="primary" onClick={handleConfirm}>确定</Button>,
+        ]}
+      />
+    );
+  };
+
+  return {
+    signOut: doSignOut,
+    SignOutDialog,
+  };
 };
 
 const useUser = () => {

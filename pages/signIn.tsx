@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import styles from '~/assets/styles/signIn.module.scss';
 import Layout from '~/components/Layout';
 import Button from '~/components/Button';
-import SignOutModal from '~/components/SignOutModal';
 
 import { signIn } from '~/services/user';
 import showNotification from '~/components/Notification';
@@ -18,7 +17,6 @@ const SignIn: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
   const [password, setPassword] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
   const [visiblePassword, setVisiblePassword] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
   const memoizedFormDate = React.useMemo(() => ([
     {
       key: 'username',
@@ -69,9 +67,9 @@ const SignIn: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
 
   React.useEffect(() => {
     if (props.userId !== -1) {
-      setOpen(true);
+      router.replace('/');
     }
-  }, [props.userId]);
+  }, [props.userId, router]);
 
   return (
     <Layout>
@@ -115,11 +113,6 @@ const SignIn: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
           登录
         </Button>
       </div>
-      <SignOutModal
-        open={open}
-        onCancel={() => router.replace('/')}
-        onClose={() => router.replace('/')}
-      />
     </Layout>
   );
 };

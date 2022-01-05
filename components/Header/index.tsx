@@ -5,14 +5,14 @@ import { useRouter } from 'next/router';
 
 import styles from './index.module.scss';
 
-import useUser from '~/utils/hooks/useUser';
-import SignOutModal from '~/components/SignOutModal';
+import useUser, { useSignOut } from '~/utils/hooks/useUser';
 
 const Header = () => {
   const router = useRouter();
   const { user } = useUser();
-  const [open, setOpen] = React.useState(false);
+  const { SignOutDialog } = useSignOut();
 
+  const [open, setOpen] = React.useState(false);
   const username = React.useMemo(() => user.username || '登录', [user.username]);
 
   const toSignIn = (event: React.MouseEvent) => {
@@ -46,10 +46,10 @@ const Header = () => {
           </div>
         </nav>
       </header>
-      <SignOutModal
+      <SignOutDialog
         open={open}
-        onConfirm={() => setOpen(false)}
         onCancel={() => setOpen(false)}
+        onConfirm={() => setOpen(false)}
       />
     </>
   );

@@ -3,9 +3,8 @@
   perspective: 1000px;
   border-radius: 50%;
   color: #fff;
-}
-  .loading::before,
-  .loading::after {
+  &::before,
+  &::after {
     content: '';
     display: block;
     position: absolute;
@@ -17,10 +16,11 @@
     transform: rotateX(70deg);
     animation: 1s spin linear infinite;
   }
-  .loading::after {
+  &::after {
     transform: rotateY(70deg);
     animation-delay: .4s;
   }
+}
 
 @keyframes rotate {
   0% {

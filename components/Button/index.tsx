@@ -1,11 +1,14 @@
-import type { ButtonProps } from './type';
+import type { ButtonProps } from '~/types/components/button';
 
 import React from 'react';
+
+import useMounted from '~/utils/hooks/useMounted';
 
 import styles from './index.module.scss';
 import Loading from '~/components/Loading';
 
 const Button: React.FC<ButtonProps> = props => {
+  const mounted = useMounted();
   const { children, onClick, loading } = props;
   const [innerLoading, setInnerLoading] = React.useState(loading);
   const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -18,7 +21,9 @@ const Button: React.FC<ButtonProps> = props => {
       await onClick(event).catch(error => console.error(error));
     }
 
-    setInnerLoading(false);
+    if (mounted.current) {
+      setInnerLoading(false);
+    }
   };
 
   return (

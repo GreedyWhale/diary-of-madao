@@ -1,9 +1,9 @@
 /*
- * @Description: Button 组建类型声明
+ * @Description: Button 组件类型声明
  * @Author: MADAO
- * @Date: 2021-12-16 15:00:11
+ * @Date: 2022-01-05 21:03:40
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-16 15:13:34
+ * @LastEditTime: 2022-01-05 21:03:40
  */
 export interface ButtonProps extends ButtonTypeMap {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => Promise<any>;

@@ -5,14 +5,14 @@ import type { RequestLabels } from '~/types/controller/post';
 
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Modal, Button, Icon } from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
 import { pick, isEqual } from 'lodash';
 import { Editor } from '@bytemd/react';
 import zhHansEditor from 'bytemd/lib/locales/zh_Hans.json';
 
 import Layout from '~/components/Layout';
 import Terminal from '~/components/Terminal';
-import CustomButton from '~/components/Button';
+import Button from '~/components/Button';
 import styles from '~/assets/styles/postEditor.module.scss';
 import getFrontmatter from '~/plugins/getFrontmatter';
 import useUser, { useUpdateUserId } from '~/utils/hooks/useUser';
@@ -238,43 +238,25 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
         uploadImages={uploadImages}
       />
       <div className={styles.submitButton}>
-        <CustomButton
-          size="medium"
-          color="green"
-          inverted
+        <Button
+          color="primary"
           onClick={onSubmit}
         >
-          <Icon name="add" />
           {props.postId ? '更新' : '发布'}
-        </CustomButton>
-        <CustomButton
-          size="medium"
-          color="purple"
-          inverted
+        </Button>
+        <Button
+          color="secondary"
+          variant="outlined"
           onClick={async () => router.back()}
         >
-          <Icon name="backward" />
           取消
-        </CustomButton>
+        </Button>
       </div>
       <Modal
         open={permissionModal}
         size="mini"
         header="权限不足"
         content="当前账号权限不足，无法发布文章"
-        actions={[
-          <Button
-            key="confirm"
-            color="red"
-            inverted
-            onClick={() => {
-              setPermissionModal(false);
-              router.replace('/');
-            }}
-          >
-            回到首页
-          </Button>,
-        ]}
       />
       <Modal
         open={submitModal.open}
@@ -285,18 +267,15 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
           <p>{props.postId ? '更新成功' : '发布成功'}</p>
         </Modal.Content>
         <Modal.Actions>
-          <CustomButton basic color="pink" onClick={syncToGithub}>
-            <Icon name="sync alternate" />
+          <Button color="success" onClick={syncToGithub} variant="outlined">
             同步到GitHub
-          </CustomButton>
-          <CustomButton
-            basic
-            color="blue"
+          </Button>
+          <Button
+            color="primary"
             onClick={() => router.replace(`/posts/${submitModal.postId}`)}
           >
-            <Icon name="check circle outline" />
             查看详情
-          </CustomButton>
+          </Button>
         </Modal.Actions>
       </Modal>
     </Layout>
