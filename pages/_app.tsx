@@ -2,7 +2,7 @@
  * @Author: MADAO
  * @Date: 2021-06-10 15:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-16 16:05:21
+ * @LastEditTime: 2022-01-19 10:05:29
  * @Description: 入口文件
  */
 import type { AppProps } from 'next/app';

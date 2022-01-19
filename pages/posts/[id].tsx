@@ -5,7 +5,6 @@ import moment from 'moment';
 import matter from 'gray-matter';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Modal, Button } from 'semantic-ui-react';
 import { Viewer } from '@bytemd/react';
 
 import { getPostDetail, deletePost } from '~/services/post';
@@ -21,6 +20,8 @@ import styles from '~/assets/styles/posts.module.scss';
 import Layout from '~/components/Layout';
 import PostTitle from '~/components/PostTitle';
 import Terminal from '~/components/Terminal';
+import Button from '~/components/Button';
+import Dialog from '~/components/Dialog';
 import showNotification from '~/components/Notification';
 
 const Posts: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
@@ -85,23 +86,23 @@ const Posts: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
           />
         </div>
       </div>
-      <Modal
+      <Dialog
         open={visibleDeleteModal}
-        size="mini"
-        header="提示"
+        title="提示"
         content="文章删除后无法恢复，是否继续"
+        onClose={() => setVisibleDeleteModal(false)}
         actions={[
           <Button
             key="confirm"
-            positive
+            color="error"
             onClick={onDelete}
           >
             删除
           </Button>,
           <Button
             key="cancel"
-            negative
-            onClick={() => setVisibleDeleteModal(false)}
+            color="secondary"
+            onClick={async () => setVisibleDeleteModal(false)}
           >
             取消
           </Button>,

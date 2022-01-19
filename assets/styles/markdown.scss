@@ -1,7 +1,7 @@
 .postViewer,
 .bytemd-preview {
+  background: var(--background-color);
   .markdown-body {
-    background: var(--background-color);
     h1, h2, h3, h4, h5 {
       color: #d6332d;
     }

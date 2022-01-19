@@ -43,7 +43,6 @@
     "react-redux": "^7.2.6",
     "react-transition-group": "^4.4.2",
     "redux-logger": "^3.0.6",
-    "semantic-ui-react": "^2.0.4",
     "sharp": "^0.29.3",
     "simple-git": "^2.48.0",
     "styled-jsx": "^4.0.1",

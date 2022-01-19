@@ -5,7 +5,6 @@ import type { RequestLabels } from '~/types/controller/post';
 
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Modal } from 'semantic-ui-react';
 import { pick, isEqual } from 'lodash';
 import { Editor } from '@bytemd/react';
 import zhHansEditor from 'bytemd/lib/locales/zh_Hans.json';
@@ -13,7 +12,9 @@ import zhHansEditor from 'bytemd/lib/locales/zh_Hans.json';
 import Layout from '~/components/Layout';
 import Terminal from '~/components/Terminal';
 import Button from '~/components/Button';
+import Dialog from '~/components/Dialog';
 import styles from '~/assets/styles/postEditor.module.scss';
+
 import getFrontmatter from '~/plugins/getFrontmatter';
 import useUser, { useUpdateUserId } from '~/utils/hooks/useUser';
 import { ACCESS_POST_EDIT } from '~/utils/constants';
@@ -74,8 +75,8 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
   const plugins = useMarkdownPlugins();
 
   const [value, setValue] = React.useState(initialFrontmatter);
-  const [permissionModal, setPermissionModal] = React.useState(false);
-  const [submitModal, setSubmitModal] = React.useState({
+  const [permissionDialog, setPermissionDialog] = React.useState(false);
+  const [submitDialog, setSubmitDialog] = React.useState({
     open: false,
     postId: -1,
   });
@@ -116,7 +117,7 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
     if (postInfo) {
       window.localStorage.removeItem(LOCAL_DRAFTS);
-      setSubmitModal({
+      setSubmitDialog({
         open: true,
         postId: postInfo.data.data.id,
       });
@@ -162,7 +163,7 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     if (user.id !== -1) {
       const canEdit = user.access.includes(ACCESS_POST_EDIT);
       if (!canEdit) {
-        setPermissionModal(true);
+        setPermissionDialog(true);
       }
     }
   }, [user.access, user.id]);
@@ -252,32 +253,33 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
           取消
         </Button>
       </div>
-      <Modal
-        open={permissionModal}
-        size="mini"
-        header="权限不足"
+      <Dialog
+        open={permissionDialog}
+        title="权限不足"
         content="当前账号权限不足，无法发布文章"
+        onClose={() => setPermissionDialog(false)}
+        actions={[
+          <Button key="confirm" variant="contained" color="primary" onClick={async () => setPermissionDialog(false)}>确定</Button>,
+        ]}
       />
-      <Modal
-        open={submitModal.open}
-        size="mini"
-      >
-        <Modal.Header>提示</Modal.Header>
-        <Modal.Content>
-          <p>{props.postId ? '更新成功' : '发布成功'}</p>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button color="success" onClick={syncToGithub} variant="outlined">
+      <Dialog
+        open={submitDialog.open}
+        title="提示"
+        content={props.postId ? '更新成功' : '发布成功'}
+        onClose={() => setSubmitDialog(prev => ({ ...prev, open: false }))}
+        actions={[
+          <Button color="secondary" onClick={syncToGithub} variant="outlined" key="gitSync">
             同步到GitHub
-          </Button>
+          </Button>,
           <Button
             color="primary"
-            onClick={() => router.replace(`/posts/${submitModal.postId}`)}
+            onClick={() => router.replace(`/posts/${submitDialog.postId}`)}
+            key="details"
           >
             查看详情
-          </Button>
-        </Modal.Actions>
-      </Modal>
+          </Button>,
+        ]}
+      />
     </Layout>
   );
 };

@@ -1,3 +1,6 @@
 .submitButton {
   padding: 40px 0 10px;
+  > button {
+    margin-right: 16px;
+  }
 }
