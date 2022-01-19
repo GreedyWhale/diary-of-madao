@@ -16,11 +16,11 @@ services:
     working_dir: /code
     command: >
       sh -c "./bin/wait-for-if.sh db:5432 -- corepack enable
-      && corepack prepare pnpm@6.25.0 --activate
-      && pnpm install
-      && pnpm build
-      && pnpm migrate:prod
-      && pnpm start"
+      && corepack prepare yarn@1.22.11 --activate
+      && yarn install
+      && yarn build
+      && yarn migrate:prod
+      && yarn start"
     ports:
       - "3000:3000"
     volumes:
