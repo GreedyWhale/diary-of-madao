@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-28 21:18:05
  * @LastEditors: MADAO
- * @LastEditTime: 2021-09-16 10:18:07
+ * @LastEditTime: 2022-01-19 15:56:52
  */
 import type { PayloadAction } from '@reduxjs/toolkit';
 
@@ -14,7 +14,7 @@ interface InitialState {
 }
 
 export const initialState: InitialState = {
-  id: -1
+  id: -1,
 };
 
 export const userSlice = createSlice({
@@ -23,8 +23,8 @@ export const userSlice = createSlice({
   reducers: {
     updateUserId: (state, action: PayloadAction<InitialState['id']>) => {
       state.id = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const { updateUserId } = userSlice.actions;

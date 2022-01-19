@@ -78,6 +78,7 @@
       &[data-loading="true"] {
         opacity: 0.5;
         pointer-events: none;
+        background: rgba(map-get($map: $color, $key: 'light'), 0.6);
         .content {
           margin-left: 10px;
         }

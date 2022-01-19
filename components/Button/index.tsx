@@ -35,7 +35,7 @@ const Button: React.FC<ButtonProps> = props => {
       data-variant={props.variant}
       onClick={handleClick}
     >
-      {props.loading && <Loading width={'1em'} height={'1em'} />}
+      {innerLoading && <Loading width={'1em'} height={'1em'} />}
       <span className={styles.content}>
         {children}
       </span>

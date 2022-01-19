@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-01-05 21:03:40
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-05 21:03:40
+ * @LastEditTime: 2022-01-19 17:58:06
  */
 export interface ButtonProps extends ButtonTypeMap {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => Promise<any>;

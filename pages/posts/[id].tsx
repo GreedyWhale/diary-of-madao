@@ -66,17 +66,17 @@ const Posts: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
         />
         {props.userId !== -1 && (
           <div className={styles.editor}>
-            {/* <div className="ui icon buttons"> */}
             <Link href={`/posts/editor?id=${props.post.id}`} passHref>
-              <button className="ui labeled icon button orange">
-                <i className="edit outline icon"></i>
-                编辑
-              </button>
+              <a>
+                <Button color="primary">编辑</Button>
+              </a>
             </Link>
-            <button className="ui right labeled icon button red" onClick={async () => setVisibleDeleteModal(prev => !prev)}>
-              <i className="trash icon"></i>
+            <Button
+              color="error"
+              variant="outlined"
+              onClick={async () => setVisibleDeleteModal(prev => !prev)}>
               删除
-            </button>
+            </Button>
           </div>
         )}
         <div className={`${styles.content} postViewer`}>
@@ -129,8 +129,8 @@ export const getServerSideProps = withSessionSsr(async context => {
         content: '',
         introduction: '',
         authorId: '',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
       },
       userId: getUserIdFromCookie(context.req as NextApiRequest),
       errorInfo: getErrorInfo(error),

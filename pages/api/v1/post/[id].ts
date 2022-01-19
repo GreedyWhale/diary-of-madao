@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-09-24 17:48:28
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-13 18:01:28
+ * @LastEditTime: 2022-01-19 17:29:00
  */
 import type { NextApiHandler } from 'next';
 
@@ -21,14 +21,14 @@ const postDetail:NextApiHandler = async (req, res) => {
   const { postData } = req.body;
   const userId = req.session[SESSION_USER_ID];
 
-  if (typeof userId !== 'number') {
-    endRequest(res, formatResponse(500, null, '用户不存在'));
-    return;
-  }
-
   if (req.method === 'GET') {
     const detail = await postController.getPostDetail(parseInt(id as string, 10));
     endRequest(res, detail);
+    return;
+  }
+
+  if (typeof userId !== 'number') {
+    endRequest(res, formatResponse(500, null, '用户不存在'));
     return;
   }
 
