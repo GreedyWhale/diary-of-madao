@@ -130,26 +130,18 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
   const uploadImages = async (files: File[]) => {
     const [result, error] = await promiseWithError(uploadImage(files[0]));
-    if (error) {
+    if (error || !result) {
       showNotification({
-        content: error.message,
+        content: error.message || '上传失败',
         theme: 'fail',
       });
       return Promise.reject(error);
     }
 
-    if (!result) {
-      showNotification({
-        content: '上传失败',
-        theme: 'fail',
-      });
-      return Promise.reject(new Error(`result: ${result}`));
-    }
-
     return [{
-      url: `/static/images/posts/${result.data.filename}`,
-      alt: result.data.filename,
-      title: result.data.filename,
+      url: `/static/images/posts/${result.data.data.filename}`,
+      alt: result.data.data.filename,
+      title: result.data.data.filename,
     }];
   };
 

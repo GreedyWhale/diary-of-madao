@@ -3,15 +3,17 @@
  * @Author: MADAO
  * @Date: 2021-10-12 17:42:33
  * @LastEditors: MADAO
- * @LastEditTime: 2021-10-13 14:26:28
+ * @LastEditTime: 2022-01-20 10:34:17
  */
+import type { API } from '~/types/API';
+
 import request from '~/utils/request';
 import { apiImage } from './api';
 
 export const uploadImage = (file: File) => {
   const data = new FormData();
   data.append('file', file);
-  return request.post<{
+  return request.post<API.ResponseData<{
     destination: string;
     encoding: string;
     fieldname: string;
@@ -19,6 +21,6 @@ export const uploadImage = (file: File) => {
     mimetype: string;
     originalname: string;
     path: string;
-    size: 1393992
-  }>(apiImage, data);
+    size: number;
+  }>>(apiImage, data);
 };
