@@ -3,13 +3,14 @@
  * @Author: MADAO
  * @Date: 2021-10-14 14:36:15
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-20 10:02:56
+ * @LastEditTime: 2022-01-20 17:14:50
  */
 import type { NextApiHandler } from 'next';
 import type { SimpleGit } from 'simple-git';
 
 import simpleGit from 'simple-git';
 import path from 'path';
+import gitP from 'simple-git/promise';
 
 import { formatResponse } from '~/utils/request/tools';
 import { endRequest, checkRequestMethods } from '~/utils/middlewares';
@@ -22,6 +23,7 @@ const git: SimpleGit = simpleGit();
 const userController = new UserController();
 const gitActions: NextApiHandler = async (req, res) => {
   await checkRequestMethods(req, res, ['POST']);
+  await gitP().raw(['config', '-l']).then(data => console.log('git config.......', data));
   if (req.method === 'POST') {
     const validationError = (await promiseWithError(userController.permissionValidator(req.session[SESSION_USER_ID], ACCESS_GIT_SYNC)))[1];
 
