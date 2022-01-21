@@ -4,9 +4,11 @@ labels: ['Blog', 'Next.js']
 introduction: '个人博客网站实现笔记 - 项目搭建'
 ---
 
-## 引言
+![post_cover_1642738442151.png](/static/images/posts/post_cover_1642738442151.png "post_cover_1642738442151.png")
 
-博客篇主要是用来记录搭建当前博客网站的过程，框架使用Next.js，使用到的其他技术有：
+## 前言
+
+博客篇主要是用来记录搭建当前博客网站的过程，基本框架使用Next.js，使用到的其他技术有：
 - TypeScript
 - Prisma
 - PostgreSQL
