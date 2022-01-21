@@ -7,7 +7,13 @@
       color: #d6332d;
     }
     h1, h2 {
+      display: flex;
+      align-items: center;
       border-bottom: 1px solid #d6332d8c;
+      &::before {
+        content: '#';
+        margin-right: 0.5em;
+      }
     }
     strong {
       color: #e93d99;
@@ -26,6 +32,10 @@
     }
     pre > code {
       color: initial;
+    }
+    img[title$="#style=center"] {
+      display: block;
+      margin: 0 auto;
     }
   }
 }
