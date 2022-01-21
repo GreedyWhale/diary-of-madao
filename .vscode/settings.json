@@ -4,6 +4,7 @@
     "Frontmatter",
     "gemoji",
     "katex",
-    "msapplication"
+    "msapplication",
+    "upsert"
   ]
 }

@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-09-24 17:48:28
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-19 17:29:00
+ * @LastEditTime: 2022-01-21 15:25:53
  */
 import type { NextApiHandler } from 'next';
 
@@ -22,7 +22,11 @@ const postDetail:NextApiHandler = async (req, res) => {
   const userId = req.session[SESSION_USER_ID];
 
   if (req.method === 'GET') {
-    const detail = await postController.getPostDetail(parseInt(id as string, 10));
+    const detail = await postController
+      .getDetail(parseInt(id as string, 10))
+      .then(result => formatResponse(200, result))
+      .catch(error => formatResponse(500, error, error.message));
+
     endRequest(res, detail);
     return;
   }
