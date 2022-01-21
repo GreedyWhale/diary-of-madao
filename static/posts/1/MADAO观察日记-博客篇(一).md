@@ -30,7 +30,7 @@ introduction: '个人博客网站实现笔记 - 项目搭建'
 
 #### 1.使用Next.js创建项目
 
-```
+```bash
 yarn create next-app --typescript .
 ```
 
@@ -38,7 +38,7 @@ yarn create next-app --typescript .
     
 如果使用的Node.js是大于等于16.13版本的，就不需要自己安装yarn或者pnpm了，可以通过corepack来管理**包管理器**，使用方式：
 
-```
+```bash
 corepack enable
 yarn -v
 ```
@@ -65,7 +65,7 @@ corepack enable --install-directory /opt/homebrew/bin/npm
     
 #### 2. 支持scss
 
-```
+```bash
 yarn add sass -D
 ```
 
@@ -116,7 +116,7 @@ docker ps -a
 
 如果容器的**STATUS**显示的是UP证明创建成功并且已经启动了，如果失败了，可以使用
 
-```docker
+```bash
 docker logs 容器id
 
 # 或者
@@ -187,7 +187,7 @@ Int、@id、@default、@unique这些都是Prisma的语法，他们的意思都�
 
 接下来就可以把这个User变成真正的数据表
 
-```
+```bash
 yarn prisma migrate dev --name test_create_table
 ```
 
@@ -195,7 +195,7 @@ yarn prisma migrate dev --name test_create_table
 
 然后去验证一下数据表是不是真实的生成了
 
-```
+```bash
 # 获取到所有容器的id
 docker pa -a
 
@@ -221,7 +221,7 @@ SELECT * FROM "User";
 
 还有一种更简单的方式去验证，用Prisma提供的图形界面客户端去查看，[下载地址](https://www.prisma.io/studio)
 
-```
+```bash
 yarn add @prisma/client
 ```
 
