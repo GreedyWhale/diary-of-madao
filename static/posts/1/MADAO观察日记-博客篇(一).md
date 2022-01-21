@@ -4,7 +4,7 @@ labels: ['Blog', 'Next.js']
 introduction: '个人博客网站实现笔记 - 项目搭建'
 ---
 
-![post_cover_1642738442151.png](/static/images/posts/post_cover_1642738442151.png "post_cover_1642738442151.png")
+![post_blog_1_cover_1642740623917.jpeg](/static/images/posts/post_blog_1_cover_1642740623917.jpeg "post_blog_1_cover_1642740623917.jpeg")
 
 ## 前言
 
