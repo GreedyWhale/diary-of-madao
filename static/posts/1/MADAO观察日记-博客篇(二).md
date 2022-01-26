@@ -4,6 +4,8 @@ labels: ['Blog', 'Next.js', 'Database']
 introduction: '个人博客网站实现笔记 - 用户注册功能实现'
 ---
 
+![post_blog_2_cover_1643192361034.jpeg](/static/images/posts/post_blog_2_cover_1643192361034.jpeg "post_blog_2_cover_1643192361034.jpeg")
+
 ## 前言
 
 [MADAO观察日记-博客篇(一)](https://greed.icu/posts/1)
