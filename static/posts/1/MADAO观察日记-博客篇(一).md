@@ -18,6 +18,8 @@ introduction: '个人博客网站实现笔记 - 项目搭建'
 
 这一篇笔记主要记录了项目搭建的过程
 
+[代码参考](https://github.com/GreedyWhale/code-examples/tree/1dab2ea8ed89549b96c7b96c7439285026550cc4/blog)
+
 ## 环境
 
 - macOS 12.1
@@ -74,7 +76,24 @@ yarn add sass -D
 
 Next.js自带了一套eslint规则，如果需要添加格外的eslint规则，只需要在配置中添加`next/core-web-vitals`即可，我额外配置了[XO](https://github.com/xojs/xo)规则，[配置参考](https://github.com/GreedyWhale/diary-of-madao/blob/main/.eslintrc.js)。
 
-#### 4. 制作数据库的docker容器
+#### 4. 添加路径别名
+
+**e.g.**
+
+tsconfig.json
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"]
+    }
+  }
+}
+
+```
+#### 5. 制作数据库的docker容器
 
 确保本机安装了docker，[下载地址](https://www.docker.com/get-started)
 
@@ -127,7 +146,7 @@ docker logs 容器id --follow
 
 来查看日志定位出错原因
 
-#### 5. 使用Prisma操作数据库
+#### 6. 使用Prisma操作数据库
 
 Prisma 是一个ORM的库，ORM的意思是：
 
