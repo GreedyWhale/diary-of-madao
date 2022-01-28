@@ -3,14 +3,13 @@
  * @Author: MADAO
  * @Date: 2021-08-07 14:11:15
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-19 17:29:30
+ * @LastEditTime: 2022-01-28 12:47:15
  */
 import type { NextApiHandler } from 'next';
 
-import { endRequest, checkRequestMethods } from '~/utils/middlewares';
+import { endRequest, checkRequestMethods, formatResponse } from '~/utils/middlewares';
 import { SESSION_USER_ID } from '~/utils/constants';
 import PostController from '~/controller/post';
-import { formatResponse } from '~/utils/request/tools';
 import { withSessionRoute } from '~/utils/withSession';
 
 const postController = new PostController();
@@ -23,7 +22,7 @@ const post: NextApiHandler = async (req, res) => {
 
   if (req.method === 'POST') {
     if (!userId) {
-      return endRequest(res, formatResponse(422, null, '用户不存在'));
+      return endRequest(res, formatResponse(422, {}, '用户不存在'));
     }
 
     const post = await postController.updatePost(userId, postData);

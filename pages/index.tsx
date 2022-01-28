@@ -2,7 +2,7 @@
  * @Author: MADAO
  * @Date: 2021-06-10 15:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-05 22:22:16
+ * @LastEditTime: 2022-01-27 14:33:02
  * @Description: 主页
  */
 import type { NextPage, InferGetServerSidePropsType, NextApiRequest } from 'next';
@@ -20,7 +20,7 @@ import { withSessionSsr, getUserIdFromCookie } from '~/utils/withSession';
 import { useUpdateUserId } from '~/utils/hooks/useUser';
 import { getPosts } from '~/services/post';
 import { promiseWithError } from '~/utils/promise';
-import { getErrorInfo } from '~/utils/request/tools';
+import { getErrorInfo } from '~/utils/middlewares';
 
 const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUpdateUserId(props.userId);

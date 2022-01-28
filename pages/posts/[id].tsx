@@ -14,7 +14,7 @@ import { ACCESS_POST_DELETE } from '~/utils/constants';
 import useUser from '~/utils/hooks/useUser';
 import { useMarkdownPlugins } from '~/utils/hooks/useMarkdown';
 import { promiseWithError } from '~/utils/promise';
-import { getErrorInfo } from '~/utils/request/tools';
+import { getErrorInfo } from '~/utils/middlewares';
 
 import styles from '~/assets/styles/posts.module.scss';
 import Layout from '~/components/Layout';

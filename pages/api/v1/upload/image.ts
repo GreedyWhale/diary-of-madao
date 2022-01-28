@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-10-11 16:19:59
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-14 14:19:51
+ * @LastEditTime: 2022-01-27 14:34:09
  */
 import type { NextApiHandler } from 'next';
 import type { NextApiRequestWithFiles } from '~/types/api/uploadImage';
@@ -12,8 +12,7 @@ import multer from 'multer';
 import path from 'path';
 
 import { ACCESS_IMAGE_UPLOAD, SESSION_USER_ID } from '~/utils/constants';
-import { endRequest, runMiddleware, checkRequestMethods } from '~/utils/middlewares';
-import { formatResponse } from '~/utils/request/tools';
+import { endRequest, runMiddleware, checkRequestMethods, formatResponse } from '~/utils/middlewares';
 import { promiseWithError } from '~/utils/promise';
 import { withSessionRoute } from '~/utils/withSession';
 import UserController from '~/controller/user';

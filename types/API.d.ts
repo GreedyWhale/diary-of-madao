@@ -3,12 +3,20 @@
  * @Author: MADAO
  * @Date: 2021-09-23 16:57:42
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-27 14:31:38
+ * @LastEditTime: 2022-01-27 17:14:59
  */
 import type { AxiosError } from 'axios';
 
 export module API {
   type BasePagination = Record<'pageSize' | 'currentPage' | 'total', number>;
+  type ResponseStatusCode = 200
+  | 204
+  | 401
+  | 403
+  | 404
+  | 405
+  | 422
+  | 500;
   interface BaseListResult<T> {
     list: T[];
     pagination: BasePagination;
@@ -18,28 +26,13 @@ export module API {
     data: T;
     message: string;
   }
+
+  type RequestError = AxiosError & {
+    status: number;
+    message: string;
+  };
 }
 
-export type ResponseStatusCode = 200
-| 204
-| 401
-| 403
-| 404
-| 405
-| 422
-| 500;
-
-export type ResponseData<T> = {
-  code: ResponseStatusCode;
-  data: T;
-  message: string;
-};
-
 export type ResponseMessageMap = {
-  [key in ResponseStatusCode]: string;
-};
-
-export type RequestError = AxiosError & {
-  status: number;
-  message: string;
+  [key in API.ResponseStatusCode]: string;
 };

@@ -3,15 +3,15 @@
  * @Author: MADAO
  * @Date: 2021-07-28 09:57:52
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-19 17:29:36
+ * @LastEditTime: 2022-01-28 12:51:47
  */
 import type { NextApiHandler } from 'next';
+import type { API } from '~/types/API';
+import type { User } from '@prisma/client';
 
-import { endRequest, setCookie, checkRequestMethods } from '~/utils/middlewares';
+import { endRequest, setCookie, checkRequestMethods, formatResponse } from '~/utils/middlewares';
 import UserController from '~/controller/user';
 import { SESSION_USER_ID } from '~/utils/constants';
-import { formatResponse } from '~/utils/request/tools';
-import { promiseWithError } from '~/utils/promise';
 import { withSessionRoute } from '~/utils/withSession';
 
 const userController = new UserController();
@@ -21,39 +21,45 @@ const user: NextApiHandler = async (req, res) => {
   const { username, password } = req.body;
   if (req.method === 'DELETE') {
     req.session.destroy();
-    endRequest(res, formatResponse(204, null, '退出成功'));
+    endRequest(res, formatResponse(204, {}, '退出成功'));
     return;
   }
 
   if (req.method === 'GET') {
     const id = req.session[SESSION_USER_ID];
-    if (!id) {
-      req.session.destroy();
-      endRequest(res, formatResponse(401, null, '用户身份验证失败'));
+    const { username, password } = req.query;
+    let user: API.ResponseData<User> | null = null;
+
+    if (username && password) {
+      user = await userController.signIn({ username: username as string }, password as string);
+    } else if (id) {
+      user = await userController.signIn({ id });
+    }
+
+    if (user) {
+      if (user.code === 200) {
+        await setCookie(req, SESSION_USER_ID, user.data.id);
+      } else {
+        req.session.destroy();
+      }
+
+      endRequest(res, user);
       return;
     }
 
-    const [user, error] = await promiseWithError(userController.signIn({ id }));
-    if (error) {
-      req.session.destroy();
-      endRequest(res, error);
-      return;
-    }
-
-    await setCookie(req, SESSION_USER_ID, user!.data.id);
-    endRequest(res, user!);
+    req.session.destroy();
+    endRequest(res, formatResponse(401, {}, '用户身份验证失败'));
     return;
   }
 
   if (req.method === 'POST') {
-    const [user, error] = await promiseWithError(userController.signUp(username, password));
-    if (error) {
+    const user = await userController.signUp(username, password);
+    if (user.code === 200) {
+      await setCookie(req, SESSION_USER_ID, user.data.id);
+    } else {
       req.session.destroy();
-      endRequest(res, error);
-      return;
     }
 
-    await setCookie(req, SESSION_USER_ID, user!.data.id);
     endRequest(res, user);
   }
 };

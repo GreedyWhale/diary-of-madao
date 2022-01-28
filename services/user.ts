@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-28 17:29:44
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-14 14:18:01
+ * @LastEditTime: 2022-01-28 12:45:30
  */
 import type { UserResponse } from '~/types/services/user';
 import type { API } from '~/types/API';
@@ -15,7 +15,7 @@ export const signIn = (params: {
   username: string;
   password: string;
 }) => (
-  request.post<API.ResponseData<UserResponse>>(apiUser, params)
+  request.get<API.ResponseData<UserResponse>>(apiUser, { params })
 );
 
 export const signOut = () => (
