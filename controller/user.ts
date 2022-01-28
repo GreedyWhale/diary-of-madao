@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-09-15 14:46:09
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-28 12:52:18
+ * @LastEditTime: 2022-01-28 13:10:35
  */
 import type{ User } from '@prisma/client';
 import type { UserQueryConditions, AccessMap } from '~/types/controller/user';
@@ -124,10 +124,10 @@ export default class UserController {
 
   async signUp(username: string, password: string): Promise<API.ResponseData<Omit<User, 'passwordDigest'>>> {
     const handleAccess = () => new Promise((resolve, reject) => {
-      // if (username !== ADMIN_USER) {
-      //   reject(formatResponse(405, {}, '因为备案的原因，不支持注册，EL PSY CONGROO!'));
-      //   return;
-      // }
+      if (username !== ADMIN_USER) {
+        reject(formatResponse(405, {}, '因为备案的原因，不支持注册，EL PSY CONGROO!'));
+        return;
+      }
 
       resolve(true);
     });
