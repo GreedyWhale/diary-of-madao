@@ -580,7 +580,7 @@ export const promiseWithSettled: PromiseWithSettled = promiseInstance => promise
    * ts总是把status推导成string，所以这里用as强制转换类型
    */
   .then(result => ({ value: result, status: 'fulfilled' as 'fulfilled' }))
-  .catch(error => ({ reason: error, status: 'rejected' }));
+  .catch(error => ({ reason: error, status: 'rejected' as 'rejected' }));
 
 ```
 
