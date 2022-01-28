@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-10-11 16:19:59
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-27 14:34:09
+ * @LastEditTime: 2022-01-28 13:12:51
  */
 import type { NextApiHandler } from 'next';
 import type { NextApiRequestWithFiles } from '~/types/api/uploadImage';
@@ -35,10 +35,25 @@ const image:NextApiHandler = async (req, res) => {
   await checkRequestMethods(req, res, ['POST']);
 
   if (req.method === 'POST') {
-    const validationError = (await promiseWithError(userController.permissionValidator(req.session[SESSION_USER_ID], ACCESS_IMAGE_UPLOAD)))[1];
+    const user = await userController.getUser({ id: req.session[SESSION_USER_ID] });
+    if (user.status === 'rejected') {
+      endRequest(res, formatResponse(500, user.reason, user.reason.message));
+      return;
+    }
 
-    if (validationError) {
-      return endRequest(res, validationError);
+    if (!user.value) {
+      endRequest(res, formatResponse(404, {}, '用户不存在'));
+      return;
+    }
+
+    const verifiedResult = UserController.validator('access', {
+      currentAccess: ACCESS_IMAGE_UPLOAD,
+      access: user.value.access,
+    });
+
+    if (!verifiedResult.passed) {
+      endRequest(res, formatResponse(403, {}, verifiedResult.message));
+      return;
     }
 
     const fileError = (await promiseWithError(runMiddleware(req, res, uploader.any())))[1];
