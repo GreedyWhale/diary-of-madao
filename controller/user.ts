@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-09-15 14:46:09
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-28 13:10:35
+ * @LastEditTime: 2022-02-09 18:51:33
  */
 import type{ User } from '@prisma/client';
 import type { UserQueryConditions, AccessMap } from '~/types/controller/user';
@@ -72,7 +72,6 @@ export default class UserController {
   }
 
   static crypto(password: string) {
-    console.log(hex.stringify(sha3(password)));
     return hex.stringify(sha3(password));
   }
 
