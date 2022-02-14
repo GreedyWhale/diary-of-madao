@@ -3,13 +3,15 @@
  * @Author: MADAO
  * @Date: 2021-12-13 14:58:11
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-27 17:15:18
+ * @LastEditTime: 2022-02-14 22:31:27
  */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type {
   API,
   ResponseMessageMap,
 } from '~/types/API';
+
+import { SESSION_USER_ID } from '~/utils/constants';
 
 /**
  * @see https://nextjs.org/docs/api-routes/api-middlewares
@@ -47,8 +49,8 @@ export const endRequest = <T>(res: NextApiResponse, data: API.ResponseData<T>, h
   res.json(data);
 };
 
-export const setCookie = async (req: NextApiRequest, key: string, value: any) => {
-  req.session[key] = value;
+export const setCookie = async (req: NextApiRequest, value: any) => {
+  req.session[SESSION_USER_ID] = value;
   await req.session.save();
 };
 

@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-28 09:57:52
  * @LastEditors: MADAO
- * @LastEditTime: 2022-02-14 21:15:26
+ * @LastEditTime: 2022-02-14 22:31:37
  */
 import type { NextApiHandler } from 'next';
 import type { API } from '~/types/API';
@@ -38,7 +38,7 @@ const user: NextApiHandler = async (req, res) => {
 
     if (user) {
       if (user.code === 200) {
-        await setCookie(req, SESSION_USER_ID, user.data.id);
+        await setCookie(req, user.data.id);
       } else {
         req.session.destroy();
       }
