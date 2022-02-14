@@ -4,6 +4,8 @@ labels: ['Blog', 'Next.js', 'Database']
 introduction: '个人博客网站实现笔记 - 用户登录功能实现'
 ---
 
+![post_blog_3_cover_1644850616419.jpeg](/static/images/posts/post_blog_3_cover_1644850616419.jpeg "post_blog_3_cover_1644850616419.jpeg")
+
 ## 前言
 
 [MADAO观察日记-博客篇(二)](https://greed.icu/posts/4)
@@ -17,8 +19,6 @@ introduction: '个人博客网站实现笔记 - 用户登录功能实现'
 
 [完整代码参考](https://github.com/GreedyWhale/code-examples/tree/a67a375e211e6fbd7da36343ae4e3c72d12f6986/blog)
 
-
-![post_blog_3_cover_1644850616419.jpeg](/static/images/posts/post_blog_3_cover_1644850616419.jpeg "post_blog_3_cover_1644850616419.jpeg")
 
 ## cookie/session
 
