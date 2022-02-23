@@ -3,8 +3,8 @@
  * @Author: MADAO
  * @Date: 2021-12-14 14:13:02
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-14 14:16:04
+ * @LastEditTime: 2022-02-23 17:40:12
  */
-import type { User } from '@prisma/client';
+import type { User, Access } from '@prisma/client';
 
-export type UserResponse = Pick<User, 'id' | 'username' | 'access'>;
+export type UserResponse = Omit<User, 'passwordDigest'> & { access: { access: Access }[] };

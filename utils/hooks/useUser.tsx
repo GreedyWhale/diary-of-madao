@@ -3,9 +3,10 @@
  * @Author: MADAO
  * @Date: 2021-07-29 22:05:08
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-05 22:32:11
+ * @LastEditTime: 2022-02-23 17:49:54
  */
 import type { SignOutDialogProps } from '~/types/useUser';
+import type { UserResponse } from '~/types/services/user';
 
 import React from 'react';
 import useSWR, { useSWRConfig } from 'swr';
@@ -18,10 +19,12 @@ import { updateUserId } from '~/store/slice/user';
 import Dialog from '~/components/Dialog';
 import Button from '~/components/Button';
 
-const initialUser = {
+const initialUser: Omit<UserResponse, 'access'> & { access: string[]; } = {
   id: -1,
   username: '',
   access: [],
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
 
 export const useUpdateUserId = (userId: number) => {
@@ -81,8 +84,19 @@ const useUser = () => {
     { shouldRetryOnError: false },
   );
 
+  const formatUser = (user?: UserResponse) => {
+    if (!user) {
+      return initialUser;
+    }
+
+    return {
+      ...user,
+      access: user.access.map(value => value.access.name),
+    };
+  };
+
   return {
-    user: (response && response.data) ? response.data.data : initialUser,
+    user: formatUser(response?.data?.data),
     isLoading: (!error && !response) && userId !== -1,
     isError: error,
   };

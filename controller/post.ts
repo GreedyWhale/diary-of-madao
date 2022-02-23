@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-09-15 12:00:19
  * @LastEditors: MADAO
- * @LastEditTime: 2022-02-23 15:03:53
+ * @LastEditTime: 2022-02-23 17:38:38
  */
 import type { GetPostsParams, GetPostsResponse } from '~/types/services/post';
 import type { API } from '~/types/API';
@@ -104,19 +104,18 @@ export default class PostController {
       return user.value;
     });
 
-    const handleAccess = (user: User) => new Promise((resolve, reject) => {
-      const verifiedResult = UserController.validator('access', {
+    const handleAccess = async () => {
+      const verifiedResult = await userController.validator('access', {
+        userId,
         currentAccess: ACCESS_POST_EDIT,
-        access: user.access,
       });
 
       if (!verifiedResult.passed) {
-        reject(formatResponse(403, {}, verifiedResult.message));
-        return;
+        return Promise.reject(formatResponse(403, {}, verifiedResult.message));
       }
 
-      resolve(true);
-    });
+      return true;
+    };
 
     const handleParams = () => new Promise((resolve, reject) => {
       const postVerifiedResult = PostController.validator(postData);
@@ -191,7 +190,7 @@ export default class PostController {
 
     try {
       const user = await handleUser();
-      await handleAccess(user);
+      await handleAccess();
       await handleParams();
       const post = await handlePost(user);
       await handleStorageToLocal(user);
@@ -253,19 +252,18 @@ export default class PostController {
       return user.value;
     });
 
-    const handleAccess = (user: User) => new Promise((resolve, reject) => {
-      const verifiedResult = UserController.validator('access', {
+    const handleAccess = async () => {
+      const verifiedResult = await userController.validator('access', {
         currentAccess: ACCESS_POST_DELETE,
-        access: user.access,
+        userId,
       });
 
       if (!verifiedResult.passed) {
-        reject(formatResponse(403, {}, verifiedResult.message));
-        return;
+        return Promise.reject(formatResponse(403, {}, verifiedResult.message));
       }
 
-      resolve(true);
-    });
+      return true;
+    };
 
     const handlePost = () => prisma.post.delete({ where: { id } })
       .then(post => post)
@@ -282,8 +280,8 @@ export default class PostController {
       .catch(error => Promise.reject(formatResponse(500, error, error.message)));
 
     try {
-      const user = await handleUser();
-      await handleAccess(user);
+      await handleUser();
+      await handleAccess();
       await handlePost();
       await handleLabels();
       return formatResponse(200, {}, '删除成功');

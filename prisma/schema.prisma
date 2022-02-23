@@ -14,7 +14,7 @@ model User {
   id             Int      @id              @default(autoincrement())
   username       String   @db.VarChar(255) @unique
   passwordDigest String   @db.Text
-  access         String[] @db.VarChar(255)
+  access         AccessOnUsers[]
   posts          Post[]
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -38,6 +38,12 @@ model Label {
   posts LabelsOnPosts[]
 }
 
+model Access {
+  id       Int             @id               @default(autoincrement())
+  name     String          @db.VarChar(255)
+  users    AccessOnUsers[]
+}
+
 model LabelsOnPosts {
   post       Post      @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   postId     Int
@@ -47,4 +53,16 @@ model LabelsOnPosts {
   assignedBy String    @db.VarChar(255)
 
   @@id([postId, labelId])
+}
+
+model AccessOnUsers {
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int
+  access    Access  @relation(fields: [accessId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  accessId  Int
+
+  assignedAt DateTime  @default(now())
+  assignedBy String    @db.VarChar(255)
+
+  @@id([userId, accessId])
 }
