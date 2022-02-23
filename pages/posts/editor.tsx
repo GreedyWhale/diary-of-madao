@@ -21,7 +21,6 @@ import { ACCESS_POST_EDIT } from '~/utils/constants';
 import { createPost, getPostDetail, updatePost } from '~/services/post';
 import { syncToGithub } from '~/services/git';
 import { uploadImage } from '~/services/upload';
-import { postValidator } from '~/utils/validator';
 import { withSessionSsr, getUserIdFromCookie } from '~/utils/withSession';
 import { promiseWithError } from '~/utils/promise';
 import { useMarkdownPlugins } from '~/utils/hooks/useMarkdown';
@@ -101,15 +100,6 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
       content: value,
       labels: getLabels(newLabels, oldLabels),
     };
-    const isPassed = postValidator(params);
-
-    if (isPassed !== true) {
-      showNotification({
-        content: isPassed,
-        theme: 'fail',
-      });
-      return Promise.resolve(false);
-    }
 
     const [postInfo, postInfoError] = props.postId
       ? await promiseWithError(updatePost(props.postId as string, params))

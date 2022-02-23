@@ -3,11 +3,11 @@
  * @Author: MADAO
  * @Date: 2021-09-15 12:00:19
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-28 12:22:43
+ * @LastEditTime: 2022-02-23 15:03:53
  */
 import type { GetPostsParams, GetPostsResponse } from '~/types/services/post';
 import type { API } from '~/types/API';
-import type { CreatePostParams } from '~/types/controller/post';
+import type { CreatePostParams, PostData } from '~/types/controller/post';
 import type { Post, User } from '@prisma/client';
 
 import fsPromises from 'fs/promises';
@@ -17,13 +17,36 @@ import path from 'path';
 import prisma from '~/utils/prisma';
 import { formatResponse } from '~/utils/middlewares';
 import { ACCESS_POST_EDIT, ACCESS_POST_DELETE } from '~/utils/constants';
-import { postValidator } from '~/utils/validator';
 import { promiseWithSettled } from '~/utils/promise';
 
 import UserController from './user';
 
 const userController = new UserController();
 export default class PostController {
+  static validator(postData: CreatePostParams) {
+    const postDataErrors = {
+      title: '文章标题不能为空',
+      content: '文章内容不能为空',
+      introduction: '文章简介不能为空',
+    };
+    const { labels, ...rest } = postData;
+    if (!labels.length) {
+      return '请至少设置一个文章标签';
+    }
+
+    let errorMessage = '';
+    Object.keys(rest).every(key => {
+      if (!postData[key as keyof PostData]) {
+        errorMessage = postDataErrors[key as keyof PostData];
+        return false;
+      }
+
+      return true;
+    });
+
+    return errorMessage || true;
+  }
+
   async getDetail(id: number) {
     const postDetail = await promiseWithSettled(prisma.post.findUnique({
       where: {
@@ -96,7 +119,7 @@ export default class PostController {
     });
 
     const handleParams = () => new Promise((resolve, reject) => {
-      const postVerifiedResult = postValidator(postData);
+      const postVerifiedResult = PostController.validator(postData);
 
       if (postVerifiedResult !== true) {
         reject(formatResponse(422, {}, postVerifiedResult));
