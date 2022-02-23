@@ -19,6 +19,7 @@ services:
       && corepack prepare yarn@1.22.11 --activate
       && yarn install
       && yarn migrate:prod
+      && yarn generate
       && yarn build
       && yarn start"
     ports:
