@@ -239,9 +239,9 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
         open={permissionDialog}
         title="权限不足"
         content="当前账号权限不足，无法发布文章"
-        onClose={() => setPermissionDialog(false)}
+        onClose={() => router.back()}
         actions={[
-          <Button key="confirm" variant="contained" color="primary" onClick={async () => setPermissionDialog(false)}>确定</Button>,
+          <Button key="confirm" variant="contained" color="primary" onClick={async () => router.back()}>确定</Button>,
         ]}
       />
       <Dialog
