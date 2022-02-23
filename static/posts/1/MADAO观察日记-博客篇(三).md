@@ -10,7 +10,7 @@ introduction: '个人博客网站实现笔记 - 用户登录功能实现'
 
 [MADAO观察日记-博客篇(二)](https://greed.icu/posts/4)
 
-接着上一篇的笔记，这次来实现用户的登录、登出功能。
+接着上一篇的笔记，这次来实现用户的登录和退出登录功能。
 
 涉及到的知识有：
 
@@ -422,9 +422,9 @@ export const getServerSideProps = withSessionSsr(async context => ({
 经过测试两种方式都能成功登录，cookie也能正确的设置。
 
 
-#### 6.登出实现
+#### 6.退出登录实现
 
-登出就很简单了，只要把cookie删除就行
+退出登录就很简单了，只要把cookie删除就行
 
 **e.g.**
 
@@ -444,5 +444,6 @@ const user: NextApiHandler = async (req, res) => {
   }
 }
 ```
+
 
 到这里登录的流程就结束了。
