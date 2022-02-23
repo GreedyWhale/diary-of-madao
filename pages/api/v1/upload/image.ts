@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-10-11 16:19:59
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-28 13:12:51
+ * @LastEditTime: 2022-02-23 18:00:38
  */
 import type { NextApiHandler } from 'next';
 import type { NextApiRequestWithFiles } from '~/types/api/uploadImage';
@@ -46,9 +46,9 @@ const image:NextApiHandler = async (req, res) => {
       return;
     }
 
-    const verifiedResult = UserController.validator('access', {
+    const verifiedResult = await userController.validator('access', {
       currentAccess: ACCESS_IMAGE_UPLOAD,
-      access: user.value.access,
+      userId: user.value.id,
     });
 
     if (!verifiedResult.passed) {

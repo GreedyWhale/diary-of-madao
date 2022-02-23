@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-10-14 14:36:15
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-28 13:03:52
+ * @LastEditTime: 2022-02-23 18:00:00
  */
 import type { NextApiHandler } from 'next';
 import type { SimpleGit } from 'simple-git';
@@ -33,9 +33,9 @@ const gitActions: NextApiHandler = async (req, res) => {
       return;
     }
 
-    const verifiedResult = UserController.validator('access', {
+    const verifiedResult = await userController.validator('access', {
       currentAccess: ACCESS_GIT_SYNC,
-      access: user.value.access,
+      userId: user.value.id,
     });
 
     if (!verifiedResult.passed) {
