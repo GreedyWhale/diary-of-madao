@@ -3,11 +3,11 @@
  * @Author: MADAO
  * @Date: 2021-07-28 09:57:52
  * @LastEditors: MADAO
- * @LastEditTime: 2022-02-14 22:31:37
+ * @LastEditTime: 2022-02-23 19:04:48
  */
 import type { NextApiHandler } from 'next';
 import type { API } from '~/types/API';
-import type { User } from '@prisma/client';
+import type { UserResponse } from '~/types/services/user';
 
 import { endRequest, setCookie, checkRequestMethods, formatResponse } from '~/utils/middlewares';
 import UserController from '~/controller/user';
@@ -28,22 +28,21 @@ const user: NextApiHandler = async (req, res) => {
   if (req.method === 'GET') {
     const id = req.session[SESSION_USER_ID];
     const { username, password } = req.query;
-    let user: API.ResponseData<User> | null = null;
+    let userResponse: API.ResponseData<UserResponse> | null = null;
 
     if (username && password) {
-      user = await userController.signIn({ username: username as string }, password as string);
+      userResponse = await userController.signIn({ username: username as string }, password as string);
     } else if (id) {
-      user = await userController.signIn({ id });
+      userResponse = await userController.signIn({ id });
     }
 
-    if (user) {
-      if (user.code === 200) {
-        await setCookie(req, user.data.id);
-      } else {
-        req.session.destroy();
-      }
+    if (!userResponse || userResponse.code === 404) {
+      userResponse = await userController.signUp(username as string, password as string);
+    }
 
-      endRequest(res, user);
+    if (userResponse) {
+      await setCookie(req, userResponse!.data.id);
+      endRequest(res, userResponse!);
       return;
     }
 

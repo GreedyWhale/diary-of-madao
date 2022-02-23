@@ -3,11 +3,9 @@
  * @Author: MADAO
  * @Date: 2021-09-15 14:46:09
  * @LastEditors: MADAO
- * @LastEditTime: 2022-02-23 17:43:14
+ * @LastEditTime: 2022-02-23 19:02:52
  */
-import type{ User } from '@prisma/client';
 import type { UserQueryConditions, AccessMap } from '~/types/controller/user';
-import type { API } from '~/types/API';
 
 import sha3 from 'crypto-js/sha3';
 import hex from 'crypto-js/enc-hex';
@@ -123,8 +121,8 @@ export default class UserController {
             assignedBy: username,
             access: {
               connectOrCreate: {
-                where: { name: value },
                 create: { name: value },
+                where: { name: value },
               },
             },
           })),
@@ -160,7 +158,7 @@ export default class UserController {
     return formatResponse(200, omit(user.value, ['passwordDigest']), '登录成功');
   }
 
-  async signUp(username: string, password: string): Promise<API.ResponseData<Omit<User, 'passwordDigest'>>> {
+  async signUp(username: string, password: string) {
     const handleAccess = () => new Promise((resolve, reject) => {
       if (username !== ADMIN_USER) {
         reject(formatResponse(405, {}, '因为备案的原因，不支持注册，EL PSY CONGROO!'));
