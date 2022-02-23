@@ -18,8 +18,8 @@ services:
       sh -c "./bin/wait-for-if.sh db:5432 -- corepack enable
       && corepack prepare yarn@1.22.11 --activate
       && yarn install
-      && yarn build
       && yarn migrate:prod
+      && yarn build
       && yarn start"
     ports:
       - "3000:3000"
