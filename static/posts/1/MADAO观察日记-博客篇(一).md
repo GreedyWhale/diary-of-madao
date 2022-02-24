@@ -22,10 +22,11 @@ introduction: '个人博客网站实现笔记 - 项目搭建'
 
 ## 环境
 
-- macOS 12.1
-- Node.js v16.13.2
-- Yarn 1.22.11
-- Docker 20.10.1
+- macOS - 12.1
+- Node.js - 16.13.2
+- Yarn - 1.22.11
+- Docker - 20.10.1
+- typescript - 4.5.4
 
 ## 实现
 
