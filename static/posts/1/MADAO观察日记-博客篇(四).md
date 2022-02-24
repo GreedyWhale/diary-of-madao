@@ -14,6 +14,7 @@ introduction: '个人博客网站实现笔记 - 博客的增删改查'
 
 - relations（关系）
 
+[代码参考](https://github.com/GreedyWhale/code-examples/tree/1d2d9ccfd131c8089b8b4d352d495c04abbd6bc6)
 
 ## relations
 
@@ -488,8 +489,8 @@ prisma.post.delete({ where: { id } })
 
 完整代码参考
 
-[controller/post.ts]()
-[pages/api/v1/posts/[id].ts]()
+[controller/post.ts](https://github.com/GreedyWhale/code-examples/blob/1d2d9ccfd131c8089b8b4d352d495c04abbd6bc6/blog/controller/post.ts)
+[pages/api/v1/posts/[id].ts](https://github.com/GreedyWhale/code-examples/blob/1d2d9ccfd131c8089b8b4d352d495c04abbd6bc6/blog/pages/api/v1/posts/%5Bid%5D.ts)
 
 
 ## 获取文章列表
