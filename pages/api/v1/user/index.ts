@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-28 09:57:52
  * @LastEditors: MADAO
- * @LastEditTime: 2022-02-23 19:04:48
+ * @LastEditTime: 2022-02-24 14:19:09
  */
 import type { NextApiHandler } from 'next';
 import type { API } from '~/types/API';
@@ -15,7 +15,7 @@ import { SESSION_USER_ID } from '~/utils/constants';
 import { withSessionRoute } from '~/utils/withSession';
 
 const userController = new UserController();
-const user: NextApiHandler = async (req, res) => {
+const userHandler: NextApiHandler = async (req, res) => {
   await checkRequestMethods(req, res, ['DELETE', 'GET', 'POST']);
 
   const { username, password } = req.body;
@@ -57,4 +57,4 @@ const user: NextApiHandler = async (req, res) => {
   }
 };
 
-export default withSessionRoute(user);
+export default withSessionRoute(userHandler);

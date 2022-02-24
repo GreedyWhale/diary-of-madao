@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-08-07 14:11:15
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-28 12:47:15
+ * @LastEditTime: 2022-02-24 14:18:45
  */
 import type { NextApiHandler } from 'next';
 
@@ -14,7 +14,7 @@ import { withSessionRoute } from '~/utils/withSession';
 
 const postController = new PostController();
 
-const post: NextApiHandler = async (req, res) => {
+const postsHandler: NextApiHandler = async (req, res) => {
   await checkRequestMethods(req, res, ['POST', 'GET']);
 
   const { postData } = req.body;
@@ -41,4 +41,4 @@ const post: NextApiHandler = async (req, res) => {
   }
 };
 
-export default withSessionRoute(post);
+export default withSessionRoute(postsHandler);
