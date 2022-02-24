@@ -527,5 +527,5 @@ const [posts, totalPosts] = await prisma.$transaction([
 这样的好处是假如有一条语句失败了，那么整个操作都会撤销。
 
 > 把多条语句作为一个整体进行操作的功能，被称为数据库事务
-
+> 
 > ----《[事务](https://www.liaoxuefeng.com/wiki/1177760294764384/1179611198786848)》
