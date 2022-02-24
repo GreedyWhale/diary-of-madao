@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-09-15 12:00:19
  * @LastEditors: MADAO
- * @LastEditTime: 2022-02-23 17:38:38
+ * @LastEditTime: 2022-02-24 16:23:37
  */
 import type { GetPostsParams, GetPostsResponse } from '~/types/services/post';
 import type { API } from '~/types/API';
@@ -67,7 +67,11 @@ export default class PostController {
       },
     }));
 
-    return postDetail;
+    if (postDetail.status === 'fulfilled') {
+      return formatResponse(200, postDetail.value);
+    }
+
+    return formatResponse(500, postDetail.reason, postDetail.reason.message);
   }
 
   async storageToLocal(userId: number, postData: CreatePostParams) {
