@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-09-24 17:48:28
  * @LastEditors: MADAO
- * @LastEditTime: 2022-02-24 14:18:55
+ * @LastEditTime: 2022-02-24 16:23:53
  */
 import type { NextApiHandler } from 'next';
 
@@ -21,22 +21,13 @@ const postDetailHandler:NextApiHandler = async (req, res) => {
   const userId = req.session[SESSION_USER_ID];
 
   if (req.method === 'GET') {
-    const detail = await postController
-      .getDetail(parseInt(id as string, 10))
-      .then(result => {
-        if (result.status === 'fulfilled') {
-          return formatResponse(200, result.value);
-        }
-
-        return formatResponse(500, result.reason, result.reason.message);
-      });
-
+    const detail = await postController.getDetail(parseInt(id as string, 10));
     endRequest(res, detail);
     return;
   }
 
   if (typeof userId !== 'number') {
-    endRequest(res, formatResponse(500, {}, '用户不存在'));
+    endRequest(res, formatResponse(500, {}, '请先登录'));
     return;
   }
 

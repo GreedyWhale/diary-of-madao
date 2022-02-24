@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-08-07 14:11:15
  * @LastEditors: MADAO
- * @LastEditTime: 2022-02-24 14:18:45
+ * @LastEditTime: 2022-02-24 15:38:32
  */
 import type { NextApiHandler } from 'next';
 
@@ -22,7 +22,7 @@ const postsHandler: NextApiHandler = async (req, res) => {
 
   if (req.method === 'POST') {
     if (!userId) {
-      return endRequest(res, formatResponse(422, {}, '用户不存在'));
+      return endRequest(res, formatResponse(422, {}, '请先登录'));
     }
 
     const post = await postController.updatePost(userId, postData);
