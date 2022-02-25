@@ -1,7 +1,7 @@
 ---
 title: 'MADAO观察日记-博客篇(四)'
 labels: ['Blog', 'Next.js', 'Database']
-introduction: '个人博客网站实现 - 博客的增删改查'
+introduction: '个人博客网站实现 - 文章的增删改查'
 ---
 
 ![post_blog_4_cover_1645586707182.jpeg](/static/images/posts/post_blog_4_cover_1645586707182.jpeg "post_blog_4_cover_1645586707182.jpeg")
