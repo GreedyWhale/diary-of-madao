@@ -1,7 +1,7 @@
 ---
 title: 'MADAO观察日记-博客篇(一)'
 labels: ['Blog', 'Next.js']
-introduction: '个人博客网站实现笔记 - 项目搭建'
+introduction: '个人博客网站实现 - 项目搭建'
 ---
 
 ![post_blog_1_cover_1642740623917.jpeg](/static/images/posts/post_blog_1_cover_1642740623917.jpeg "post_blog_1_cover_1642740623917.jpeg")
