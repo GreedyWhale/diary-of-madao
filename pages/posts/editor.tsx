@@ -1,7 +1,7 @@
 import type { NextPage, InferGetServerSidePropsType, NextApiRequest } from 'next';
 import type { PostItem } from '~/types/services/post';
 import type { Label } from '@prisma/client';
-import type { RequestLabels } from '~/types/controller/post';
+import type { Labels } from '~/types/controller/post';
 
 import React from 'react';
 import { useRouter } from 'next/router';
@@ -33,7 +33,7 @@ const getInitialFrontmatterObject = () => ({
   introduction: '',
   labels: [],
 });
-const getLabels = (newLabels: {name: string}[], oldLabels: Label[]): RequestLabels => {
+const getLabels = (newLabels: {name: string}[], oldLabels: Label[]): Labels => {
   if (!newLabels.length) {
     return [];
   }
@@ -60,7 +60,7 @@ const getLabels = (newLabels: {name: string}[], oldLabels: Label[]): RequestLabe
     };
   });
 
-  return labels.concat(oldLabels.map(value => ({ ...value, action: 'delete' }))) as RequestLabels;
+  return labels.concat(oldLabels.map(value => ({ ...value, action: 'delete' }))) as Labels;
 };
 
 let lastStorageTime = 0;
