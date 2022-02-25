@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-10-11 16:19:59
  * @LastEditors: MADAO
- * @LastEditTime: 2022-02-23 18:00:38
+ * @LastEditTime: 2022-02-25 16:11:51
  */
 import type { NextApiHandler } from 'next';
 import type { NextApiRequestWithFiles } from '~/types/api/uploadImage';
@@ -29,7 +29,20 @@ const storage = multer.diskStorage({
   },
 });
 
-const uploader = multer({ storage });
+const uploader = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    try {
+      const isPassed = /^image.*/.test(file.mimetype);
+      cb(null, isPassed);
+    } catch (error: any) {
+      cb(error);
+    }
+  },
+  limits: {
+    fileSize: 10485760,
+  },
+});
 
 const image:NextApiHandler = async (req, res) => {
   await checkRequestMethods(req, res, ['POST']);
