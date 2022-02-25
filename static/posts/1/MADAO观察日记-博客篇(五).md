@@ -1,7 +1,7 @@
 ---
 title: 'MADAO观察日记-博客篇(五)'
 labels: ['Blog', 'Next.js', 'Database']
-introduction: '给文章添加标签，实现同步文章到 GitHub 和图片上传功能'
+introduction: '个人博客网站实现 - 给文章添加标签，实现同步文章到 GitHub 和图片上传功能'
 ---
 
 ![post_blog_5_cover_1645783965510.jpeg](/static/images/posts/post_blog_5_cover_1645783965510.jpeg "post_blog_5_cover_1645783965510.jpeg")
