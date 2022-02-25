@@ -1,7 +1,7 @@
 ---
 title: 'MADAO观察日记-博客篇(三)'
 labels: ['Blog', 'Next.js', 'Database']
-introduction: '个人博客网站实现笔记 - 用户登录功能实现'
+introduction: '个人博客网站实现 - 用户登录功能实现'
 ---
 
 ![post_blog_3_cover_1644850616419.jpeg](/static/images/posts/post_blog_3_cover_1644850616419.jpeg "post_blog_3_cover_1644850616419.jpeg")
