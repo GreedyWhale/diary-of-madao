@@ -175,7 +175,7 @@ yarn prisma init
 # 5432 创建数据库时映射的端口
 # development 要连接的数据库名，不存在会自动创建
 
-DATABASE_URL="postgresql://admin:blogExample@localhost:5432/development?schema=public"   
+DATABASE_URL="postgresql://admin:blogExamplePassword@localhost:5432/development?schema=public"   
 ```
 
 注意这里要把`.env`文件添加到`.gitignore`里面去，不要提交到github上，提交上去的话你的数据库的用户名和密码就暴漏了。
