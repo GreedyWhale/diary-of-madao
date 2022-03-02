@@ -4,6 +4,8 @@ labels: ['Blog', 'Docker']
 introduction: '个人博客网站实现 - 部署'
 ---
 
+![post_blog_6_cover_1646189348967.jpeg](/static/images/posts/post_blog_6_cover_1646189348967.jpeg "post_blog_6_cover_1646189348967.jpeg")
+
 ## 前言
 
 [MADAO观察日记-博客篇(五)](https://greed.icu/posts/7)
