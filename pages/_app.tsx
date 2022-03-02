@@ -2,7 +2,7 @@
  * @Author: MADAO
  * @Date: 2021-06-10 15:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-19 10:05:29
+ * @LastEditTime: 2022-03-02 14:10:04
  * @Description: 入口文件
  */
 import type { AppProps } from 'next/app';
@@ -28,10 +28,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon-16x16.png" />
         <link rel="icon" type="image/png" href="/images/logo/favicon.ico" />
         <link rel="manifest" href="/images/logo/site.webmanifest" />
-        <link rel="mask-icon" href="/images/logo/safari-pinned-tab.svg" color="#ffffff" />
+        <link rel="mask-icon" href="/images/logo/safari-pinned-tab.svg" color="#201828" />
         <meta name="description" content="Programming, notes" />
-        <meta name="msapplication-TileColor" content="#ffffff" />
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="msapplication-TileColor" content="#201828" />
+        <meta name="theme-color" content="#201828"></meta>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Backdrop />
