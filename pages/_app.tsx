@@ -2,7 +2,7 @@
  * @Author: MADAO
  * @Date: 2021-06-10 15:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2022-03-02 14:10:04
+ * @LastEditTime: 2022-03-02 15:35:08
  * @Description: 入口文件
  */
 import type { AppProps } from 'next/app';
@@ -29,6 +29,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/png" href="/images/logo/favicon.ico" />
         <link rel="manifest" href="/images/logo/site.webmanifest" />
         <link rel="mask-icon" href="/images/logo/safari-pinned-tab.svg" color="#201828" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/satouriko/LxgwWenKai_Webfonts@v1.101/dist/LXGWWenKaiMono-Regular.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/satouriko/LxgwWenKai_Webfonts@v1.101/dist/LXGWWenKaiMono-Light.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/satouriko/LxgwWenKai_Webfonts@v1.101/dist/LXGWWenKaiMono-Bold.css" />
         <meta name="description" content="Programming, notes" />
         <meta name="msapplication-TileColor" content="#201828" />
         <meta name="theme-color" content="#201828"></meta>

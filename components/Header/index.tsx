@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -29,10 +28,8 @@ const Header = () => {
     <>
       <header className={styles.header}>
         <nav>
-          <Link href="/">
-            <a className={styles.logoIcon}>
-              <Image src="/images/candle.png" alt="logo" width={32} height={32} />
-            </a>
+          <Link href="/" passHref>
+            <h1 className={styles.title}>MADAO觀察日記</h1>
           </Link>
           <div className={styles.menu}>
             <Link href="/classify">

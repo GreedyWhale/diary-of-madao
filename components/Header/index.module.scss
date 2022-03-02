@@ -4,8 +4,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .logoIcon {
-      transform: translateX(-10px);
+    .title {
+      color: #fff;
+      cursor: pointer;
     }
     .menu {
       display: flex;
