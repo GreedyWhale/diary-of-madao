@@ -65,6 +65,20 @@ const Header = () => {
   const { user } = useUser();
   const [visibleMenu, setVisibleMenu] = React.useState(false);
   const username = React.useMemo(() => user.username || '登录', [user.username]);
+  const navList = React.useRef([
+    {
+      text: '首页',
+      path: '/',
+    },
+    {
+      text: '文章分类',
+      path: '/classify',
+    },
+    {
+      text: '首页',
+      path: '/signIn',
+    },
+  ]);
 
   const toSignIn = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -85,15 +99,29 @@ const Header = () => {
             <h1 className={styles.title}>MADAO觀察日記</h1>
           </Link>
           <div className={styles.menu}>
-            <Link href="/classify">
-              文章分类
-            </Link>
-            <Link href="/signIn" passHref>
-              <a onClick={toSignIn} className={styles.username} title={username}>
-                {username}
-                <UserMenu visible={visibleMenu} onHide={visible => setVisibleMenu(visible) } />
-              </a>
-            </Link>
+            {navList.current.map(value => (
+              <Link
+                href={value.path}
+                key={value.path}
+                passHref
+              >
+                {
+                  value.path === '/signIn'
+                    ? (
+                      <a
+                        onClick={toSignIn}
+                        className={styles.username}
+                        title={username}
+                        data-active={router.pathname === value.path}
+                      >
+                        {username}
+                        <UserMenu visible={visibleMenu} onHide={visible => setVisibleMenu(visible) } />
+                      </a>
+                    )
+                    : <a data-active={router.pathname === value.path}>{value.text}</a>
+                }
+              </Link>
+            ))}
           </div>
         </nav>
       </header>

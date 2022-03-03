@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-03-03 10:20:32
  * @LastEditors: MADAO
- * @LastEditTime: 2022-03-03 12:12:07
+ * @LastEditTime: 2022-03-03 12:35:00
  */
 
 export type UserMenuTypes = 'createPost' | 'signOut';
