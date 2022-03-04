@@ -3,9 +3,9 @@
  * @Author: MADAO
  * @Date: 2021-07-29 22:05:08
  * @LastEditors: MADAO
- * @LastEditTime: 2022-02-23 17:49:54
+ * @LastEditTime: 2022-03-04 11:21:21
  */
-import type { SignOutDialogProps } from '~/types/useUser';
+import type { SignOutDialogProps } from '~/types/hooks/useUser';
 import type { UserResponse } from '~/types/services/user';
 
 import React from 'react';

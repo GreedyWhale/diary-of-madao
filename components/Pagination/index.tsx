@@ -1,4 +1,4 @@
-import type { PaginationProps } from './type';
+import type { PaginationProps } from '~/types/components/pagination';
 
 import React from 'react';
 

@@ -1,4 +1,4 @@
-import type { LoadingProps } from '~/types/components/Loading';
+import type { LoadingProps } from '~/types/components/loading';
 
 import React from 'react';
 

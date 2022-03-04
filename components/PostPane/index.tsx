@@ -1,4 +1,4 @@
-import type { PostPaneProps } from './type';
+import type { PostPaneProps } from '~/types/components/postPane';
 
 import React from 'react';
 import Link from 'next/link';

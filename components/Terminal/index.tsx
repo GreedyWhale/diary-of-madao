@@ -1,4 +1,4 @@
-import type { TerminalProps } from './type';
+import type { TerminalProps } from '~/types/components/terminal';
 
 import React from 'react';
 import { useRouter } from 'next/router';

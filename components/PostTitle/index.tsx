@@ -1,4 +1,4 @@
-import type { PostTitleProps } from './type';
+import type { PostTitleProps } from '~/types/components/postTitle';
 
 import React from 'react';
 import PropTypes from 'prop-types';
