@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  @include zIndex(backdrop, 1);
+  @include zIndex(backdrop, 10);
   background: rgba(0,0,0,0.5);
   pointer-events: auto;
   display: flex;

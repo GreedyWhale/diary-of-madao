@@ -2,12 +2,13 @@
  * @Author: MADAO
  * @Date: 2021-06-10 15:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-27 14:33:02
+ * @LastEditTime: 2022-03-07 12:27:47
  * @Description: 主页
  */
 import type { NextPage, InferGetServerSidePropsType, NextApiRequest } from 'next';
 
 import React from 'react';
+import { useRouter } from 'next/router';
 
 import Layout from '~/components/Layout';
 import PostPane from '~/components/PostPane';
@@ -24,9 +25,7 @@ import { getErrorInfo } from '~/utils/middlewares';
 
 const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUpdateUserId(props.userId);
-
-  const [currentPage, setCurrentPage] = React.useState(props.pagination.currentPage);
-
+  const router = useRouter();
   return (
     <Layout errorInfo={props.errorInfo}>
       <Welcome />
@@ -39,8 +38,11 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
       <Pagination
         pageSize={props.pagination.pageSize}
         total={props.pagination.total}
-        currentPage={currentPage}
-        onClick={params => setCurrentPage(params)}
+        currentPage={props.pagination.currentPage}
+        onClick={page => router.push({
+          pathname: '/',
+          query: { page },
+        })}
       />
     </Layout>
   );

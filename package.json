@@ -23,6 +23,7 @@
     "@bytemd/plugin-mermaid": "^1.10.13",
     "@bytemd/react": "^1.10.13",
     "@prisma/client": "^3.8.1",
+    "@react-spring/web": "^9.4.3",
     "@reduxjs/toolkit": "^1.7.1",
     "axios": "^0.24.0",
     "bytemd": "^1.10.13",

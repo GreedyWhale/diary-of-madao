@@ -1,0 +1,46 @@
+@import '~/assets/styles/mixin.scss';
+@import '~/assets/styles/animation.scss';
+
+.goTop {
+  position: fixed;
+  right: 40px;
+  bottom: 50px;
+  @include zIndex(backdrop, 9);
+  > div {
+    cursor: pointer;
+    &[data-icon="go_top"] {
+      background: url('~/assets/images/go_top.png') no-repeat center / 100%;
+      width: 60px;
+      height: 60px;
+    }
+  }
+}
+
+.goTopAnimation {
+  &Enter {
+    transform: translateX(150%);
+  }
+  &EnterActive {
+    transform: translateX(0);
+    transition: all 300ms $easeOutSine;
+  }
+  &Exit {
+    transform: translateX(0);
+  }
+  &ExitActive {
+    transform: translateX(150%);
+    transition: all 300ms $easeOutSine;
+  }
+}
+
+.animationEnter,
+.animationExit {
+  opacity: 0;
+  transform: translateX(-150%);
+}
+.animationEnterActive,
+.animationExitActive {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 200ms;
+}

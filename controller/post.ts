@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-09-15 12:00:19
  * @LastEditors: MADAO
- * @LastEditTime: 2022-02-24 16:23:37
+ * @LastEditTime: 2022-03-07 12:29:29
  */
 import type { GetPostsParams, GetPostsResponse } from '~/types/services/post';
 import type { API } from '~/types/API';
@@ -197,7 +197,10 @@ export default class PostController {
       await handleAccess();
       await handleParams();
       const post = await handlePost(user);
-      await handleStorageToLocal(user);
+      if (process.env.NODE_ENV === 'production') {
+        await handleStorageToLocal(user);
+      }
+
       return formatResponse(200, post, postId ? '更新成功' : '发布成功');
     } catch (error: any) {
       return error;
@@ -207,7 +210,7 @@ export default class PostController {
   async getPosts(params: GetPostsParams): Promise<API.ResponseData<GetPostsResponse>> {
     const post = await promiseWithSettled(prisma.$transaction([
       prisma.post.findMany({
-        skip: params.page === 1 ? 0 : params.page * params.pageSize,
+        skip: params.page === 1 ? 0 : (params.page - 1) * params.pageSize,
         take: params.pageSize,
         where: params.labelId
           ? {

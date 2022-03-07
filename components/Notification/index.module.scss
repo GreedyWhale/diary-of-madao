@@ -1,4 +1,5 @@
 @import '~/assets/styles/mixin.scss';
+@import '~/assets/styles/animation.scss';
 
 $bgColor: #2a274d;
 $themes: (
@@ -11,7 +12,6 @@ $themes: (
     'color': #fc1153
   ),
 );
-$easeOutSine: cubic-bezier(0.39, 0.575, 0.565, 1);
 
 .notificationWrap {
   position: fixed;

@@ -6,6 +6,7 @@ import Error from 'next/error';
 import styles from './index.module.scss';
 import Header from '~/components/Header';
 import Footer from '~/components/Footer';
+import Sidebar from '~/components/GoTop';
 
 const Layout: React.FC<LayoutProps> = props => {
   if (props.errorInfo) {
@@ -18,7 +19,8 @@ const Layout: React.FC<LayoutProps> = props => {
   return (
     <main className={styles.layout}>
       <Header />
-      { props.children }
+      <Sidebar />
+      {props.children}
       <Footer />
     </main>
   );
