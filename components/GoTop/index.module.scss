@@ -18,9 +18,11 @@
 
 .goTopAnimation {
   &Enter {
+    opacity: 0;
     transform: translateX(150%);
   }
   &EnterActive {
+    opacity: 1;
     transform: translateX(0);
     transition: all 300ms $easeOutSine;
   }
@@ -31,16 +33,4 @@
     transform: translateX(150%);
     transition: all 300ms $easeOutSine;
   }
-}
-
-.animationEnter,
-.animationExit {
-  opacity: 0;
-  transform: translateX(-150%);
-}
-.animationEnterActive,
-.animationExitActive {
-  opacity: 1;
-  transform: translateX(0);
-  transition: all 200ms;
 }
