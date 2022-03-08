@@ -18,7 +18,7 @@
         margin-left: 20px;
         color: var(--theme-color);
         font-weight: 500;
-        padding: 0 0.5em 1em;
+        padding: 0 0.5em 0.5em;
         position: relative;
         &:hover {
           color: darken($themeColor, 10%);
@@ -27,7 +27,7 @@
           position: absolute;
           left: 50%;
           transform: translateX(-50%);
-          width: calc(100% / 2);
+          width: calc(100% / 4);
           bottom: 0;
           height: 2px;
           background: var(--theme-color);
