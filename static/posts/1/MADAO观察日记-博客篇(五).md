@@ -349,6 +349,64 @@ const handle = async (label: string) => {
 handle('标签一');
 ```
 
+#### some 和 every的 区别
+
+假设现在有两条记录是这样：
+
+|  id  |  title  |  content  |  labels |
+|  ----  | ----  | ----  | ----  |
+| 1  | every | 测试every | [{ id: 1, name: '标签一' }] |
+| 2  | some | 测试some | [{ id: 1, name: '标签一' }, { id: 2, name: '标签二' }] |
+
+```js
+const postList1 = await prisma.post.findMany({
+  where: {
+    labels: {
+      every: { id: 1 }
+    }
+  }
+})
+
+const postList2 = await prisma.post.findMany({
+  where: {
+    labels: {
+      some: { id: 1 }
+    }
+  }
+})
+
+console.log(postList1)
+// [
+//   {
+//    id:1,
+//    title: 'every',
+//    content: '测试 every',
+//    labels: [{ id: 1, name: '标签一' }]
+//   }
+// ]
+//
+
+console.log(postList2)
+// [
+//   {
+//    id:1,
+//    title: 'every',
+//    content: '测试 every',
+//    labels: [{ id: 1, name: '标签一' }]
+//   },
+//   {
+//    id: 2,
+//    title: 'some',
+//    content: '测试 some',
+//    labels: [{ id: 1, name: '标签一' }, { id: 2, name: '标签二' }]
+//   }
+// ]
+//
+```
+
+every表示记录的labels字段里的每一个都要满足`id = 1`这一条件，some表示只要记录的labels字段里只要有一个满足`id = 1`这一条件即可。
+
+
 ## 让Next.js服务器支持图片上传
 
 Next.js 在开发环境下，启动服务后，动态的创建文件是可以访问到的，直到我部署到服务器后发现上传了图片都无法访问，经过搜索才发现，Next.js 出于安全考虑会将文件访问限制为仅在服务器以生产模式启动时存在的文件。
