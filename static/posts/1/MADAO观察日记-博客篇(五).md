@@ -404,7 +404,7 @@ console.log(postList2)
 //
 ```
 
-every表示记录的labels字段里的每一个都要满足`id = 1`这一条件，some表示只要记录的labels字段里只要有一个满足`id = 1`这一条件即可。
+every表示记录的labels字段里的每一个都要满足`id = 1`这一条件，some表示记录的labels字段里只要有一个满足`id = 1`这一条件即可。
 
 
 ## 让Next.js服务器支持图片上传
