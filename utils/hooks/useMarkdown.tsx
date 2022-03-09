@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-10-16 15:01:20
  * @LastEditors: MADAO
- * @LastEditTime: 2022-03-09 16:02:58
+ * @LastEditTime: 2022-03-09 16:57:54
  */
 import React from 'react';
 import gfm from '@bytemd/plugin-gfm';
@@ -23,6 +23,9 @@ import 'katex/dist/katex.css';
 import 'github-markdown-css/github-markdown-dark.css';
 import 'highlight.js/styles/gradient-dark.css';
 
+import showNotification from '~/components/Notification';
+import { promiseWithError } from '~/utils/promise';
+
 export function useMarkdownPlugins() {
   const plugins = React.useRef([
     gfm({ locale: zhHansGfm }),
@@ -39,4 +42,39 @@ export function useMarkdownPlugins() {
   ]);
 
   return plugins;
+}
+
+export function useMarkdownCopyButton() {
+  const getButtonElement = () => {
+    const button = document.createElement('button');
+    button.innerText = 'Copy';
+    button.classList.add('copy-button');
+    button.addEventListener('click', async event => {
+      const children = (event.target as HTMLElement).parentElement?.children;
+      if (!children) {
+        return;
+      }
+
+      const { innerText } = Array.from(children)[0] as HTMLElement;
+      const error = (await promiseWithError(navigator.clipboard.writeText(innerText)))[1];
+      showNotification({
+        content: error ? error.message : '复制成功',
+        theme: error ? 'fail' : 'success',
+      });
+    });
+    return button;
+  };
+
+  const addButtonToCodeBlock = React.useCallback(() => {
+    const codeBlocks = Array.from(document.querySelectorAll('pre'));
+    if (codeBlocks.length) {
+      codeBlocks.forEach(element => {
+        element.appendChild(getButtonElement());
+      });
+    }
+  }, []);
+
+  React.useEffect(() => {
+    addButtonToCodeBlock();
+  }, [addButtonToCodeBlock]);
 }

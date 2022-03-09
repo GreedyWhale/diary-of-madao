@@ -6,12 +6,12 @@
   .markdown-body {
     background: var(--background-color);
     h1, h2, h3, h4, h5 {
-      color: #d6332d;
+      color: #37d5d6;
     }
     h1, h2 {
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #d6332d8c;
+      border-bottom: 1px solid #37d6d6a4;
       &::before {
         content: '#';
         margin-right: 0.5em;
@@ -34,6 +34,23 @@
     }
     pre > code {
       color: initial;
+    }
+    pre {
+      position: relative;
+      .copy-button {
+        color: #000;
+        box-sizing: border-box;
+        cursor: pointer;
+        user-select: none;
+        background: #adb5bd;
+        border: 1px solid rgba(0, 0, 0, 0);
+        padding: 5px 10px;
+        font-size: 0.8em;
+        position: absolute;
+        top: 0;
+        right: 0;
+        border-radius: 0 0.15rem;
+      }
     }
     img[title$="#style=center"] {
       display: block;

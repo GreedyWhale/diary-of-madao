@@ -12,7 +12,7 @@ import { withSessionSsr, getUserIdFromCookie } from '~/utils/withSession';
 import { useUpdateUserId } from '~/utils/hooks/useUser';
 import { ACCESS_POST_DELETE } from '~/utils/constants';
 import useUser from '~/utils/hooks/useUser';
-import { useMarkdownPlugins } from '~/utils/hooks/useMarkdown';
+import { useMarkdownPlugins, useMarkdownCopyButton } from '~/utils/hooks/useMarkdown';
 import { promiseWithError } from '~/utils/promise';
 import { getErrorInfo } from '~/utils/middlewares';
 
@@ -29,6 +29,7 @@ const Posts: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
   const router = useRouter();
   const { user } = useUser();
   const plugins = useMarkdownPlugins();
+  useMarkdownCopyButton();
 
   useUpdateUserId(props.userId);
   const [visibleDeleteModal, setVisibleDeleteModal] = React.useState(false);
