@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-09-15 12:00:19
  * @LastEditors: MADAO
- * @LastEditTime: 2022-03-07 12:29:29
+ * @LastEditTime: 2022-03-08 17:17:57
  */
 import type { GetPostsParams, GetPostsResponse } from '~/types/services/post';
 import type { API } from '~/types/API';
@@ -215,7 +215,9 @@ export default class PostController {
         where: params.labelId
           ? {
             labels: {
-              every: { labelId: params.labelId },
+              some: {
+                labelId: params.labelId,
+              },
             },
           }
           : {},
@@ -229,7 +231,17 @@ export default class PostController {
         },
         orderBy: { createdAt: 'desc' },
       }),
-      prisma.post.count(),
+      prisma.post.count({
+        where: params.labelId
+          ? {
+            labels: {
+              some: {
+                labelId: params.labelId,
+              },
+            },
+          }
+          : {},
+      }),
     ]));
 
     if (post.status === 'rejected') {

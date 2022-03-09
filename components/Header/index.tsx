@@ -72,7 +72,7 @@ const Header = () => {
     },
     {
       text: '文章分类',
-      path: '/classify',
+      path: '/posts/category',
     },
     {
       text: '首页',
