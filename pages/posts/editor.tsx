@@ -13,7 +13,6 @@ import Layout from '~/components/Layout';
 import Terminal from '~/components/Terminal';
 import Button from '~/components/Button';
 import Dialog from '~/components/Dialog';
-import styles from '~/assets/styles/postEditor.module.scss';
 
 import getFrontmatter from '~/plugins/getFrontmatter';
 import useUser, { useUpdateUserId } from '~/utils/hooks/useUser';
@@ -27,6 +26,7 @@ import { useMarkdownPlugins } from '~/utils/hooks/useMarkdown';
 import { LOCAL_DRAFTS } from '~/utils/constants';
 
 import showNotification from '~/components/Notification';
+import SpaceBetween from '~/components/SpaceBetween';
 
 const getInitialFrontmatterObject = () => ({
   title: '',
@@ -189,6 +189,30 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
       `}
       </style>
       <Terminal command={command} />
+      <SpaceBetween>
+        <SpaceBetween.Left>
+          <Button color="warning" variant="outlined" onClick={async () => router.back()}>
+            返回
+          </Button>
+        </SpaceBetween.Left>
+        <SpaceBetween.Right>
+          <>
+            <Button
+              color="primary"
+              onClick={onSubmit}
+            >
+              {props.postId ? '更新' : '发布'}
+            </Button>
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={async () => router.back()}
+            >
+              取消
+            </Button>
+          </>
+        </SpaceBetween.Right>
+      </SpaceBetween>
       <Editor
         mode="auto"
         value={value}
@@ -220,21 +244,6 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
         }}
         uploadImages={uploadImages}
       />
-      <div className={styles.submitButton}>
-        <Button
-          color="primary"
-          onClick={onSubmit}
-        >
-          {props.postId ? '更新' : '发布'}
-        </Button>
-        <Button
-          color="secondary"
-          variant="outlined"
-          onClick={async () => router.back()}
-        >
-          取消
-        </Button>
-      </div>
       <Dialog
         open={permissionDialog}
         title="权限不足"

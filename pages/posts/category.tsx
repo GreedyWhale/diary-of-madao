@@ -10,6 +10,7 @@ import { getPosts } from '~/services/post';
 import { withSessionSsr, getUserIdFromCookie } from '~/utils/withSession';
 import { promiseWithError } from '~/utils/promise';
 import { getErrorInfo } from '~/utils/middlewares';
+import { useUpdateUserId } from '~/utils/hooks/useUser';
 
 import Layout from '~/components/Layout';
 import Terminal from '~/components/Terminal';
@@ -18,6 +19,7 @@ import Pagination from '~/components/Pagination';
 import styles from '~/assets/styles/postsCategory.module.scss';
 
 const PostsCategory: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
+  useUpdateUserId(props.userId);
   const [command, setCommand] = React.useState('ls -ltr *');
   const [pagination, setPagination] = React.useState<API.BasePagination>({
     pageSize: 10,

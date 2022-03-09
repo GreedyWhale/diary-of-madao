@@ -23,6 +23,7 @@ import Terminal from '~/components/Terminal';
 import Button from '~/components/Button';
 import Dialog from '~/components/Dialog';
 import showNotification from '~/components/Notification';
+import SpaceBetween from '~/components/SpaceBetween';
 
 const Posts: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   const router = useRouter();
@@ -64,21 +65,28 @@ const Posts: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
           title={props.post.title}
           metaInfo={`${moment(props.post.createdAt).format('YYYY-MM-DD')} [Updated: ${moment(props.post.updatedAt).format('YYYY-MM-DD')}]`}
         />
-        {props.userId !== -1 && (
-          <div className={styles.editor}>
-            <Link href={`/posts/editor?id=${props.post.id}`} passHref>
-              <a>
-                <Button color="primary">编辑</Button>
-              </a>
-            </Link>
-            <Button
-              color="error"
-              variant="outlined"
-              onClick={async () => setVisibleDeleteModal(prev => !prev)}>
-              删除
+        <SpaceBetween>
+          <SpaceBetween.Left>
+            <Button color="warning" variant="outlined" onClick={async () => router.back()}>
+              返回
             </Button>
-          </div>
-        )}
+          </SpaceBetween.Left>
+          {props.userId !== -1 && (
+            <SpaceBetween.Right>
+              <Link href={`/posts/editor?id=${props.post.id}`} passHref>
+                <a>
+                  <Button color="primary">编辑</Button>
+                </a>
+              </Link>
+              <Button
+                color="error"
+                variant="outlined"
+                onClick={async () => setVisibleDeleteModal(prev => !prev)}>
+                删除
+              </Button>
+            </SpaceBetween.Right>
+          )}
+        </SpaceBetween>
         <div className={`${styles.content} postViewer`}>
           <Viewer
             plugins={plugins.current}
