@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-10-16 15:01:20
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-19 11:08:13
+ * @LastEditTime: 2022-03-09 16:02:58
  */
 import React from 'react';
 import gfm from '@bytemd/plugin-gfm';
@@ -11,7 +11,7 @@ import breaks from '@bytemd/plugin-breaks';
 import footnotes from '@bytemd/plugin-footnotes';
 import frontmatter from '@bytemd/plugin-frontmatter';
 import gemoji from '@bytemd/plugin-gemoji';
-import highlight from '@bytemd/plugin-highlight';
+import highlight from '@bytemd/plugin-highlight-ssr';
 import math from '@bytemd/plugin-math';
 import mermaid from '@bytemd/plugin-mermaid';
 import mediumZoom from '@bytemd/plugin-medium-zoom';
@@ -32,10 +32,10 @@ export function useMarkdownPlugins() {
     gemoji(),
     highlight(),
     math({
-      locale: zhHansMath
+      locale: zhHansMath,
     }),
     mermaid({ locale: zhHansMathMermaid }),
-    mediumZoom()
+    mediumZoom(),
   ]);
 
   return plugins;
