@@ -372,7 +372,7 @@ while (true) {
    那就会导致当前阶段一直无法结束，一直在执行 `fn`，需要注意一下。
    
 
-### Node.js 的模块机制
+## Node.js 的模块机制
 
 在 ES6 之前 JavaScript 没有模块机制，你如果想要用其他的库必须通过 `<script>` 标签引入，Node.js 是没有`<script>` 标签的，它使用的是 CommonJS 规范。
 
@@ -447,3 +447,34 @@ exports-->空对象;
 但是当导出的时候 Node.js 永远使用的是 `module.exports` 指向的对象。
 
 所以当 `exports = () => console.log('error');` 这样写的时候，`exports` 指向了其他对象，不再和`module.exports` 指向同一个对象，所以这样写导出的模块是一个空对象。
+
+#### ES6 模块和 CommonJS 模块的区别
+
+我之前一直没有特别注意过这两种模块的区别，只是知道ES6 模块使用 import/export 来导入/导出模块，而CommonJS 模块使用 require/module.exports 来导入/导出模块，直到有一次面试中，面试官问我在 Node.js 中可不可以在条件语句中使用 require，比如：
+
+```js
+let name;
+
+if (Date.now() === 1650959132980) {
+  name = require('name')
+}
+```
+
+因为平时没有这么使用过，也没有很注意它们之间的区别，所以当时就没答出来，后来去看资料，发现在阮一峰大神写的 [ECMAScript 6 入门](https://es6.ruanyifeng.com/#docs/module-loader#ES6-%E6%A8%A1%E5%9D%97%E4%B8%8E-CommonJS-%E6%A8%A1%E5%9D%97%E7%9A%84%E5%B7%AE%E5%BC%82) 中就做了很详细的对比：
+
+> 1. CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。
+> 2. CommonJS 模块是运行时加载，ES6 模块是编译时输出接口。
+> 3. CommonJS 模块的require()是同步加载模块，ES6 模块的import命令是异步加载，有一个独立的模块依赖的解析阶段。
+> 
+> ---- [《ES6 模块与 CommonJS 模块的差异》](https://es6.ruanyifeng.com/#docs/module-loader#ES6-%E6%A8%A1%E5%9D%97%E4%B8%8E-CommonJS-%E6%A8%A1%E5%9D%97%E7%9A%84%E5%B7%AE%E5%BC%82)
+
+
+通关第二条差异就可以得出答案， 在 Node.js 中可以在条件语句中使用 require。而 ES6 模块是在编译阶段完成模块的加载的，也就是说在代码执行之前，就要完成模块的加载，所以不能使用在运行时才能得到结果的语法结构，比如放在条件语句中加载，但是下面这种情况是可以的：
+
+```js
+console.log(name);
+
+import name from 'module';
+```
+
+另外关于`ES6 模块的import命令是异步加载`这句话的准确性我自己无法证实，因为inport在代码编译阶段执行，当代码运行的时候，模块是已经完成加载的，所以无法确定 import 命令是异步加载模块的还是同步加载模块的，这部分可能得去了解一下 import 的实现才能确定。
