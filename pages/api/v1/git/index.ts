@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-10-14 14:36:15
  * @LastEditors: MADAO
- * @LastEditTime: 2022-02-23 18:00:00
+ * @LastEditTime: 2022-04-27 16:43:07
  */
 import type { NextApiHandler } from 'next';
 import type { SimpleGit } from 'simple-git';
@@ -47,6 +47,7 @@ const gitActions: NextApiHandler = async (req, res) => {
       git
         .add(path.join(process.cwd(), '/static'))
         .commit('update：更新static目录')
+        .pull('origin', 'master')
         .push(['origin', 'main'], () => console.log('sync done')),
     );
 
