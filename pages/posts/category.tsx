@@ -32,12 +32,14 @@ const PostsCategory: NextPage<InferGetServerSidePropsType<typeof getServerSidePr
     name: '',
     posts: [],
   });
+  const [visibleCollapseButton, setVisibleCollapseButton] = React.useState(false);
 
   const getCategorizedPosts = (params: GetPostsParams) => {
     getPosts(params)
       .then(res => {
         setPosts(res.data.data.list);
         setPagination({ ...res.data.data.pagination });
+        setVisibleCollapseButton(Boolean(res.data.data.list));
       });
   };
 
@@ -45,8 +47,38 @@ const PostsCategory: NextPage<InferGetServerSidePropsType<typeof getServerSidePr
     <Layout>
       <Terminal command={command} />
       <div>
-        <ul className={styles.labels} data-collapse={Boolean(posts.length)}>
-          {props.labels.map(value => (
+        <ul className={styles.labels}>
+          {
+            visibleCollapseButton
+              ? (
+                <li
+                  className={styles.labelListControl}
+                  onClick={() => setVisibleCollapseButton(false)}
+                >
+                  展开
+                </li>
+              )
+              : (
+                props.labels.map(value => (
+                  <li
+                    data-selected={value.id === selectedLabel.id}
+                    key={value.id}
+                    onClick={() => {
+                      setCommand(`ls -ltr ${value.name}`);
+                      setSelectedLabel(value);
+                      getCategorizedPosts({
+                        page: pagination.currentPage,
+                        pageSize: pagination.pageSize,
+                        labelId: value.id,
+                      });
+                    }}
+                  >
+                    {value.name}({value.posts.length})
+                  </li>
+                ))
+              )
+          }
+          {/* {props.labels.map(value => (
             <li
               data-selected={value.id === selectedLabel.id}
               key={value.id}
@@ -62,15 +94,7 @@ const PostsCategory: NextPage<InferGetServerSidePropsType<typeof getServerSidePr
             >
               {value.name}({value.posts.length})
             </li>
-          ))}
-          <li
-            className={styles.labelListControl}
-            onClick={() => {
-              setPosts([]);
-            }}
-          >
-            展开
-          </li>
+          ))} */}
         </ul>
         {Boolean(posts.length) && (
           <>

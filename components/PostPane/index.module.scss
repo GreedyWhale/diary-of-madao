@@ -11,10 +11,13 @@
     padding: 0;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
     margin-bottom: 20px;
     > li {
-      margin-right: 10px;
+      margin: 0 10px 10px 0;
       color: rgba(255,255,255,0.5);
+      flex: none;
     }
   }
   .introduction {
