@@ -421,9 +421,13 @@ done();
 
 ```js
 exports = () => console.log('error'); // 不要这样使用。
+
+exports = {
+ add: () => console.log('add'),
+}
 ```
 
-exports 的这种用法不能正确的引入函数，得到的是一个空对象。
+当重新给exports赋值的情况下，是不能正确导出模块的，会得到一个空对象。
 
 可以这样理解：
 
