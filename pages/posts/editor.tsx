@@ -88,6 +88,7 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
   const postBeforeUpdateRef = React.useRef<PostItem | null>(null);
 
   const command = React.useMemo(() => frontmatterObject.title ? `vim ${frontmatterObject.title}` : '请按照提示输入文章标题', [frontmatterObject]);
+  const localStorageKey = React.useMemo(() => props.postId ? `${LOCAL_DRAFTS}_${props.postId}` : LOCAL_DRAFTS, [props.postId]);
 
   const onSubmit = async () => {
     const newLabels = frontmatterObject.labels.map(value => ({ name: value }));
@@ -106,7 +107,7 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
       : await promiseWithError(createPost(params));
 
     if (postInfo) {
-      window.localStorage.removeItem(LOCAL_DRAFTS);
+      window.localStorage.removeItem(localStorageKey);
       setSubmitDialog({
         open: true,
         postId: postInfo.data.data.id,
@@ -151,16 +152,12 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
   }, [user.access, user.id]);
 
   React.useEffect(() => {
-    if (props.postId) {
-      return;
-    }
-
     const now = Date.now();
     if ((value && value !== initialFrontmatter) && Date.now() - lastStorageTime > 30000) {
       lastStorageTime = now;
-      window.localStorage.setItem(LOCAL_DRAFTS, JSON.stringify(value));
+      window.localStorage.setItem(localStorageKey, JSON.stringify(value));
     }
-  }, [props.postId, value]);
+  }, [localStorageKey, props.postId, value]);
 
   React.useEffect(() => {
     if (props.postId) {
@@ -173,12 +170,12 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
       return;
     }
 
-    const localDrafts = window.localStorage.getItem(LOCAL_DRAFTS);
+    const localDrafts = window.localStorage.getItem(localStorageKey);
 
     if (localDrafts) {
       setValue(JSON.parse(localDrafts));
     }
-  }, [props.postId]);
+  }, [props.postId, localStorageKey]);
 
   return (
     <Layout>
