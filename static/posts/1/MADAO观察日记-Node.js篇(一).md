@@ -6,21 +6,6 @@ introduction: 'Node.js学习笔记 - 基础'
 
 ![post_blog_6_cover_1648549428015.jpeg](/static/images/posts/post_blog_6_cover_1648549428015.jpeg "post_blog_6_cover_1648549428015.jpeg")
 
-## 参考
-
-[event-loop-timers-and-nexttick](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick)
-
-[New Changes to the Timers and Microtasks in Node v11.0.0 ( and above)
-](https://blog.insiderattack.net/new-changes-to-timers-and-microtasks-from-node-v11-0-0-and-above-68d112743eb3)
-
-[setImmediate() vs nextTick() vs setTimeout(fn,0) - in depth explanation
-](https://www.voidcanvas.com/setimmediate-vs-nexttick-vs-settimeout/)
-
-[Using microtasks in JavaScript with queueMicrotask()](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide)
-
-[Process.nextTick and Promise callback
-](https://stackoverflow.com/questions/68052366/process-nexttick-and-promise-callback)
-
 ## 前言
 
 开始系统的学习一下 Node.js，虽然一直在用，但是用到的 Node.js 相关的功能很少，基本上都是操作下文件，写点工程化相关的东西，这一次希望可以深入的掌握一下。
@@ -392,60 +377,40 @@ Promise.resolve().then(() => {
 
 ## Node.js 的模块机制
 
-在 ES6 之前 JavaScript 没有模块机制，你如果想要用其他的库必须通过 `<script>` 标签引入，Node.js 是没有`<script>` 标签的，它使用的是 CommonJS 规范。
+Node.js 采用的是 CommonJS 规范，使用 `require` 引入一个模块，使用 `module.exports/exports` 导出一个模块。
 
-在 Node.js 中，引入一个模块使用`require`，导出一个模块使用 `modele.exports` 或者 `exports`。
+**e.g.**
+
+```js
+// module.js
+
+module.exports = {
+  a: console.log('a'),
+  b: console.log('b')
+}
+
+exports.c = () => console.log('c');
+```
+
+```js
+
+const { a, b, c } = require('./module');
+
+```
+
+这里需要注意的是如果你这样使用 `exports`:
 
 
 **e.g.**
 
 ```js
-// a.js
-exports.sayGoodbye = () => console.log('Goodbye');
-
-exports.sayHello = () => console.log('hello world');
-```
-
-```js
-// b.js
-
-module.exports = {
-  sayName: () => console.log('MODAO'),
-  sayAge: () => console.log(65),
-}
-```
-
-```js
-// c.js
-
-module.exports = () => console.log('done');
-```
-
-```js
-const { sayGoodbye, sayHello } = require('./a');
-const { sayName, sayAge } = require('./b');
-const done = require('./exports2');
-
-sayGoodbye();
-sayHello();
-
-sayName();
-sayAge();
-
-done();
-```
-
-上面情况下 `exports` 和 `module.exports` 是一样的，但是有一种情况下只能用 `module.exports`。
-
-```js
-exports = () => console.log('error'); // 不要这样使用。
-
+exports = () => console.log(1);
 exports = {
- add: () => console.log('add'),
-}
+  name: 1,
+};
 ```
 
-当重新给exports赋值的情况下，是不能正确导出模块的，会得到一个空对象。
+是不能正确导出模块的，会得到一个空对象。
 
 可以这样理解：
 
@@ -491,7 +456,11 @@ if (Date.now() === 1650959132980) {
 > ---- [《ES6 模块与 CommonJS 模块的差异》](https://es6.ruanyifeng.com/#docs/module-loader#ES6-%E6%A8%A1%E5%9D%97%E4%B8%8E-CommonJS-%E6%A8%A1%E5%9D%97%E7%9A%84%E5%B7%AE%E5%BC%82)
 
 
-通关第二条差异就可以得出答案， 在 Node.js 中可以在条件语句中使用 require。而 ES6 模块是在编译阶段完成模块的加载的，也就是说在代码执行之前，就要完成模块的加载，所以不能使用在运行时才能得到结果的语法结构，比如放在条件语句中加载，但是下面这种情况是可以的：
+通关第二条差异就可以得出答案，在 Node.js 中可以在条件语句中使用 require。
+
+而 ES6 模块是在编译阶段完成模块的加载的，也就是说在代码执行之前，就要完成模块的加载，所以不能使用在运行时才能得到结果的语法结构，比如放在条件语句中加载。
+
+但是下面这种情况是可以的：
 
 ```js
 console.log(name);
@@ -499,4 +468,21 @@ console.log(name);
 import name from 'module';
 ```
 
-另外关于`ES6 模块的import命令是异步加载`这句话的准确性我自己无法证实，因为inport在代码编译阶段执行，当代码运行的时候，模块是已经完成加载的，所以无法确定 import 命令是异步加载模块的还是同步加载模块的，这部分可能得去了解一下 import 的实现才能确定。
+另外关于`ES6 模块的import命令是异步加载`这句话的准确性我自己无法证实，因为import在代码编译阶段执行，当代码运行的时候，模块是已经完成加载的，所以无法确定 import 命令是异步加载模块的还是同步加载模块的，这部分可能得去了解一下 import 的实现才能确定。
+
+## 参考
+
+[event-loop-timers-and-nexttick](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick)
+
+[New Changes to the Timers and Microtasks in Node v11.0.0 ( and above)
+](https://blog.insiderattack.net/new-changes-to-timers-and-microtasks-from-node-v11-0-0-and-above-68d112743eb3)
+
+[setImmediate() vs nextTick() vs setTimeout(fn,0) - in depth explanation
+](https://www.voidcanvas.com/setimmediate-vs-nexttick-vs-settimeout/)
+
+[Using microtasks in JavaScript with queueMicrotask()](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide)
+
+[Process.nextTick and Promise callback
+](https://stackoverflow.com/questions/68052366/process-nexttick-and-promise-callback)
+
+[ES6 模块与 CommonJS 模块的差异 ](https://es6.ruanyifeng.com/#docs/module-loader#ES6-%E6%A8%A1%E5%9D%97%E4%B8%8E-CommonJS-%E6%A8%A1%E5%9D%97%E7%9A%84%E5%B7%AE%E5%BC%82)
