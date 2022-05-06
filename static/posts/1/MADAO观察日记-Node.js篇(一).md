@@ -262,6 +262,8 @@ immediate3
 immediate4
 ```
 
+可以看到即使 `process.nextTick` 是在第二个 `setImmediate` 的回调函数中执行的，它的优先级也比它外层的 `setImmediate` 优先级高。
+
 但是在低于 Node.js 11版本之下会得到：
 
 ```
