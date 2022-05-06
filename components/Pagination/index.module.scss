@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--font-color);
   padding: 0;
   max-width: 350px;
   margin: 0 auto;
@@ -19,11 +19,11 @@
       left: 0;
       right: 0;
       height: 1px;
-      background: var(--theme-color);
+      background: var(--font-color);
       display: none;
     }
     &[data-active="true"] {
-      color: var(--theme-color);
+      color: var(--font-color);
       font-weight: 600;
       &::after {
         display: block;

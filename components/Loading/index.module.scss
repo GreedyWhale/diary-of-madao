@@ -2,7 +2,7 @@
   transform: rotateZ(45deg);
   perspective: 1000px;
   border-radius: 50%;
-  color: #fff;
+  color: var(--font-color);
   &::before,
   &::after {
     content: '';

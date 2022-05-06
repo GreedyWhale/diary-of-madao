@@ -3,12 +3,12 @@
  * @Author: MADAO
  * @Date: 2022-01-05 21:03:40
  * @LastEditors: MADAO
- * @LastEditTime: 2022-01-19 17:58:06
+ * @LastEditTime: 2022-05-06 12:07:23
  */
 export interface ButtonProps extends ButtonTypeMap {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => Promise<any>;
   loading?: boolean;
   disable?: boolean;
   variant?: 'text' | 'contained' | 'outlined';
-  color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning';
+  color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'normal';
 }

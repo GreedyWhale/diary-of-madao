@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-10-16 15:01:20
  * @LastEditors: MADAO
- * @LastEditTime: 2022-03-09 16:57:54
+ * @LastEditTime: 2022-05-06 12:39:16
  */
 import React from 'react';
 import gfm from '@bytemd/plugin-gfm';
@@ -20,8 +20,8 @@ import zhHansMath from '@bytemd/plugin-math/lib/locales/zh_Hans.json';
 import zhHansMathMermaid from '@bytemd/plugin-mermaid/lib/locales/zh_Hans.json';
 import 'bytemd/dist/index.min.css';
 import 'katex/dist/katex.css';
-import 'github-markdown-css/github-markdown-dark.css';
-import 'highlight.js/styles/gradient-dark.css';
+import 'github-markdown-css/github-markdown.css';
+import 'highlight.js/styles/vs2015.css';
 
 import showNotification from '~/components/Notification';
 import { promiseWithError } from '~/utils/promise';

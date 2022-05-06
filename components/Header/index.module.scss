@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: space-between;
     .title {
-      color: #fff;
+      color: var(--font-color);
       cursor: pointer;
     }
     .menu {
@@ -16,7 +16,7 @@
       align-items: center;
       > a {
         margin-left: 20px;
-        color: var(--theme-color);
+        color: var(--font-color);
         font-weight: 500;
         padding: 0 0.5em 0.5em;
         position: relative;
@@ -30,7 +30,7 @@
           width: calc(100% / 4);
           bottom: 0;
           height: 2px;
-          background: var(--theme-color);
+          background: var(--font-color);
         }
         &[data-active="true"] {
           &::after {
@@ -64,7 +64,7 @@
     height: 28px;
     padding: 0 20px;
     white-space: nowrap;
-    color: #fff;
+    color: var(--font-color);
     &:hover {
       background: rgba(53, 118, 171, 0.959);
     }

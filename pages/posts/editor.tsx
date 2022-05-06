@@ -188,7 +188,7 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
       <Terminal command={command} />
       <SpaceBetween>
         <SpaceBetween.Left>
-          <Button color="warning" variant="outlined" onClick={async () => router.back()}>
+          <Button color="normal" variant="outlined" onClick={async () => router.back()}>
             返回
           </Button>
         </SpaceBetween.Left>

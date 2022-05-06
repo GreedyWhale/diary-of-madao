@@ -1,9 +1,10 @@
 :root {
-  --background-color: #040d21;
+  --background-color: #3A4750;
   --border-color: rgba(255, 255, 255, 0.1);
   --main-width: 1200px;
   --font-size: 16px;
-  --theme-color: #FFA900;
+  --font-color: #E7E7DE;
+  --blue: rgb(8,145,178);
 }
 
 * {
@@ -34,6 +35,6 @@ a {
   &,
   &:active,
   &:visited {
-    color: rgb(8,145,178);
+    color: var(--blue);
   }
 }

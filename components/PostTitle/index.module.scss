@@ -5,7 +5,7 @@
     font-size: 22px;
     padding-bottom: 15px;
     position: relative;
-    color: var(--theme-color);
+    color: var(--font-color);
     margin-bottom: 15px;
     &::after {
       content: '';
@@ -15,11 +15,11 @@
       width: 100%;
     }
     &, &::after {
-      border-bottom: 3px dotted var(--theme-color);
+      border-bottom: 3px dotted var(--font-color);
     }
   }
   .meta {
     font-weight: lighter;
-    color: var(--theme-color);
+    color: var(--font-color);
   }
 }

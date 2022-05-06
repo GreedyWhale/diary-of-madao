@@ -11,7 +11,7 @@ const PostPane = (props: PostPaneProps) => (
   <article className={styles.container}>
     <PostTitle
       title={props.post.title}
-      metaInfo={`${moment(props.post.createdAt).format('YYYY-MM-DD')} [Updated: ${moment(props.post.updatedAt).format('YYYY-MM-DD')}] :: ${props.post.author.username}`}
+      metaInfo={`${moment(props.post.createdAt).format('YYYY-MM-DD')} [Updated: ${moment(props.post.updatedAt).format('YYYY-MM-DD')}] ::${props.post.author.username}`}
     />
     <ul className={styles.labels}>
       {props.post.labels.map(item => (
