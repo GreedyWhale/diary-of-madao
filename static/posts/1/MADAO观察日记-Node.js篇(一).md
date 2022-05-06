@@ -270,8 +270,8 @@ immediate4
 nextTick
 ```
 
-具体可参考[New Changes to the Timers and Microtasks in Node v11.0.0 ( and above)
-](https://blog.insiderattack.net/new-changes-to-timers-and-microtasks-from-node-v11-0-0-and-above-68d112743eb3)。
+具体可参考 [New Changes to the Timers and Microtasks in Node v11.0.0 ( and above)
+](https://blog.insiderattack.net/new-changes-to-timers-and-microtasks-from-node-v11-0-0-and-above-68d112743eb3)
 
 这里就按照高于11的版本为准，既然 `process.nextTick` 有无视事件循环阶段的特性，用它就可以实现*饿死事件循环*的效果，就是让事件循环永远无法进入到下一个阶段：
 
