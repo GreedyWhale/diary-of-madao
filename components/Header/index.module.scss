@@ -1,5 +1,4 @@
 @import '~/assets/styles/mixin.scss';
-@import '~/assets/styles/var.scss';
 
 .header {
   padding: 20px 0;
@@ -21,7 +20,7 @@
         padding: 0 0.5em 0.5em;
         position: relative;
         &:hover {
-          color: darken($themeColor, 10%);
+          opacity: 0.8;
         }
         &::after {
           position: absolute;
