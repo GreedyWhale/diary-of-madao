@@ -236,6 +236,8 @@ setImmediate(() => {
 
 nextTickQueue 就是放置`process.nextTick`相关的回调函数的队列。
 
+我的理解就是，遇到`process.nextTick`，事件循环就会暂停，直到清空了当前阶段的nextTickQueue才会继续循环。
+
 举个例子：
 
 **e.g.**
@@ -273,7 +275,7 @@ nextTick
 具体可参考 [New Changes to the Timers and Microtasks in Node v11.0.0 ( and above)
 ](https://blog.insiderattack.net/new-changes-to-timers-and-microtasks-from-node-v11-0-0-and-above-68d112743eb3)
 
-这里就按照高于11的版本为准，既然 `process.nextTick` 有无视事件循环阶段的特性，用它就可以实现*饿死事件循环*的效果，就是让事件循环永远无法进入到下一个阶段：
+这里就按照高于11的版本为准，用 `process.nextTick`  可以实现*饿死事件循环*的效果，就是让事件循环永远无法进入到下一个阶段：
 
 ```js
 const fn = () => {
@@ -292,7 +294,7 @@ setTimeout(() => {
 除了 `process.nextTick` 之外还有一个异步的 API 没有说到，那就是 `Promise`。
 
 
-`Promise` 也可以造成*事件循环饿死*
+如果递归的调用 `Promise` 也会造成*事件循环饿死*。
 
 **e.g.**
 
@@ -368,7 +370,7 @@ Promise.resolve().then(() => {
 
 当前正在处理微任务队列，所以把微任务队列清空，才会执行nextTickQueue里面的回调函数。
 
-我也是看了这篇回答才理解的
+推荐看看下面的帖子，我也是看了下面的帖子后理解的。
 
 [Process.nextTick and Promise callback
 ](https://stackoverflow.com/questions/68052366/process-nexttick-and-promise-callback)
