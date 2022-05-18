@@ -4,7 +4,7 @@ labels: ['Node.js']
 introduction: 'Node.js学习笔记 - 基础'
 ---
 
-![post_blog_6_cover_1648549428015.jpeg](/static/images/posts/post_blog_6_cover_1648549428015.jpeg "post_blog_6_cover_1648549428015.jpeg")
+![post_blog_7_cover_1648549428015.jpeg](/static/images/posts/post_blog_7_cover_1648549428015.jpeg "post_blog_7_cover_1648549428015.jpeg")
 
 ## 前言
 
