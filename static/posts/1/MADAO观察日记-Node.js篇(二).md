@@ -18,7 +18,7 @@ introduction: 'Node.js 中有关 File、Buffer、Stream 的知识点'
 
 ## File System
 
-Node.js 中提供了很多对文件操作的 API，对文件的操作就是：创建、删除、读取、写入，除此之外 Node.js 还提供了文件相关的事件，比如可以监听文件的变化。
+Node.js 中提供了很多对文件操作的 API，文件的操作通常都是：创建、删除、读取、写入这几种，除此之外 Node.js 还提供了文件相关的事件，比如可以监听文件的变化。
 
 关于文件的操作，Node.js 提供了4个版本的 API 供开发中使用，分别是：同步、异步、回调形式、Promise 化的 API。
 
