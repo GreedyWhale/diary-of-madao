@@ -21,14 +21,14 @@ const GoTop: React.FC = () => {
     let scrollTimer = -1;
     const listener = () => {
       window.clearTimeout(scrollTimer);
-      scrollTimer = window.requestAnimationFrame(() => {
+      scrollTimer = window.setTimeout(() => {
         const { scrollTop } = document.documentElement;
         if (scrollTop > 300 && !visible) {
           setVisible(true);
         } else if (visible && scrollTop < 300) {
           setVisible(false);
         }
-      });
+      }, 60);
     };
 
     document.addEventListener('scroll', listener);
