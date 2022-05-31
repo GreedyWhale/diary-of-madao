@@ -1,7 +1,7 @@
 ---
 title: 'MADAO观察日记-Node.js篇(四)'
 labels: ['Node.js']
-introduction: '使用 Node.js 进行网络编程 - HTTP'
+introduction: '使用 Node.js 进行网络编程 - HTTP、HTTPS'
 ---
 
 ![post_blog_10_cover_1653898951578.jpeg](/static/images/posts/post_blog_10_cover_1653898951578.jpeg "post_blog_10_cover_1653898951578.jpeg")
@@ -11,6 +11,24 @@ introduction: '使用 Node.js 进行网络编程 - HTTP'
 上一篇记录了在 Node.js 中如何创建 TCP 和 UDP 的服务器，我个人目前在工作和个人项目中，遇到需要这方面知识的场景都很少，但是再往上一层，需要用到有关 HTTP 或者 HTTPS 相关知识的场景就很多了，最基础的前后端通信项目的热更新以及自己搭建 Web 服务器，都要用到这些知识，今天就来总结下Node.js 中有关 HTTP、HTTPS 的知识。
 
 ## HTTP
+
+HTTP 协议全程叫超文本传输协议，用于在万维网上传输类似 HTML 文件、图像、视频、音频等资源的一个协议，目前的标准是 HTTP/2，但是现在大部分网站用的协议还是 HTTP/1.1。
+
+面试中也是经常被问到 HTTP/1 和 HTTP/2 有什么区别，我是觉得这种问题很难回答，因为大部分网站仍然使用 HTTP/1.1 版本，所以这里就记录一下 HTTP/1.1 和 HTTP/2 的区别：
+
+*1. HTTP 1.1 管道 / HTTP 2 多路复用*
+
+   HTTP/1.1 协议有一个管道机制，允许客户端批量发送请求到服务端，但是服务端响应需要按照请求到达服务端的顺序响应，这就存在一个问题，当前一个响应处理非常的慢的时候，会影响到后续的所有响应，这种情况有一个专业术语叫做*队头阻塞*，为了解决这个问题，HTTP/2使用了一个叫做多路复用的机制，它给传输的每个数据块增加了一个用于记录这个数据块属于哪个请求的东西，叫做数据帧（frame），这样就可以让服务端在响应的时候不用按照请求的顺序进行响应了，浏览器根据数据帧里的标识来组合响应结果，这样就避免了队头阻塞的问题。
+    
+*2. HTTP 1.1 使用纯文本进行数据传输 / HTTP 2 使用二进制格式进行数据传输*
+
+*3. HTTP/2 对请求头进行了压缩*
+
+*4. HTTP/2 支持服务端推送*
+
+*5. 目前主流浏览器只支持经TLS加密的HTTP/2，也就说想要用 HTTP/2 版本，必须要用 HTTPS 协议*
+
+
 
 在 Node.js 中创建一个 HTTP 服务器非常简单。
 
@@ -508,8 +526,16 @@ curl -H "Connection:Upgrade" -H "Upgrade:websocket" http://localhost:1111
 可参考 MDN 的文档 [协议升级机制](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Protocol_upgrade_mechanism)
 
 
+## HTTPS
+
+HTTPS 协议是 HTTP 协议的加密版本，它使用了 TLS 协议对通信内容进行加密，有的地方还有说 SSL 协议，目前 SSL 协议已经弃用了，采用的是标准化之后的 SSL 协议，被称作 TLS 协议（传输层安全性协议）。
+
+
+
 ## 参考
 
 [协议升级机制](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Protocol_upgrade_mechanism)
 
 [HTTP event connect](https://nodejs.org/api/http.html#event-connect)
+
+[关于队头阻塞（Head-of-Line blocking），看这一篇就足够了](https://zhuanlan.zhihu.com/p/330300133)
