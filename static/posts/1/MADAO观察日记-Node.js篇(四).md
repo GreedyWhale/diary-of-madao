@@ -530,6 +530,145 @@ curl -H "Connection:Upgrade" -H "Upgrade:websocket" http://localhost:1111
 
 HTTPS 协议是 HTTP 协议的加密版本，它使用了 TLS 协议对通信内容进行加密，有的地方还有说 SSL 协议，目前 SSL 协议已经弃用了，采用的是标准化之后的 SSL 协议，被称作 TLS 协议（传输层安全性协议）。
 
+关于这部分还需要提到一个知识点，就是 HTTPS 的加密过程，除了面试经常问，自己搭建服务也会用到。
+
+
+#### 1. 对称加密 / 非对称加密
+
+因为 HTTPS 的加密过程使用了这两种方式的结合，所以先要简单了解一下*对称加密*和*非对称加密*。
+
+- 对称加密：加密和解密公用一个密钥。
+- 非对称加密：密钥分为公钥和私钥，使用公钥加密的数据，只有对应的私钥可以解密，公钥可以公开，私钥不可公开。
+
+从这两种加密机制可以看出，HTTPS 协议都不能单纯的使用上面的某一种方式，都会存在漏洞。
+
+假如采用对称加密：
+
+![symmetric-encryption-2022-06-01-1132_1654054646298.png](/static/images/posts/symmetric-encryption-2022-06-01-1132_1654054646298.png "symmetric-encryption-2022-06-01-1132_1654054646298.png")
+
+以上过程中间人只要劫持同步密钥的过程，那么加密后的数据就成了摆设，除非某一方内置了另一方的密钥，想想让浏览器内置所有 HTTPS 服务端的密钥是不可能的事情。
+
+假如采用非对称加密
+
+![asymmetric-encryption-2022-06-01-1132_1654055115803.png](/static/images/posts/asymmetric-encryption-2022-06-01-1132_1654055115803.png "asymmetric-encryption-2022-06-01-1132_1654055115803.png")
+
+这样看起来是没问题的，因为私钥不会参与传输过程，但是假如中间人在传送公钥的时候劫持了，把浏览器和客户端发送的公钥都换成自己的，那么浏览器用中间人公钥加密的数据，中间人就可以用自己的私钥解开，同理客户端加密的数据也是能解开的。
+
+所以仅用一种机制是不可以的。
+
+#### 2. 对称加密 + 非对称加密
+
+HTTPS 采用了对称加密和非对称加密混合的方式进行加密，为什么还要使用对称加密，是因为对称加密的效率要比非对称加密的效率高。
+
+HTTPS 采用的方案是这样的：
+
+1. 浏览器想服务器发起请求，服务器把自己的公钥发送给浏览器。
+
+2. 浏览器随机生成一个用于对称加密的密钥，然后使用服务器的公钥进行加密后再发送给服务器。
+
+3. 服务器用自己的密钥对浏览器发送的加密信息进行解密后就得到了用于对称加密的密钥，这样浏览器和服务器都拿到了用于数据加密的密钥。
+
+4. 浏览器和服务端用同一个密钥对数据进行加密，然后开始传输数据。
+
+![https-encryption-2022-06-01-1132_1654068971367.png](/static/images/posts/https-encryption-2022-06-01-1132_1654068971367.png "https-encryption-2022-06-01-1132_1654068971367.png")
+
+但是这种方案还是有漏洞，和非对称加密方案的漏洞类似，中间人可以把服务器发送给浏览器的公钥进行替换，换成自己的公钥，当浏览器生成用于对称加密的密钥发送给服务端的时候，中间人就可以用自己的私钥进行解密，类似这样：
+
+![https-encryption-bug-2022-06-01-1132_1654070488065.png](/static/images/posts/https-encryption-bug-2022-06-01-1132_1654070488065.png "https-encryption-bug-2022-06-01-1132_1654070488065.png")
+
+
+要解决这个问题需要让浏览器知道公钥到底是不是真的，这就需要一个第三方来确保服务器的公钥没有被替换，这个第三方就是*CA机构*。
+
+服务器可以向CA机构申请证书，这个证书就相当于服务器的身份证，服务器的公钥就写在这个证书里，上面流程的第一步服务器就不用发送公钥了，直接把证书发送给浏览器，浏览器通过验证证书就可以知道服务器的公钥是不是可信的。
+
+至于浏览器怎么验证证书的合法性，有没有可能伪造证书这些，又是另外的流程了，我还没有捋清楚，所以这里就打住。
+
+从这个加密过程可以看出想要使用HTTPS协议，需要有以下前置条件：
+
+1. 服务器需要有自己的公钥和私钥
+2. 需要有**被信任**的CA机构颁发的数字证书。
+
+上面特地强调了被信任的CA机构颁是因为自己就可以生成证书，只是自己生成的证书不被浏览器信任。
+
+#### 3. 生成公钥和私钥
+
+Node.js 是基于 OpenSSL 实现的 TLS 协议，所以可以使用 openssl 命令来生成公钥和私钥，一般系统都会自带这个库，所以可以直接使用该命令。
+
+- 生成私钥
+
+   ```bash
+   # 在当前目录下生成私钥
+
+   openssl genrsa -out server.key 2048 # 生成长度为2048的服务端私钥
+   openssl genrsa -out client.key 2048 # 生成长度为2048的客户端端私钥
+   ```
+   
+- 生成公钥
+
+    ```bash
+    # 利用刚刚生成的私钥生成对应的公钥
+
+    openssl rsa -in server.key -pubout -out server.pem # 服务端公钥
+    
+    openssl rsa -in client.key -pubout -out client.pem # 客户端公钥
+    ```
+    
+#### 3. 生成CA数字证书
+
+因为向CA机构申请证书很麻烦，所以这里就自己给自己颁发一个证书。
+
+
+首先需要准备一些文件让自己变成CA机构
+
+```bash
+
+# 生成用于签名证书的密钥
+
+openssl genrsa -out ca.key 2048
+
+# 生成证书签名请求文件
+
+openssl req -new -key ca.key -out ca.csr
+
+# 使用ca.key 对 ca.csr 签名生成证书
+
+openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
+```
+这些命令执行完成后现在应该有以下这些文件：
+
+- ca.crt
+- ca.csr
+- ca.key
+- server.key
+- server.pem
+- client.key
+- client.pem
+
+
+然后用上面生成的 *ca.key*、*ca.csr*、*ca.crt* 生成服务器的CA证书。
+
+```bash
+# 生成用于服务端的csr文件
+ 
+openssl req -new -key server.key -out server.csr
+
+# 生成用于服务端的证书
+
+openssl x509 -req \
+    -in server.csr \
+    -CA ca.crt -CAkey ca.key \  
+    -CAcreateserial -out server.crt \
+    -days 365 \
+    -sha256   
+```
+
+上面命令执行完成后，会得到`server.csr`和`server.crt` 文件。
+
+现在服务端所需要的文件就准备好了，可以开始构建 HTTPS 服务了。
+
+
+#### 4. 使用 Node.js 构建 HTTPS 服务
+
 
 
 ## 参考
@@ -539,3 +678,7 @@ HTTPS 协议是 HTTP 协议的加密版本，它使用了 TLS 协议对通信内
 [HTTP event connect](https://nodejs.org/api/http.html#event-connect)
 
 [关于队头阻塞（Head-of-Line blocking），看这一篇就足够了](https://zhuanlan.zhihu.com/p/330300133)
+
+[彻底搞懂HTTPS的加密原理](https://zhuanlan.zhihu.com/p/43789231)
+
+[How to Create Self-Signed Certificates using OpenSSL](https://devopscube.com/create-self-signed-certificates-openssl/)
