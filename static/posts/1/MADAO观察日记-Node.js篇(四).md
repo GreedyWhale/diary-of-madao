@@ -586,7 +586,8 @@ HTTPS 采用的方案是这样的：
 从这个加密过程可以看出想要使用HTTPS协议，需要有以下前置条件：
 
 1. 服务器需要有自己的公钥和私钥
-2. 需要有**被信任**的CA机构颁发的数字证书。
+2. 需要有**被信任**的CA机构颁发的数字证书
+3. 客户端要有验证数字证书的能力
 
 上面特地强调了被信任的CA机构颁是因为自己就可以生成证书，只是自己生成的证书不被浏览器信任。
 
@@ -600,7 +601,6 @@ Node.js 是基于 OpenSSL 实现的 TLS 协议，所以可以使用 openssl 命�
    # 在当前目录下生成私钥
 
    openssl genrsa -out server.key 2048 # 生成长度为2048的服务端私钥
-   openssl genrsa -out client.key 2048 # 生成长度为2048的客户端端私钥
    ```
    
 - 生成公钥
@@ -609,8 +609,6 @@ Node.js 是基于 OpenSSL 实现的 TLS 协议，所以可以使用 openssl 命�
     # 利用刚刚生成的私钥生成对应的公钥
 
     openssl rsa -in server.key -pubout -out server.pem # 服务端公钥
-    
-    openssl rsa -in client.key -pubout -out client.pem # 客户端公钥
     ```
     
 #### 3. 生成CA数字证书
@@ -641,9 +639,6 @@ openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
 - ca.key
 - server.key
 - server.pem
-- client.key
-- client.pem
-
 
 然后用上面生成的 *ca.key*、*ca.csr*、*ca.crt* 生成服务器的CA证书。
 
@@ -656,7 +651,7 @@ openssl req -new -key server.key -out server.csr
 
 openssl x509 -req \
     -in server.csr \
-    -CA ca.crt -CAkey ca.key \  
+    -CA ca.crt -CAkey ca.key \
     -CAcreateserial -out server.crt \
     -days 365 \
     -sha256   
@@ -669,6 +664,114 @@ openssl x509 -req \
 
 #### 4. 使用 Node.js 构建 HTTPS 服务
 
+```ts
+import https from 'https';
+import fs from 'fs';
+import os from 'os';
+
+const server = https.createServer({
+  // 上面步骤生成的服务端密钥和证书
+  key: fs.readFileSync('server.key')),
+  cert: fs.readFileSync('server.crt')),
+});
+
+server.on('request', (req, res) => {
+  res.statusCode = 200;
+  res.end('hello world');
+})
+
+server.listen('1111', () => {
+  console.log('listening');
+});
+
+```
+
+用curl测试：
+
+```
+curl https://localhost:1111
+```
+
+结果是：
+
+```
+curl: (60) SSL certificate problem: unable to get local issuer certificate
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+```
+
+因为curl无法验证证书所以会报错。
+
+可以添加`-k`参数来忽略证书的检查
+
+```
+curl https://localhost:1111 -k
+```
+
+如果把根证书（前面生成的ca.crt）的路径传给curl让它去检查：
+
+```
+curl https://localhost:1111 --cacert ./ca.crt
+```
+
+他会报：
+
+```
+curl: (60) SSL certificate problem: self signed certificate
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+```
+
+*self signed certificate* 是自签名证书所以还是不行...
+
+用浏览器打开也是无法访问，那么用 Node.js 写一个客户端试试：
+
+```ts
+import https from 'https';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+
+const req = https.request({
+  hostname: 'localhost',
+  port: 1111,
+  path: '/',
+  method: 'GET',
+  key: fs.readFileSync('client.key'),
+  cert: fs.readFileSync('client.key')),
+  ca: fs.readFileSync('ca.crt'),
+});
+
+req.on('response', res => {
+  res.on('data', data => {
+    console.log('data', data.toString());
+  });
+});
+
+req.end();
+
+```
+
+还会会报 *self signed certificate* 错误，可以加上`rejectUnauthorized: false`属性来忽略这个错误。
+
+```ts
+const req = https.request({
+  hostname: 'localhost',
+  port: 1111,
+  path: '/',
+  method: 'GET',
+  key: fs.readFileSync(path.join(os.homedir(), '/code/tls/client.key')),
+  cert: fs.readFileSync(path.join(os.homedir(), '/code/tls/client.crt')),
+  ca: fs.readFileSync(path.join(os.homedir(), '/code/tls/ca.crt')),
+  rejectUnauthorized: false,
+});
+```
 
 
 ## 参考
