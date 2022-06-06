@@ -16,14 +16,13 @@ import Dialog from '~/components/Dialog';
 
 import getFrontmatter from '~/plugins/getFrontmatter';
 import useUser, { useUpdateUserId } from '~/utils/hooks/useUser';
-import { ACCESS_POST_EDIT } from '~/utils/constants';
+import { ACCESS_POST_EDIT, LOCAL_DRAFTS } from '~/utils/constants';
 import { createPost, getPostDetail, updatePost } from '~/services/post';
 import { syncToGithub } from '~/services/git';
 import { uploadImage } from '~/services/upload';
 import { withSessionSsr, getUserIdFromCookie } from '~/utils/withSession';
 import { promiseWithError } from '~/utils/promise';
 import { useMarkdownPlugins } from '~/utils/hooks/useMarkdown';
-import { LOCAL_DRAFTS } from '~/utils/constants';
 
 import showNotification from '~/components/Notification';
 import SpaceBetween from '~/components/SpaceBetween';
@@ -136,6 +135,10 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     }];
   };
 
+  const goBack = () => {
+    window.localStorage.removeItem(localStorageKey);
+  };
+
   React.useEffect(() => {
     if (props.userId === -1) {
       router.replace('/');
@@ -188,7 +191,7 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
       <Terminal command={command} />
       <SpaceBetween>
         <SpaceBetween.Left>
-          <Button color="normal" variant="outlined" onClick={async () => router.back()}>
+          <Button color="normal" variant="outlined" onClick={async () => goBack()}>
             返回
           </Button>
         </SpaceBetween.Left>
@@ -203,7 +206,7 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
             <Button
               color="secondary"
               variant="outlined"
-              onClick={async () => router.back()}
+              onClick={async () => goBack()}
             >
               取消
             </Button>

@@ -9,9 +9,8 @@ import { Viewer } from '@bytemd/react';
 
 import { getPostDetail, deletePost } from '~/services/post';
 import { withSessionSsr, getUserIdFromCookie } from '~/utils/withSession';
-import { useUpdateUserId } from '~/utils/hooks/useUser';
+import useUser, { useUpdateUserId } from '~/utils/hooks/useUser';
 import { ACCESS_POST_DELETE } from '~/utils/constants';
-import useUser from '~/utils/hooks/useUser';
 import { useMarkdownPlugins, useMarkdownCopyButton } from '~/utils/hooks/useMarkdown';
 import { promiseWithError } from '~/utils/promise';
 import { getErrorInfo } from '~/utils/middlewares';

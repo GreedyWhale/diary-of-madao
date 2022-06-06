@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-12-04 11:52:57
  * @LastEditors: MADAO
- * @LastEditTime: 2021-12-13 18:00:49
+ * @LastEditTime: 2022-06-06 11:06:55
  */
 module.exports = {
   env: {
@@ -38,6 +38,7 @@ module.exports = {
     'react/prop-types': 'off',
     'operator-linebreak': ['error', 'before'],
     'capitalized-comments': 'off',
+    '@typescript-eslint/no-duplicate-imports': ['error'],
   },
   globals: {
     AsyncReturnType: 'readonly',
