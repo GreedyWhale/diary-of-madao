@@ -10,6 +10,8 @@ introduction: '使用 Node.js 进行网络编程 - WebSocket'
 
 [The WebSocket Protocol](https://www.rfc-editor.org/rfc/rfc6455)
 
+[Protocol upgrade mechanism](https://developer.mozilla.org/en-US/docs/Web/HTTP/Protocol_upgrade_mechanism)
+
 ## 前言
 
 第一次听说 WebSocket 是在面试中被问到 HTML5 的新特性的时候，时至今日我仍然没有在工作中使用过这个特性。
@@ -84,10 +86,9 @@ Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
     
 - Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
 
-    这个字段指定服务端使用 WebSocket 的扩展，比如例子中的 permessage-deflate 指的就是对 WebSocket 中的消息进行压缩，分号后面的值是扩展的参数。
+    这个字段表示服务端可以使用 WebSocket 的扩展，比如例子中的 permessage-deflate 指的就是对 WebSocket 中的消息进行压缩，分号后面的值是扩展的参数。
 
-
-根据之前的笔记，当请求头的字端中有 *Connection: Upgrade*，表示这是一个协议升级的请求，服务端应该响应一个 `101 Switching Protocols` 状态码。
+根据之前的笔记，当请求头的字段中有 *Connection: Upgrade*，表示这是一个协议升级的请求，服务端应该响应一个 `101 Switching Protocols` 状态码。
 
 想要响应 `101 Switching Protocols` 首先得算出 `Sec-WebSocket-Key` 的值，所以要把请求报文从字符串格式解析成对象拿到原始的`Sec-WebSocket-Key`值。
 
