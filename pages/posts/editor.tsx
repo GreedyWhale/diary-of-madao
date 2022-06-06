@@ -137,6 +137,7 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
   const goBack = () => {
     window.localStorage.removeItem(localStorageKey);
+    router.replace('/');
   };
 
   React.useEffect(() => {
