@@ -717,7 +717,7 @@ curl https://localhost:1111 -k
 curl https://localhost:1111 --cacert ./ca.crt
 ```
 
-他会报：
+结果：
 
 ```
 curl: (60) SSL certificate problem: self signed certificate
