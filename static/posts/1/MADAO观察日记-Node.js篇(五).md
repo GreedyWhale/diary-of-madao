@@ -12,6 +12,12 @@ introduction: '使用 Node.js 进行网络编程 - WebSocket'
 
 [Protocol upgrade mechanism](https://developer.mozilla.org/en-US/docs/Web/HTTP/Protocol_upgrade_mechanism)
 
+[XOR 加密简介](http://www.ruanyifeng.com/blog/2017/05/xor.html)
+
+[decode continuation frame in websocket](https://stackoverflow.com/questions/15770079/decode-continuation-frame-in-websocket)
+
+[how do you process a basic websocket-frame](https://stackoverflow.com/questions/14514657/how-do-you-process-a-basic-websocket-frame)
+
 ## 前言
 
 第一次听说 WebSocket 是在面试中被问到 HTML5 的新特性的时候，时至今日我仍然没有在工作中使用过这个特性。
@@ -231,4 +237,57 @@ server.on('connection', socket => {
 });
 ```
 
-这种写法看起来很奇怪，还有一种写法就是设置一个变量来保持是否完成握手
+这种写法看起来很奇怪，还有一种写法就是设置一个变量来标识是否完成握手。
+
+然后在浏览器端发送一个信息：
+
+```js
+const socket = new WebSocket('ws://localhost:1111');
+socket.onopen = event => console.log(event);
+
+socket.send('hi');
+```
+
+服务端打印出来的信息是乱码...
+
+接下来还要对数据解码，服务端和客户端交换的数据专业名称叫做数据帧，MDN 上有它的结构：
+
+```
+Frame format:
+​​
+      0                   1                   2                   3
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     +-+-+-+-+-------+-+-------------+-------------------------------+
+     |F|R|R|R| opcode|M| Payload len |    Extended payload length    |
+     |I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
+     |N|V|V|V|       |S|             |   (if payload len==126/127)   |
+     | |1|2|3|       |K|             |                               |
+     +-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +
+     |     Extended payload length continued, if payload len == 127  |
+     + - - - - - - - - - - - - - - - +-------------------------------+
+     |                               |Masking-key, if MASK set to 1  |
+     +-------------------------------+-------------------------------+
+     | Masking-key (continued)       |          Payload Data         |
+     +-------------------------------- - - - - - - - - - - - - - - - +
+     :                     Payload Data continued ...                :
+     + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+     |                     Payload Data continued ...                |
+     +---------------------------------------------------------------+
+```
+
+WebSocket 交换的信息都是二进制的，所以FIN位指的是数据转换成二进制之后的第一位，然后[规范](https://www.rfc-editor.org/rfc/rfc6455#page-28)规定了RSV1, RSV2, RSV3这三位都必须是0，除非发送端和服务端有协商可以是非0的值。
+
+那么如何判断FIN是否为0？
+
+Node.js 中处理二进制数据使用的是 Buffer 对象，Buffer 对象里面的每一项值都是十六进制的两位数，转换成二进制的范围在*00000000 ~ 11111111* 之间。
+
+要判断第一位的值是否位0，需要用到位运算`&`。
+
+位运算符`&`表示：两个位都为1时，结果才为1，否则为0。
+
+那么我只需要找到二进制数中第一位为1的数，然后和Buffer 对象第一项的数据进行`&`运算，就可以判断了。
+
+![bit_operation_1654596147546.png](/static/images/posts/bit_operation_1654596147546.png "bit_operation_1654596147546.png")
+
+通过上图就可以知道，只要 xxx & 128 的结果不等于128，那么xxx的第一位就是0。
+
