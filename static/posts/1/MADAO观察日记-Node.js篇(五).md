@@ -216,4 +216,19 @@ socket.onopen = event => console.log(event);
 
 经过上面的步骤，客户端和服务端已成功握手，接下来就实现服务端和客户端相互传输数据的功能。
 
+首先需要改动一下上面例子的代码，例子中使用once监听了*data*事件，是为了完成握手，当握手完成后，还需要再监听*data*事件来获取客户端发送的信息。
 
+```ts
+// server.ts
+
+server.on('connection', socket => {
+  socket.once('data', data => {
+    // ...
+    socket.on('data', chunks => {
+      console.log(chunks.toString());
+    });
+  });
+});
+```
+
+这种写法看起来很奇怪，还有一种写法就是设置一个变量来保持是否完成握手
