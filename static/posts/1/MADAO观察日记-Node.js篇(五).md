@@ -16,7 +16,7 @@ introduction: '使用 Node.js 进行网络编程 - WebSocket'
 
 [decode continuation frame in websocket](https://stackoverflow.com/questions/15770079/decode-continuation-frame-in-websocket)
 
-[how do you process a basic websocket-frame](https://stackoverflow.com/questions/14514657/how-do-you-process-a-basic-websocket-frame)
+[how do you process a basic websocket frame](https://stackoverflow.com/questions/14514657/how-do-you-process-a-basic-websocket-frame)
 
 ## 前言
 
@@ -279,7 +279,17 @@ WebSocket 交换的信息都是二进制的，所以FIN位指的是数据转换�
 
 那么如何判断FIN是否为0？
 
+#### 1. 解码 FIN 位
+
 Node.js 中处理二进制数据使用的是 Buffer 对象，Buffer 对象里面的每一项值都是十六进制的两位数，转换成二进制的范围在*00000000 ~ 11111111* 之间。
+
+小提示：
+
+- 1字节是8位：范围00000000－11111111，表示0到255。
+
+- 一位16进制数：范围0000 - 1111，表示0到15。
+
+    所以1字节 = 2个16进制字符
 
 要判断第一位的值是否位0，需要用到位运算`&`。
 
@@ -291,3 +301,136 @@ Node.js 中处理二进制数据使用的是 Buffer 对象，Buffer 对象里面
 
 通过上图就可以知道，只要 xxx & 128 的结果不等于128，那么xxx的第一位就是0。
 
+同理要看第二位的值是0还是1，找到一个二进制为`01000000`的数然后进行`&`运算。
+
+以此类推可以得出：
+
+```ts
+ const FIN = (frame[0] & 0x80);
+ const RSV1 = (frame[0] & 0x40);
+ const RSV2 = (frame[0] & 0x20);
+ const RSV3 = (frame[0] & 0x10);
+```
+
+`frame[0]` 就是客户端发送的二进制数据中的第一项的十六进制两位数（第一个字节）。
+
+这样数据帧中的 `FIN + RSV`部分就解出来了。
+
+#### 2. 解码 opcode
+
+通过 MDN 的描述：
+
+> The opcode field defines how to interpret the payload data: 0x0 for continuation, 0x1 for text (which is always encoded in UTF-8), 0x2 for binary, and other so-called "control codes" that will be discussed later. In this version of WebSockets, 0x3 to 0x7 and 0xB to 0xF have no meaning.
+
+> 操作码字段定义了如何解释有效载荷数据。0x0表示延续，0x1表示文本（总是以UTF-8编码），0x2表示二进制，以及其他所谓的 "控制码"，将在后面讨论。在这个版本的WebSockets中，0x3到0x7和0xB到0xF没有意义。
+
+然后查看规范发现
+
+> *  %x0 denotes a continuation frame
+>
+> *  %x1 denotes a text frame
+>
+> *  %x2 denotes a binary frame
+>
+> *  %x3-7 are reserved for further non-control frames
+>
+> *  %x8 denotes a connection close
+>
+> *  %x9 denotes a ping
+>
+> *  %xA denotes a pong
+>
+> *  %xB-F are reserved for further control frames
+
+目前opcode的有效值只有：
+
+- `0x0`: 表示延续（将数据分为多个部分发送）
+- `0x1`: 表示数据是文本类型
+- `0x2`: 表示数据是二进制类型
+- `0x8`: 表示关闭连接
+- `0x9`: 表示ping数据帧（用于心跳检测，收到的一方需要回一个pong数据帧）
+- `0xA`: 表示pong数据帧
+
+转换成十进制是：0，1，2，8，9，10。
+
+转换成二进制是：00000000，00000001，00000010，00001000，00001001，00001010。
+
+那么找哪个数字进行`&`运算呢，答案是15，转换成2进制就是：00001111。
+
+通过上面的解码，可以发现规律就是找到你想要判断的位的那一位为1的二进制数，比如opcode是第一个字节的后四位表示，那么只要找到二进制为`00001111`的数即可。
+
+所以通过`opcode & 15`就能得到opcode的值了。
+
+```ts
+const opcode = (frame[0] & 0x0F);
+```
+
+
+#### 3. 解码 Mask
+
+Mask 位表示数据是否进行掩码处理，1为进行掩码处理需要使用`Masking-key`为中的掩码键进行解码，0为没有进行掩码处理。
+
+参考MDN的说法，客户端发送给服务端的mask位必须为1，尔服务端发送给客户端的mask位应该是0。
+
+按照上面总结的规律，mask位在第二个字节的第一位，所以只要找到`10000000`的二进制数进行`&`运算就可以得到它的值了，`10000000`就是十进制的128。
+
+```ts
+const mask = (frame[1] & 0x80);
+```
+
+#### 4. 解码 Payload len
+
+Payload len 也就是数据长度，这个长度解析起来也有点麻烦，它有三条规则：
+
+1. 如果解码出来的值在0～125之间，那么这个值就是数据的长度。
+
+2. 如果解码出来的值是126，那么后16位（2字节）的值就是数据的长度。
+
+3. 如果解码出来的值是127， 那么后64位（8字节）的值就是数据的长度。
+
+按照上面说的结构第二个字节第一位是Mask位，剩下的7位则Payload len，如果值不是0～125之间，还要继续往后推。
+
+那么按照上面的规则，要获取第二个字节后七位的值，需要用二进制为 `01111111` 的数进行 `&` 运算。
+
+
+二进制为 `01111111` 的数转换为十进制是127。
+
+所以payload len的值是：
+
+```ts
+const payloadLength = (frame[1] & 0x7F);
+```
+
+接下来就要判断这个值。
+
+```ts
+/**
+  * 数据起始位置
+  * 因为 FIN，RSV，opcode，masked，payload len 这些位总共占据2字节的位置
+  */
+
+let dataStartPosition = 2;
+if (frameObj.payloadLength === 126) { // 需要解后面16位（2字节）的值
+  dataStartPosition += 2;
+  frameObj.payloadLength = frame.readUintBE(2, 2);
+} else if (frameObj.payloadLength === 127) { // 需要解后面64位（8字节）的值
+  dataStartPosition += 8;
+  frameObj.payloadLength = frame.readUintBE(4, 8);
+}
+```
+
+readUintBE 是 Node.js 中 Buffer 对象提供的一个方法，里面牵扯到字节序的问题（大脑已接近宕机状态），这里为什么用 readUintBE 是因为我自己测试中发现用大端字节序读出来的长度符合实际发送数据的长度，原理有空再研究吧，我暂时还不能理解字节序。
+
+### 获取 Masking key
+
+接下来就要解码 Masking Key 了，如果数据被掩码处理，需要用 Masking Key 进行解码。
+
+Masking Key 是一个32位的数据，也就是4个字节。
+
+```ts
+let maskingKey = [];
+if (mask === 1) {
+  maskingKey = frame.slice(dataStartPosition, dataStartPosition + 4);
+  dataStartPosition += 4;
+}
+```
