@@ -8,8 +8,9 @@ introduction: '使用 Node.js 进行网络编程 - WebSocket'
 
 ## 环境
 
-node - v16.13.1
-Google Chrome - 版本 102.0.5005.61（正式版本） (x86_64)
+- Node.js - v16.13.1
+
+- Google Chrome - 版本 102.0.5005.61
 
 ## 前言
 
