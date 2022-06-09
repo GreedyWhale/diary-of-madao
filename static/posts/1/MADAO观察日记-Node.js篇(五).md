@@ -4,19 +4,12 @@ labels: ['Node.js']
 introduction: '使用 Node.js 进行网络编程 - WebSocket'
 ---
 
-## 参考
+![post_blog_11_cover_1654765965522.jpeg](/static/images/posts/post_blog_11_cover_1654765965522.jpeg "post_blog_11_cover_1654765965522.jpeg")
 
-[编写 WebSocket 服务器](https://developer.mozilla.org/zh-CN/docs/Web/API/WebSockets_API/Writing_WebSocket_servers)
+## 环境
 
-[The WebSocket Protocol](https://www.rfc-editor.org/rfc/rfc6455)
-
-[Protocol upgrade mechanism](https://developer.mozilla.org/en-US/docs/Web/HTTP/Protocol_upgrade_mechanism)
-
-[XOR 加密简介](http://www.ruanyifeng.com/blog/2017/05/xor.html)
-
-[decode continuation frame in websocket](https://stackoverflow.com/questions/15770079/decode-continuation-frame-in-websocket)
-
-[how do you process a basic websocket frame](https://stackoverflow.com/questions/14514657/how-do-you-process-a-basic-websocket-frame)
+node - v16.13.1
+Google Chrome - 版本 102.0.5005.61（正式版本） (x86_64)
 
 ## 前言
 
@@ -386,11 +379,11 @@ Payload len 也就是数据长度，这个长度解析起来也有点麻烦，�
 
 2. 如果解码出来的值是126，那么后16位（2字节）的值就是数据的长度。
 
-3. 如果解码出来的值是127， 那么后64位（8字节）的值就是数据的长度。
+3. 如果解码出来的值是127， 那么后64位（8字节）的值就是数据的长度，最高位需要是0，最高位指的是最左边的那一位。
 
-按照上面说的结构第二个字节第一位是Mask位，剩下的7位则Payload len，如果值不是0～125之间，还要继续往后推。
+按照数据帧的结构第二个字节第一位是Mask位，剩下的7位则Payload len，如果值不是0～125之间，还要继续往后推。
 
-那么按照上面的规则，要获取第二个字节后七位的值，需要用二进制为 `01111111` 的数进行 `&` 运算。
+那么要获取第二个字节后七位的值，需要用二进制为 `01111111` 的数进行 `&` 运算。
 
 
 二进制为 `01111111` 的数转换为十进制是127。
@@ -398,32 +391,39 @@ Payload len 也就是数据长度，这个长度解析起来也有点麻烦，�
 所以payload len的值是：
 
 ```ts
-const payloadLength = (frame[1] & 0x7F);
+let payloadLength = (frame[1] & 0x7F);
 ```
 
 接下来就要判断这个值。
 
 ```ts
 /**
-  * 数据起始位置
-  * 因为 FIN，RSV，opcode，masked，payload len 这些位总共占据2字节的位置
-  */
-
+ * 数据起始位置
+ * 因为 FIN，RSV，opcode，masked，payload len 这些位总共占据2字节的位置
+ */
 let dataStartPosition = 2;
-if (frameObj.payloadLength === 126) { // 需要解后面16位（2字节）的值
+
+if (payloadLength === 126) { // 需要解后面16位（2字节）的值
   dataStartPosition += 2;
-  frameObj.payloadLength = frame.readUintBE(2, 2);
-} else if (frameObj.payloadLength === 127) { // 需要解后面64位（8字节）的值
+  payloadLength = frame.readUintBE(2, 2);
+} else if (payloadLength === 127) { // 需要解后面64位（8字节）的值
   dataStartPosition += 8;
-  frameObj.payloadLength = frame.readUintBE(4, 8);
+  // 这里不知如何处理
 }
 ```
 
-readUintBE 是 Node.js 中 Buffer 对象提供的一个方法，里面牵扯到字节序的问题（大脑已接近宕机状态），这里为什么用 readUintBE 是因为我自己测试中发现用大端字节序读出来的长度符合实际发送数据的长度，原理有空再研究吧，我暂时还不能理解字节序。
+**注意**：上面示例中的代码是有问题的：
 
-### 获取 Masking key
+问题一：当payloadLength的值为127的时候不知道如何把对应的buffer处理64位的数字。
 
-接下来就要解码 Masking Key 了，如果数据被掩码处理，需要用 Masking Key 进行解码。
+问题二：我用chrome作为客户端进行测试，当每次通信的数据长度大于65535，它就会分段发给服务端，然后导致后续的数据解码不出来，我还不知道如何处理这个问题。
+
+然后这里面还需要知道一个字节序的知识，请参考阮一峰大神的文章[理解字节序](https://www.ruanyifeng.com/blog/2016/11/byte-order.html)
+
+
+#### 5. 获取 Masking key
+
+接下来就要获取 Masking Key 了，如果数据被掩码处理，需要用 Masking Key 进行解码。
 
 Masking Key 是一个32位的数据，也就是4个字节。
 
@@ -434,3 +434,233 @@ if (mask === 1) {
   dataStartPosition += 4;
 }
 ```
+
+#### 6. 解码数据
+
+这是最后一步了，万幸的是MDN有给出示例代码，直接照抄：
+
+```ts
+// dataStartPosition 是数据起始位置
+const payload = frame.slice(dataStartPosition, dataStartPosition + payloadLength);
+
+if (maskingKey.length){
+  for (var i = 0; i < payload.length; i++){
+    payload[i] = payload[i] ^ maskingKey[i % 4];
+  }
+}
+```
+
+这里如果要深入研究的话，需要知道[XOR 加密简介](http://www.ruanyifeng.com/blog/2017/05/xor.html)。
+
+完整的代码是：
+
+```ts
+import net from 'net';
+import crypto from 'crypto';
+
+const server = net.createServer();
+const parseHeaders = (headerStr: string) => {
+  const headers: Record<string, string> = {};
+  headerStr
+    .split('\r\n')
+    .slice(1)
+    .filter(item => item)
+    .forEach(item => {
+      const [key, value] = item.split(':');
+      headers[key.trim()] = value.trim();
+    });
+
+  return headers;
+};
+
+const decodeFrame = (frame: Buffer) => {
+  const frameObj: Record<string, any> = {
+    isFinal: (frame[0] & 0x80) === 0x80,
+    res1: (frame[0] & 0x40),
+    res2: (frame[0] & 0x20),
+    res3: (frame[0] & 0x10),
+    opcode: (frame[0] & 0x0F),
+    masked: (frame[1] & 0x80) === 0x80,
+    payloadLength: (frame[1] & 0x7F),
+    maskingKey: [],
+  }
+
+  /**
+   * 数据起始位置
+   * 因为 FIN，RSV，opcode，masked，payload len
+   * 总共占据2字节的位置
+   */
+  let dataStartPosition = 2;
+  if (frameObj.payloadLength === 126) { // 需要解后面16位（2字节）的值
+    dataStartPosition += 2;
+    frameObj.payloadLength = frame.readUIntBE(2, 2);
+  } else if (frameObj.payloadLength === 127) { // 需要解后面64位（8字节）的值
+    dataStartPosition += 8;
+  }
+
+  if (frameObj.masked) {
+    frameObj.maskingKey = frame.slice(dataStartPosition, dataStartPosition + 4);
+    dataStartPosition += 4;
+  }
+
+  const payload = frame.slice(dataStartPosition, dataStartPosition + frameObj.payloadLength);
+  if (frameObj.maskingKey.length){
+    for (var i = 0; i < payload.length; i++){
+      payload[i] = payload[i] ^ frameObj.maskingKey[i % 4];
+    }
+  }
+
+  return {
+    frame: frameObj,
+    payload,
+  }
+}
+
+server.on('connection', socket => {
+  socket.once('data', data => {
+    const requestHeaders = parseHeaders(data.toString());
+    const key = crypto
+      .createHash('sha1')
+      .update(`${requestHeaders['Sec-WebSocket-Key']}258EAFA5-E914-47DA-95CA-C5AB0DC85B11`)
+      .digest('base64');
+
+    const headers = [
+      'HTTP/1.1 101 Switching Protocols',
+      'Upgrade: websocket',
+      'Connection: Upgrade',
+      `Sec-WebSocket-Accept: ${key}`,
+      '',
+      ''
+    ]
+
+    socket.setNoDelay(true);
+    socket.write(headers.join('\r\n'));
+    socket.on('data', chunks => {
+      const { frame, payload } = decodeFrame(chunks);
+      console.log('接收到的数据', frame, payload.toString());
+    });
+  });
+});
+
+server.listen(1111, () => console.log('listening'));
+
+```
+
+在浏览器控制台输入：
+
+```
+const socket = new WebSocket('ws://localhost:1111');
+socket.onopen = event => console.log('open');
+
+socket.send('hi, server');
+```
+
+服务端的控制台就可以打印出：
+
+![WX20220609-164248@2x_1654764239544.png](/static/images/posts/WX20220609-164248@2x_1654764239544.png "WX20220609-164248@2x_1654764239544.png")
+
+接下来就是服务器发送消息给客户端了。
+
+同样的服务器发送消息，也需要把数据组合成
+
+```
+Frame format:
+​​
+      0                   1                   2                   3
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     +-+-+-+-+-------+-+-------------+-------------------------------+
+     |F|R|R|R| opcode|M| Payload len |    Extended payload length    |
+     |I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
+     |N|V|V|V|       |S|             |   (if payload len==126/127)   |
+     | |1|2|3|       |K|             |                               |
+     +-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +
+     |     Extended payload length continued, if payload len == 127  |
+     + - - - - - - - - - - - - - - - +-------------------------------+
+     |                               |Masking-key, if MASK set to 1  |
+     +-------------------------------+-------------------------------+
+     | Masking-key (continued)       |          Payload Data         |
+     +-------------------------------- - - - - - - - - - - - - - - - +
+     :                     Payload Data continued ...                :
+     + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+     |                     Payload Data continued ...                |
+     +---------------------------------------------------------------+
+```
+
+这种格式。
+
+这里我也就不处理大的数据格式了，目前还没搞清楚大的数据格式怎么处理。
+
+```ts
+const encodeFrame = (message: string) => {
+  const length = Buffer.byteLength(message);
+  // 数据的起始位置
+  const index = 2;
+  const response = Buffer.alloc(index + length);
+
+  //第一个字节，fin位为1，opcode为1
+  response[0] = 129;
+  response[1] = length;
+
+  response.write(message, index);
+
+  return response;
+};
+```
+
+服务端就可以在收到信息后进行回复了：
+
+```ts
+socket.on('data', chunks => {
+    const { frame, payload } = decodeFrame(chunks);
+    console.log('接收到的数据', frame, payload.toString());
+    socket.write(encodeFrame('hi, client!'));
+});
+```
+
+浏览器端则需要监听一下message事件：
+
+```ts
+const socket = new WebSocket('ws://localhost:1111');
+socket.onopen = event => console.log(event);
+socket.onmessage = event => console.log(event.data);
+```
+
+这样就完成了一次客户端和服务端相互推送消息的过程。
+
+
+## 总结一下
+
+只是一个数据帧的处理就让我手忙脚乱，最后还是没搞清楚大的数据怎么处理，有点可惜。
+
+但是确实能感受到，如果不用第三方库来自己实现一个 WebSocket 服务器非常麻烦。
+
+涉及到的知识有：
+
+1. TCP 协议相关
+2. HTTP 协议相关
+3. 二进制、十六进制
+4. Buffer
+5. 位运算、字节序
+6. XOR 加密
+7. ....
+
+好在是通过这次的学习，理解了字节、位这些概念，也会了一点位运算，起码能看懂`&`运算了，也算有收获。
+
+简单总结下WebSocket的通信过程就是：握手 + 数据传输。
+而数据传输中的难点就是解析数据帧。
+
+## 参考
+
+[编写 WebSocket 服务器](https://developer.mozilla.org/zh-CN/docs/Web/API/WebSockets_API/Writing_WebSocket_servers)
+
+[The WebSocket Protocol](https://www.rfc-editor.org/rfc/rfc6455)
+
+[Protocol upgrade mechanism](https://developer.mozilla.org/en-US/docs/Web/HTTP/Protocol_upgrade_mechanism)
+
+[XOR 加密简介](http://www.ruanyifeng.com/blog/2017/05/xor.html)
+
+[decode continuation frame in websocket](https://stackoverflow.com/questions/15770079/decode-continuation-frame-in-websocket)
+
+[how do you process a basic websocket frame](https://stackoverflow.com/questions/14514657/how-do-you-process-a-basic-websocket-frame)
+
+[理解字节序](https://www.ruanyifeng.com/blog/2016/11/byte-order.html)
