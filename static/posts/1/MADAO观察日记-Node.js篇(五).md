@@ -549,7 +549,7 @@ server.listen(1111, () => console.log('listening'));
 
 在浏览器控制台输入：
 
-```
+```ts
 const socket = new WebSocket('ws://localhost:1111');
 socket.onopen = event => console.log('open');
 
