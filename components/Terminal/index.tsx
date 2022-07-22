@@ -19,7 +19,7 @@ const Terminal = (props: TerminalProps) => {
         <span>@</span>
         <p>IBN5100</p>
         <span>in</span>
-        <p>~{router.pathname}</p>
+        <p>~{router.asPath}</p>
         <span>[{moment().format('YYYY-MM-DD')}]</span>
       </div>
       <div className={styles.command}>
