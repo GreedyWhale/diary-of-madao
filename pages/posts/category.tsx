@@ -78,23 +78,6 @@ const PostsCategory: NextPage<InferGetServerSidePropsType<typeof getServerSidePr
                 ))
               )
           }
-          {/* {props.labels.map(value => (
-            <li
-              data-selected={value.id === selectedLabel.id}
-              key={value.id}
-              onClick={() => {
-                setCommand(`ls -ltr ${value.name}`);
-                setSelectedLabel(value);
-                getCategorizedPosts({
-                  page: pagination.currentPage,
-                  pageSize: pagination.pageSize,
-                  labelId: value.id,
-                });
-              }}
-            >
-              {value.name}({value.posts.length})
-            </li>
-          ))} */}
         </ul>
         {Boolean(posts.length) && (
           <>

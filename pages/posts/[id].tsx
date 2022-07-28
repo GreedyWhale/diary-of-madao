@@ -67,7 +67,7 @@ const Posts: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
         />
         <SpaceBetween>
           <SpaceBetween.Left>
-            <Button color="normal" variant="outlined" onClick={async () => router.push('/')}>
+            <Button color="normal" variant="outlined" onClick={async () => router.back()}>
               返回
             </Button>
           </SpaceBetween.Left>
