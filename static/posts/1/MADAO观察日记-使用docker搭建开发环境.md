@@ -645,6 +645,8 @@ development:
 gem 'dotenv-rails'
 ```
 
+不要忘了把 `.env` 添加到 `.gitignore` 里面
+
 然后执行：`rails s` 启动服务～
 
 然后会报错：
