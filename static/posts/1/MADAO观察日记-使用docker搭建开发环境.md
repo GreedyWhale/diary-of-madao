@@ -690,7 +690,7 @@ bundle update
 bundle install
 ```
 
-执行完了之后，再执行：`rails s`
+执行完了之后，再执行：`./bin/rails s`
 
 打开浏览器，输入：`http://127.0.0.1:3000/`
 
