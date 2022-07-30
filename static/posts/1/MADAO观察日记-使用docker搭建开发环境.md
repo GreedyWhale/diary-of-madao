@@ -221,16 +221,21 @@ introduction: '使用docker搭建开发环境'
     RUN apt-get update
 
     # 安装开发时的工具，-y 表示在安装时自动回答 yes
-    RUN apt-get install -y git zsh curl vim iputils-ping
+    RUN apt-get install -y git zsh curl vim iputils-ping locales
 
     # 安装 oh my zsh
-    RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    RUN /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     # 替换on my zsh 主题为 ys
     RUN sed -i 's/robbyrussell/ys/g' ~/.zshrc
 
     # 安装 nvm
     RUN /bin/zsh -c "$(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash)"
     RUN echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"\n[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm' >> ~/.zshrc
+
+    # 避免zsh中文乱码
+    RUN /bin/zsh -c "locale-gen en_US.UTF-8"
+    RUN echo 'export LC_ALL=en_US.UTF-8' >> ~/.zshrc
+    RUN echo 'export LANG=en_US.UTF-8' >> ~/.zshrc
 
     # 因为默认的sh没有source命令，所以这里使用 zsh 去执行 "source ~/.zshrc"
     RUN /bin/zsh -c "source ~/.zshrc"
@@ -695,6 +700,12 @@ bundle install
 ![rails-init_1659093276679.png](/static/images/posts/rails-init_1659093276679.png "rails-init_1659093276679.png")
 
 页面的时候，表示成功了。
+
+完整代码参考：
+
+- [oh-my-docker](https://github.com/GreedyWhale/oh-my-docker)
+
+- [peach-ledger](https://github.com/GreedyWhale/peach-ledger)
 
 ## 感受
 
