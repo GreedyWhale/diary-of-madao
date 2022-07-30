@@ -152,11 +152,13 @@ introduction: '使用docker搭建开发环境'
     
         ```docker
         # 安装开发时的工具，-y 表示在安装时自动回答 yes
-        RUN apt-get install -y git zsh curl vim iputils-ping
+        RUN apt-get install -y git zsh curl vim iputils-ping locales
         ```
         
         -y 在注释里已经解释了，如果不写 -y 的话构建镜像的时候执行到这里会中断。
         
+        
+        locales 这个包是用来设置语言环境的，不安装的话没有办法设置字符集，会导致中文字符在zsh里面显示`<ffffffff>`
     
     5. 安装 oh my zsh
     
@@ -164,7 +166,7 @@ introduction: '使用docker搭建开发环境'
         
         ```docker
         # 安装 oh my zsh
-        RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        RUN /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         # 替换on my zsh 主题为 ys
         RUN sed -i 's/robbyrussell/ys/g' ~/.zshrc
         ```
@@ -187,6 +189,10 @@ introduction: '使用docker搭建开发环境'
      7. 更新shell的配置
      
          ```docker
+         # 避免zsh中文乱码
+         RUN /bin/zsh -c "locale-gen en_US.UTF-8"
+         RUN echo 'export LC_ALL=en_US.UTF-8' >> ~/.zshrc
+         RUN echo 'export LANG=en_US.UTF-8' >> ~/.zshrc
          # 因为默认的sh没有source命令，所以这里使用 zsh 去执行 "source ~/.zshrc"
         RUN /bin/zsh -c "source ~/.zshrc"
         # 注意这里需要双引号，否则会报找不到命令的错误
