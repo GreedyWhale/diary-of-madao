@@ -705,7 +705,7 @@ bundle install
 
 - [oh-my-docker](https://github.com/GreedyWhale/oh-my-docker)
 
-- [peach-ledger](https://github.com/GreedyWhale/peach-ledger)
+- [oh-my-env.peach-ledger](https://github.com/GreedyWhale/oh-my-env.peach-ledger)
 
 ## 感受
 
