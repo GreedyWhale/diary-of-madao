@@ -707,6 +707,19 @@ bundle install
 
 - [oh-my-env.peach-ledger](https://github.com/GreedyWhale/oh-my-env.peach-ledger)
 
+
+## 补充
+
+这是我在开发时遇到的问题，因为是做移动端的页面，需要在手机中调试，这时候就出现问题了，无法在手机上打开页面，需要将在vscode的设置里面添加：
+
+```
+"remote.localPortHost": "allInterfaces"
+```
+
+添加之后，让手机和电脑连接同一个wifi，然后在手机端使用ip去访问页面，这样就可以在手机上调试了。
+
+参考：https://stackoverflow.com/questions/70523216/in-a-vscode-development-container-is-there-a-way-to-access-the-docker-container
+
 ## 感受
 
 比起复杂的配置我觉得更打击我积极性的是网络的高墙，你不仅要配置一堆的镜像，还要能用Google去搜索，这些问题我用百度的话一辈子也解决不了。
