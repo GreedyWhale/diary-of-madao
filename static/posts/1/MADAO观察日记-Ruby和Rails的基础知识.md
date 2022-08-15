@@ -755,3 +755,67 @@ curl -H "Content-Type: application/json" --data '{"username":"allen","age":15}' 
 简单的用法就记录到这里了，最后再推荐一个好用的Ralis文档
 
 [Railsドキュメント](https://railsdoc.com/)
+
+
+## 补充
+
+1. 开启 CORS
+
+    由于前端部分没有使用 Rails 实现，所以在请求接口的时候会出现跨域问题，我使用 CORS 的方式解决：
+
+    ```rb
+    # config/initializers/cors.rb
+
+    Rails.application.config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins "localhost:5173"
+
+        resource "/api/v1/*",
+          headers: :any,
+          methods: [:get, :post, :put, :patch, :delete, :options, :head],
+          expose: ["*"],
+          max_age: 600
+      end
+    end
+    ```
+
+    因为我目前的开发环境是 `localhost:5173`，后面部署的时候估计还要改。
+
+    在 `config/initializers/cors.rb` 文件增加了这个配置之后，还需要去 `Gemfile` 文件里面，把下面注释掉的代码取消注释：
+
+    ```rb
+    # gem "rack-cors"
+
+    gem "rack-cors"
+    ```
+
+    然后执行 `bundle install` 安装依赖。不安装 *rack-cors* 会报错：
+
+    ```
+     uninitialized constant Rack::Cors (NameError)
+    ```
+
+2. 开启gzip
+
+    在 `config/application.rb` 文件中加上 
+
+
+    ```rb
+    config.middleware.use Rack::Deflater
+    ```
+
+    **e.g.**
+
+    ```rb
+    # config/application.rb
+
+    module PeachLedger
+      class Application < Rails::Application
+        config.api_only = true
+        # 开启gzip
+        config.middleware.use Rack::Deflater
+      end
+    end
+
+    ```
+
