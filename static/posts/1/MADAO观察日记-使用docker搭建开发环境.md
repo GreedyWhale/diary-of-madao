@@ -1,6 +1,6 @@
 ---
 title: 'MADAO观察日记-使用docker搭建开发环境'
-labels: ['docker']
+labels: ['Docker']
 introduction: '使用docker搭建开发环境'
 ---
 
