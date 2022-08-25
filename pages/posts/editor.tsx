@@ -69,7 +69,7 @@ const initialFrontmatter = "---\ntitle: '文章标题'\nlabels: ['标签一', '�
 const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUpdateUserId(props.userId);
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isLogged, userId } = useUser();
   const plugins = useMarkdownPlugins();
 
   const [value, setValue] = React.useState(initialFrontmatter);
@@ -137,23 +137,23 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
   const goBack = () => {
     window.localStorage.removeItem(localStorageKey);
-    router.replace('/');
+    router.replace(`/posts/${router.query.id}`);
   };
 
   React.useEffect(() => {
-    if (props.userId === -1) {
+    if (userId === -1) {
       router.replace('/');
     }
-  }, [router, props.userId]);
+  }, [userId, router]);
 
   React.useEffect(() => {
-    if (user.id !== -1) {
+    if (isLogged) {
       const canEdit = user.access.includes(ACCESS_POST_EDIT);
       if (!canEdit) {
         setPermissionDialog(true);
       }
     }
-  }, [user.access, user.id]);
+  }, [isLogged, user.access]);
 
   React.useEffect(() => {
     const now = Date.now();

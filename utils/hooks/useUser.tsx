@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2021-07-29 22:05:08
  * @LastEditors: MADAO
- * @LastEditTime: 2022-03-04 11:21:21
+ * @LastEditTime: 2022-08-25 13:46:41
  */
 import type { SignOutDialogProps } from '~/types/hooks/useUser';
 import type { UserResponse } from '~/types/services/user';
@@ -20,20 +20,29 @@ import Dialog from '~/components/Dialog';
 import Button from '~/components/Button';
 
 const initialUser: Omit<UserResponse, 'access'> & { access: string[]; } = {
-  id: -1,
+  id: 0,
   username: '',
   access: [],
   createdAt: new Date(),
   updatedAt: new Date(),
 };
 
+const formatUser = (user?: UserResponse) => {
+  if (!user) {
+    return initialUser;
+  }
+
+  return {
+    ...user,
+    access: user.access.map(value => value.access.name),
+  };
+};
+
 export const useUpdateUserId = (userId: number) => {
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
-    if (userId !== -1) {
-      dispatch(updateUserId(userId));
-    }
+    dispatch(updateUserId(userId));
   }, [dispatch, userId]);
 };
 
@@ -79,24 +88,17 @@ export const useSignOut = () => {
 const useUser = () => {
   const userId = useAppSelector(state => state.user.id);
   const { data: response, error } = useSWR(
-    userId === -1 ? null : apiUser,
+    userId > 0 ? apiUser : null,
     getUserInfo,
     { shouldRetryOnError: false },
   );
 
-  const formatUser = (user?: UserResponse) => {
-    if (!user) {
-      return initialUser;
-    }
-
-    return {
-      ...user,
-      access: user.access.map(value => value.access.name),
-    };
-  };
+  const isLogged = React.useMemo(() => userId > 0, [userId]);
 
   return {
     user: formatUser(response?.data?.data),
+    userId,
+    isLogged,
     isLoading: (!error && !response) && userId !== -1,
     isError: error,
   };

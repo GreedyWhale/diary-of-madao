@@ -57,7 +57,7 @@ const SignIn: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
           theme: 'success',
         });
 
-        router.replace('/');
+        router.reload();
       });
   };
 

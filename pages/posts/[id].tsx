@@ -26,7 +26,7 @@ import SpaceBetween from '~/components/SpaceBetween';
 
 const Posts: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isLogged } = useUser();
   const plugins = useMarkdownPlugins();
   useMarkdownCopyButton();
 
@@ -71,7 +71,7 @@ const Posts: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
               返回
             </Button>
           </SpaceBetween.Left>
-          {props.userId !== -1 && (
+          {isLogged && (
             <SpaceBetween.Right>
               <Link href={`/posts/editor?id=${props.post.id}`} passHref>
                 <a>

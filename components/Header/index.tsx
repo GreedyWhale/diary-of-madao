@@ -62,7 +62,7 @@ const UserMenu: React.FC<UserMenuProps> = props => {
 
 const Header = () => {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isLogged } = useUser();
   const [visibleMenu, setVisibleMenu] = React.useState(false);
   const username = React.useMemo(() => user.username || '登录', [user.username]);
   const navList = React.useRef([
@@ -83,7 +83,7 @@ const Header = () => {
   const toSignIn = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    if (user.id !== -1) {
+    if (isLogged) {
       setVisibleMenu(prev => !prev);
       return;
     }
