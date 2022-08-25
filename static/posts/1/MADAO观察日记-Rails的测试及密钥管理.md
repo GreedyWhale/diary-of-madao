@@ -1,6 +1,6 @@
 ---
 title: 'MADAO观察日记-Rails的测试及密钥管理'
-labels: ['标签一', '标签二']
+labels: ['Ruby', 'Rails']
 introduction: '有关 Rails 框架的单元测试及密钥管理的笔记'
 ---
 
