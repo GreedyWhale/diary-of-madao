@@ -8,7 +8,6 @@ import Layout from '~/components/Layout';
 import Button from '~/components/Button';
 
 import { signIn } from '~/services/user';
-import showNotification from '~/components/Notification';
 import { withSessionSsr, getUserIdFromCookie } from '~/utils/withSession';
 
 const SignIn: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
@@ -50,15 +49,8 @@ const SignIn: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
       return;
     }
 
-    await signIn({ username, password })
-      .then(res => {
-        showNotification({
-          content: res.data.message,
-          theme: 'success',
-        });
-
-        router.reload();
-      });
+    await signIn({ username, password });
+    router.reload();
   };
 
   React.useEffect(() => {
