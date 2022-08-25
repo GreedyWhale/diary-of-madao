@@ -4,6 +4,8 @@ labels: ['Ruby', 'Rails']
 introduction: '有关 Rails 框架的单元测试及密钥管理的笔记'
 ---
 
+![post_blog_14_cover_1661411865939.jpeg](/static/images/posts/post_blog_14_cover_1661411865939.jpeg "post_blog_14_cover_1661411865939.jpeg")
+
 ## 前言
 
 经过快一个月的时间，终于把*桃子记账*的前端页面写完了，最终还是选择使用 React 作为前端的开发框架，我看了课程使用Vue3进行开发的过程，发现它相比 React 没什么特别吸引我去使用的特性，感觉语法糖过多也是一种负担，对 TypeScript 的支持也没有 React 那么好，唯一感到很不错的是国内的 Vue3 的组件库要比 React 多一点，React 能用的国内组件库就 ant desgin 比较让人放心，但是又是阿里系出品，很纠结。
