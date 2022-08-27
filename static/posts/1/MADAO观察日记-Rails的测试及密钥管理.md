@@ -207,3 +207,30 @@ Rails.application.credentials.config
     ```rb
     Rails.application.credentials.config
     ```
+
+## 补充
+
+如果在编辑密钥的时候遇到类似以下报错：
+
+```
+Unable to connect to VS Code server: Error in request.
+Error: connect ENOENT /tmp/vscode-ipc-6228ea69-6f3a-4ad1-92c1-40c7c59327d2.sockk
+    at PipeConnectWrap.afterConnect [as oncomplete] (node:net:1161:16) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'connect',
+  address: '/tmp/vscode-ipc-6228ea69-6f3a-4ad1-92c1-40c7c59327d2.sock'
+}
+```
+
+请删除容器的根目录下的 `.vscode-server` 目录，然后重新启动 vscode。
+
+**e.g.**
+
+```
+cd ~ # 进入根目录
+
+rm -rf .vscode-server # 删除这个目录
+```
+
+参考：https://github.com/microsoft/vscode-remote-release/issues/3575#issuecomment-690826257
