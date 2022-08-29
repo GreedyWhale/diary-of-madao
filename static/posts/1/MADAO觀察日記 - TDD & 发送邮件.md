@@ -397,7 +397,15 @@ end
 
 class Api::V1::AuthCodesController < ApplicationController
   def create
-    @auth_code = AuthCode.new(email: params[:email], scene: params[:scene])
+    @scene = params[:scene] || :signIn
+    # 限制次数
+    if AuthCode.exists?(email: params[:email], scene: @scene, created_at: 1.minute.ago..Time.now)
+      render json: { data: {}, message: '发送太频繁，请稍后重试' }, status: 429
+      return
+    end
+    
+    
+    @auth_code = AuthCode.new(email: params[:email], scene: @scene)
 
     if @auth_code.save
       render json: { data: {}, message: '发送成功' }, status: 200
