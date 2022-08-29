@@ -439,6 +439,51 @@ yarn http-server ./doc/api -d
 
 到这里发送邮件接口的开发 + 文档就全部完成了。
 
+## 同步到 test 环境
+
+上面都是在开发环境测试的，更好做法是在test环境。
+
+要同步的有
+
+1. 密钥：email_key, email_account
+2. 环境变量
+
+    ```rb
+    # config/environments/test.rb
+    
+    # 发送真实的邮件
+    # config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address:              'smtp.qq.com',
+      port:                 587,
+      domain:               'smtp.qq.com',
+      user_name:            Rails.application.credentials[:email_account],
+      password:             Rails.application.credentials[:email_key],
+      authentication:       'plain',
+      enable_starttls_auto: true,
+      open_timeout:         5,
+      read_timeout:         5
+    }
+    ```
+    
+    注意test环境默认是不发送真实的邮件的：
+    
+    ```rb
+    # Tell Action Mailer not to deliver emails to the real world.
+    # The :test delivery method accumulates sent emails in the
+    # ActionMailer::Base.deliveries array.
+    config.action_mailer.delivery_method = :test
+    ```
+    
+    它会把发送的邮件放进 `ActionMailer::Base.deliveries` 里面，所以测试的时候我是通过 `ActionMailer::Base.deliveries` 来测试邮件内容。
+    
+    如果想要发送真实的邮件就把这个改成：
+    
+    ```rb
+    config.action_mailer.delivery_method = :smtp
+    ```
+    
+
 ## 感受
 
 在不熟悉测试框架的语法情况下写测试代码的时间超过了写开发代码的时间，还要保证测试用例是正确的，比如就算测试通过，也要故意试一下错误的情况来验证，这个总感觉有点繁琐，可能是使用姿势不对。
