@@ -4,6 +4,7 @@ labels: ['TDD', 'Rails']
 introduction: '使用测试驱动开发的模式实现发送邮件的接口'
 ---
 
+![post_blog_15_cover_1661761803214.jpeg](/static/images/posts/post_blog_15_cover_1661761803214.jpeg "post_blog_15_cover_1661761803214.jpeg")
 
 ## 前言
 
