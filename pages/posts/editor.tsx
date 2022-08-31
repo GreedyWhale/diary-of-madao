@@ -135,9 +135,13 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     }];
   };
 
-  const goBack = () => {
+  const goBack = async () => {
     window.localStorage.removeItem(localStorageKey);
-    router.replace(`/posts/${router.query.id}`);
+    if (props.postId) {
+      router.replace(`/posts/${router.query.id}`);
+    } else {
+      router.back();
+    }
   };
 
   React.useEffect(() => {
@@ -192,7 +196,7 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
       <Terminal command={command} />
       <SpaceBetween>
         <SpaceBetween.Left>
-          <Button color="normal" variant="outlined" onClick={async () => goBack()}>
+          <Button color="normal" variant="outlined" onClick={goBack}>
             返回
           </Button>
         </SpaceBetween.Left>
@@ -207,7 +211,7 @@ const PostEditor: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
             <Button
               color="secondary"
               variant="outlined"
-              onClick={async () => goBack()}
+              onClick={goBack}
             >
               取消
             </Button>
