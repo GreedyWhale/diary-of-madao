@@ -440,7 +440,7 @@ export default withSessionRoute(postDetailHandler);
 
 **e.g.**
 
-```
+```ts
 // pages/api/v1/posts/[id].ts
 
 import type { NextApiHandler } from 'next';
@@ -499,7 +499,7 @@ prisma.post.delete({ where: { id } })
 
 **e.g.**
 
-```
+```ts
 prisma.post.findMany({
   skip: 0, // 跳过的数量（页码 * 每页的文章数）
   take: 10, // 每次饭回的数量
