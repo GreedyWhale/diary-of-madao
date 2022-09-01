@@ -397,27 +397,27 @@ end
 
 class Api::V1::AuthCodesController < ApplicationController
   def create
-    @scene = params[:scene] || :signIn
+    scene = params[:scene] || :signIn
     # 限制次数
-    if AuthCode.exists?(email: params[:email], scene: @scene, created_at: 1.minute.ago..Time.now)
+    if AuthCode.exists?(email: params[:email], scene: scene, created_at: 1.minute.ago..Time.now)
       render json: { data: {}, message: '发送太频繁，请稍后重试' }, status: 429
       return
     end
     
     
-    @auth_code = AuthCode.new(email: params[:email], scene: @scene)
+    auth_code = AuthCode.new(email: params[:email], scene: scene)
 
-    if @auth_code.save
+    if auth_code.save
       render json: { data: {}, message: '发送成功' }, status: 200
       return
     end
 
-    if @auth_code.errors[:email].any?
-      render json: { errors: @auth_code.errors, message: '发送失败，邮箱不能为空' }, status: 422
+    if auth_code.errors[:email].any?
+      render json: { errors: auth_code.errors, message: '发送失败，邮箱不能为空' }, status: 422
       return;
     end
 
-    render json: { errors: @auth_code.errors, message: '发送失败' }, status: 422
+    render json: { errors: auth_code.errors, message: '发送失败' }, status: 422
   end
 end
 ```
