@@ -4,6 +4,8 @@ labels: ['Rails']
 introduction: '有关表单验证和JWT的一些笔记'
 ---
 
+![post_blog_16_cover_1662088634172.jpeg](/static/images/posts/post_blog_16_cover_1662088634172.jpeg "post_blog_16_cover_1662088634172.jpeg")
+
 ## 表单验证
 
 Rails 中的错误数据结构是这样的：
@@ -21,7 +23,7 @@ errors = {
 
 ![form_demo_1661934855314.png](/static/images/posts/form_demo_1661934855314.png "form_demo_1661934855314.png")
 
-只展示一个错误信息，这种数据结构就还需要前端处理，不方便。
+只展示一个错误信息，这种数据结构还需要前端处理，不方便。
 
 随着我接触越来越多的表单，渐渐可以理解到这种结构的好处了，很多网站在表单错误的时候都选择以这种方式来提醒用户：
 
