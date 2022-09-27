@@ -1,0 +1,15 @@
+
+@mixin zIndex($level) {
+  $levelMap: (
+    wallpaper: -100,
+    overlay: 100,
+  );
+
+  z-index: map-get($levelMap, $level);
+}
+
+@mixin mobile {
+  @media screen and (max-width: 960px) {
+    @content;
+  }
+}

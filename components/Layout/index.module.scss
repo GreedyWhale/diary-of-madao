@@ -1,0 +1,150 @@
+@use "sass:list";
+@use "~/assets/styles/lib";
+@use "~/assets/styles/mixin";
+
+@keyframes hinge {
+  0% {
+    animation-timing-function: ease-in-out;
+  }
+
+  20%,
+  60% {
+    transform: rotate3d(0, 0, 1, 80deg);
+    animation-timing-function: ease-in-out;
+  }
+
+  40%,
+  80% {
+    transform: rotate3d(0, 0, 1, 60deg);
+    animation-timing-function: ease-in-out;
+    opacity: 1;
+  }
+
+  to {
+    transform: translate3d(0, 700px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes flicker {
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+
+.container {
+  background: url('~/assets/images/grid.svg') no-repeat center / 100%, #02010e;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  @include mixin.zIndex(overlay);
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  color: #F6FBF4;
+  .bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    @include mixin.zIndex(wallpaper);
+  }
+  .slogan {
+    position: absolute;
+    top: 2em;
+    left: 2em;
+    animation: flicker 2s 4s infinite ease-in-out;
+    > h2 {
+      font-size: 32px;
+      color: var(--bg-color-blue);
+      text-shadow: 0 0 20px var(--bg-color-blue);
+      &:last-child {
+        animation: hinge 2s 2s forwards;
+        transform-origin: top left;
+      }
+    }
+  }
+  .main {
+    width: var(--main-width);
+    flex: 1;
+    background: rgba(0, 055, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: var(--main-border-radius);
+    border: 1px solid rgba(0, 0, 0, 0.416);
+  }
+}
+
+.cube {
+  $width: 50vw;
+  $height: 50vw;
+  $offset: $width / 2;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: $width;
+  height: $height;
+  backface-visibility: visible;
+  transform-style: preserve-3d;
+  perspective: none;
+  perspective-origin: center center;
+  transform: rotateX(-15deg) rotateY(-45deg);
+  > div {
+    position: absolute;
+    width: $width;
+    height: $height;
+    padding: 32px;
+    // 前
+    &:nth-child(1) {
+      transform: translateZ($offset);
+      border-right: none;
+      border: 2px solid var(--bg-color-yellow);
+      box-shadow: 0 0 20px 0px var(--bg-color-yellow);
+      color: var(--bg-color-yellow);
+    }
+    // 后
+    &:nth-child(2) {
+      transform: translateZ(-$offset) rotateY(180deg);
+    }
+    // 左
+    &:nth-child(3) {
+      transform: translateX(-$offset) rotateY(-90deg);
+    }
+    // 右
+    &:nth-child(4) {
+      border: 2px solid var(--bg-color-green);
+      border-left: none;
+      box-shadow: 0 0 20px 0px var(--bg-color-green);
+      color: var(--bg-color-green);
+      transform: translateX($offset) rotateY(90deg);
+    }
+    // 上
+    &:nth-child(5) {
+      height: $width;
+      border-right: 2px solid var(--bg-color-blue);
+      box-shadow: 0 0 20px 0px var(--bg-color-blue);
+      color: var(--bg-color-blue);
+      transform: translateY(-$offset) rotateX(-90deg) rotateY(180deg);
+    }
+    // 下
+    &:nth-child(6) {
+      height: $width;
+      transform: translateZ($offset) translateY($height) rotateX(-90deg);
+      transform-origin: center top;
+    }
+  }
+  &_inner {
+    height: 100%;
+    overflow: hidden;
+    > p {
+      line-height: 1.5;
+      font-size: 16px;
+    }
+    > h4 {
+      margin-top: 1em;
+    }
+  }
+}
