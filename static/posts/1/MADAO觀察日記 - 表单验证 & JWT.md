@@ -416,7 +416,7 @@ Authorization: Bearer <token>
                auth_code = AuthCode.find_by(email: params[:email], code: params[:code], used: false)
                return send_response({}, :unauthorized, 401) unless auth_code
 
-               send_response({}, :'Internal Server Error', 500, auth_code.errors) unless auth_code.update(used: true)
+               return send_response({}, :'Internal Server Error', 500, auth_code.errors) unless auth_code.update(used: true)
              end
 
              user = User.find_or_create_by(email: params[:email])
