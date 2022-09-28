@@ -25,8 +25,6 @@ type WelcomeType = {
 };
 
 const Home: NextPage = () => {
-  const [title, setTitle] = React.useState('');
-  const [description, setDescription] = React.useState<string[]>([]);
   const [welcome, setWelcome] = useImmer<WelcomeType>({
     rawData: {
       title: ['你', '好', '👋'],
@@ -51,97 +49,106 @@ const Home: NextPage = () => {
     icons: [],
   });
 
-  const updateTitle = React.useCallback(() => {
-    const { title, titleIndex } = welcome.rawData;
-    let timer = -1;
-    if (titleIndex === title.length) {
-      return;
-    }
-
-    timer = window.setTimeout(() => {
-      setWelcome(draft => {
-        draft.title += draft.rawData.title[titleIndex];
-        draft.rawData.titleIndex += 1;
-      });
-    }, 100);
-
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [setWelcome, welcome.rawData]);
-
-  const updateDescription = React.useCallback(() => {
+  const typewritersTasks = React.useCallback(() => {
+    const delay = 100;
     const {
-      description,
-      descriptionIndex,
       title,
       titleIndex,
+      description,
+      descriptionIndex,
+      icons,
+      iconsIndex,
     } = welcome.rawData;
     let { index, subIndex } = descriptionIndex;
     let timer = -1;
-    if (title.length !== titleIndex || index === description.length) {
-      return;
-    }
+    let abort = false;
 
-    const isNextLine = subIndex === description[index].length;
-    if (isNextLine) {
-      index += 1;
-      subIndex = 0;
-    }
+    const handleFinished = (resolve: (value: unknown) => void, reject: () => void) => {
+      window.clearTimeout(timer);
+      if (abort) {
+        reject();
+        return;
+      }
 
-    if (index === description.length) {
-      setWelcome(draft => { draft.rawData.descriptionIndex.index = index; });
-      return;
-    }
+      resolve(true);
+    };
 
-    timer = window.setTimeout(() => {
-      setWelcome(draft => {
-        draft.description[index] = (draft.description[index] || '') + draft.rawData.description[index][subIndex];
-        draft.rawData.descriptionIndex = {
-          index,
-          subIndex: subIndex + 1,
-        };
-      });
-    }, 100);
+    const updateTitle = async () => new Promise((resolve, reject) => {
+      if (titleIndex === title.length) {
+        handleFinished(resolve, reject);
+        return;
+      }
+
+      timer = window.setTimeout(() => {
+        setWelcome(draft => {
+          draft.title += draft.rawData.title[titleIndex];
+          draft.rawData.titleIndex += 1;
+        });
+      }, delay);
+    });
+
+    const updateDescription = async () => new Promise((resolve, reject) => {
+      if (index === description.length) {
+        handleFinished(resolve, reject);
+        return;
+      }
+
+      const isNextLine = subIndex === description[index].length;
+      if (isNextLine) {
+        index += 1;
+        subIndex = 0;
+      }
+
+      if (index === description.length) {
+        handleFinished(resolve, reject);
+        return;
+      }
+
+      timer = window.setTimeout(() => {
+        setWelcome(draft => {
+          draft.description[index] = (draft.description[index] || '') + draft.rawData.description[index][subIndex];
+          draft.rawData.descriptionIndex = {
+            index,
+            subIndex: subIndex + 1,
+          };
+        });
+      }, delay);
+    });
+
+    const updateIcons = async () => new Promise((resolve, reject) => {
+      if (icons.length === iconsIndex) {
+        handleFinished(resolve, reject);
+        return;
+      }
+
+      timer = window.setTimeout(() => {
+        setWelcome(draft => {
+          draft.icons.push(draft.rawData.icons[iconsIndex]);
+          draft.rawData.iconsIndex += 1;
+        });
+      }, delay);
+    });
+
+    const handler = async () => {
+      try {
+        await updateTitle();
+        await updateDescription();
+        await updateIcons();
+      } catch (error) {}
+    };
+
+    handler();
 
     return () => {
       window.clearTimeout(timer);
-    };
-  }, [setWelcome, welcome.rawData]);
-
-  const updateIcons = React.useCallback(() => {
-    const { icons, iconsIndex, descriptionIndex: { index }, description } = welcome.rawData;
-    let timer = -1;
-    if (description.length !== index || icons.length === iconsIndex) {
-      return;
-    }
-
-    timer = window.setTimeout(() => {
-      setWelcome(draft => {
-        draft.icons.push(draft.rawData.icons[iconsIndex]);
-        draft.rawData.iconsIndex += 1;
-      });
-    }, 100);
-
-    return () => {
-      window.clearTimeout(timer);
+      abort = true;
     };
   }, [setWelcome, welcome.rawData]);
 
   React.useEffect(() => {
-    const unsubscribe = updateTitle();
+    const unsubscribe = typewritersTasks();
     return unsubscribe;
-  }, [updateTitle]);
-
-  React.useEffect(() => {
-    const unsubscribe = updateDescription();
-    return unsubscribe;
-  }, [updateDescription]);
-
-  React.useEffect(() => {
-    const unsubscribe = updateIcons();
-    return unsubscribe;
-  }, [updateIcons]);
+  }, [typewritersTasks]);
 
   return (
     <div className={styles.container}>
