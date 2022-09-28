@@ -9,15 +9,13 @@ const navMap = [
   { text: '首页⛺️', href: '/' },
   { text: '技术笔记📔', href: '/skills' },
   { text: '读书笔记📚', href: '/study' },
+  { text: '标签🏷️', href: '/tag' },
   { text: '关于我🧐', href: '/about' },
   { text: '登录👈', href: '/signIn' },
 ];
 
 export const Navbar: NextPage = () => {
   const router = useRouter();
-
-  console.log(router.asPath);
-
   return (
     <ul className={styles.container}>
       {navMap.map(nav => (

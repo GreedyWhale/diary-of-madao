@@ -1,0 +1,26 @@
+.container {
+  padding: 40px 60px;
+  .welcome {
+    > h1 {
+      margin-bottom: 15px;
+    }
+    > p {
+      line-height: 2;
+      letter-spacing: 5px;
+    }
+    .icon_wrap {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      > li {
+        margin-right: 20px;
+        cursor: pointer;
+      }
+    }
+    .icon {
+      width: 32px;
+      height: 32px;
+      color: var(--bg-color-yellow);
+    }
+  }
+}

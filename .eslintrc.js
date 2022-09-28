@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-09-27 11:28:20
  * @LastEditors: MADAO
- * @LastEditTime: 2022-09-27 11:46:09
+ * @LastEditTime: 2022-09-28 12:27:09
  */
 module.exports = {
   env: {
@@ -40,6 +40,7 @@ module.exports = {
         'brace-style': ['error', '1tbs', { allowSingleLine: true }],
         '@typescript-eslint/brace-style': ['error', '1tbs', { allowSingleLine: true }],
         '@typescript-eslint/no-floating-promises': 'off',
+        '@typescript-eslint/no-implicit-any-catch': 'off',
       },
     },
   ],
