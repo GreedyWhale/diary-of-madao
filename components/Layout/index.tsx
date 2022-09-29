@@ -109,10 +109,6 @@ const Cube: React.FC = () => (
   </div>
 );
 
-const Cube2: React.FC = () => (
-  <div className={styles.cube2}></div>
-);
-
 export const Layout: NextPage<React.PropsWithChildren> = props => {
   console.log(1);
 

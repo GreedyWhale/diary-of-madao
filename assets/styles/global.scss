@@ -1,12 +1,23 @@
 :root {
-  --bg-color-yellow: #c1f130;
-  --bg-color-green: #5bab3c;
-  --bg-color-blue: #60faf8;
+  --color-yellow: #c1f130;
+  --color-green: #5bab3c;
+  --color-blue: #60faf8;
+  --color-black: #2B303B;
+  --color-white: #F9F9F9;
+  --color-black-6: rgba(43, 48, 59, 0.6);
   --nav-height: 96px;
-  --main-border-radius: 8px;
+  --border-radius: 8px;
   --main-width: 1200px;
 }
 
-html {
+html, body {
   font-size: 16px;
+}
+
+body {
+  font-size: 16px;
+  color: var(--color-white);
+  letter-spacing: 5px;
+  font-family: "LXGW WenKai Screen", "LXGW WenKai", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  -webkit-text-size-adjust: 100%;
 }

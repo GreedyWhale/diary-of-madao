@@ -1,12 +1,12 @@
 .container {
   padding: 40px 60px;
   .welcome {
+    min-height: 200px;
     > h1 {
       margin-bottom: 15px;
     }
     > p {
       line-height: 2;
-      letter-spacing: 5px;
     }
     .icon_wrap {
       margin-top: 10px;
@@ -20,7 +20,11 @@
     .icon {
       width: 32px;
       height: 32px;
-      color: var(--bg-color-yellow);
+      color: var(--color-yellow);
     }
+  }
+
+  .articles {
+    margin-top: 40px;
   }
 }

@@ -1,23 +1,22 @@
 .container {
   height: var(--nav-height);
-  background: #2B303B;
-  border-top-left-radius: var(--main-border-radius);
-  border-top-right-radius: var(--main-border-radius);
+  background: var(--color-black);
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
   display: flex;
   align-items: center;
   justify-content: flex-end;
   padding: 0 20px;
   > li {
     margin-right: 2em;
-    letter-spacing: 5px;
     cursor: pointer;
     transition: all 0.2s;
     &[data-active='true'] {
-      color: var(--bg-color-yellow);
+      color: var(--color-yellow);
     }
     &:hover {
-      color: var(--bg-color-yellow);
-      text-shadow: 0 0 10px var(--bg-color-yellow);
+      color: var(--color-yellow);
+      text-shadow: 0 0 10px var(--color-yellow);
     }
     > a {
       text-decoration: none;

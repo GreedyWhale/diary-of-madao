@@ -4,9 +4,8 @@ export default function Document() {
   return (
     <Html>
       <Head>
-        <link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/satouriko/LxgwWenKai_Webfonts@v1.101/dist/LXGWWenKaiMono-Regular.css' />
-        <link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/satouriko/LxgwWenKai_Webfonts@v1.101/dist/LXGWWenKaiMono-Light.css' />
-        <link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/satouriko/LxgwWenKai_Webfonts@v1.101/dist/LXGWWenKaiMono-Bold.css' />
+        <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.6.0/style.css' />
+        <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css' />
       </Head>
       <body>
         <Main />

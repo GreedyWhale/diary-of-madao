@@ -7,6 +7,8 @@ import styles from '~/assets/styles/pages/home.module.scss';
 import EmailIcon from '~/assets/images/email.svg';
 import GithubIcon from '~/assets/images/github.svg';
 
+import { Card } from '~/components/Card';
+
 type WelcomeType = {
   rawData: {
     title: string[];
@@ -166,6 +168,9 @@ const Home: NextPage = () => {
         </ul>
       </div>
 
+      <div className={styles.articles}>
+        <Card />
+      </div>
     </div>
   );
 };

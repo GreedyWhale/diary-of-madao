@@ -60,8 +60,8 @@
     animation: flicker 2s 4s infinite ease-in-out;
     > h2 {
       font-size: 32px;
-      color: var(--bg-color-blue);
-      text-shadow: 0 0 20px var(--bg-color-blue);
+      color: var(--color-blue);
+      text-shadow: 0 0 20px var(--color-blue);
       &:last-child {
         animation: hinge 2s 2s;
         transform-origin: top left;
@@ -73,7 +73,7 @@
     flex: 1;
     background: rgba(0, 055, 0, 0.2);
     backdrop-filter: blur(10px);
-    border-radius: var(--main-border-radius);
+    border-radius: var(--border-radius);
     border: 1px solid rgba(0, 0, 0, 0.416);
   }
 }
@@ -101,9 +101,9 @@
     &:nth-child(1) {
       transform: translateZ($offset);
       border-right: none;
-      border: 2px solid var(--bg-color-yellow);
-      box-shadow: 0 0 20px 0px var(--bg-color-yellow);
-      color: var(--bg-color-yellow);
+      border: 2px solid var(--color-yellow);
+      box-shadow: 0 0 20px 0px var(--color-yellow);
+      color: var(--color-yellow);
     }
     // 后
     &:nth-child(2) {
@@ -115,18 +115,18 @@
     }
     // 右
     &:nth-child(4) {
-      border: 2px solid var(--bg-color-green);
+      border: 2px solid var(--color-green);
       border-left: none;
-      box-shadow: 0 0 20px 0px var(--bg-color-green);
-      color: var(--bg-color-green);
+      box-shadow: 0 0 20px 0px var(--color-green);
+      color: var(--color-green);
       transform: translateX($offset) rotateY(90deg);
     }
     // 上
     &:nth-child(5) {
       height: $width;
-      border-right: 2px solid var(--bg-color-blue);
-      box-shadow: 0 0 20px 0px var(--bg-color-blue);
-      color: var(--bg-color-blue);
+      border-right: 2px solid var(--color-blue);
+      box-shadow: 0 0 20px 0px var(--color-blue);
+      color: var(--color-blue);
       transform: translateY(-$offset) rotateX(-90deg) rotateY(180deg);
     }
     // 下
