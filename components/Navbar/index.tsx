@@ -11,7 +11,7 @@ const navMap = [
   { text: '读书笔记📚', href: '/study' },
   { text: '标签🏷️', href: '/tag' },
   { text: '关于我🧐', href: '/about' },
-  { text: '登录👈', href: '/signIn' },
+  { text: '登录👈', href: '/login' },
 ];
 
 export const Navbar: NextPage = () => {

@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-09-27 11:28:20
  * @LastEditors: MADAO
- * @LastEditTime: 2022-09-28 12:27:09
+ * @LastEditTime: 2022-09-30 15:52:26
  */
 module.exports = {
   env: {
@@ -33,7 +33,6 @@ module.exports = {
         '@typescript-eslint/indent': ['error', 2],
         'object-curly-spacing': 'off',
         '@typescript-eslint/object-curly-spacing': ['error', 'always'],
-        'no-duplicate-imports': ['error'],
         '@next/next/no-img-element': 'off',
         camelcase: 'off',
         'max-statements-per-line': ['error', { max: 2 }],
@@ -41,6 +40,8 @@ module.exports = {
         '@typescript-eslint/brace-style': ['error', '1tbs', { allowSingleLine: true }],
         '@typescript-eslint/no-floating-promises': 'off',
         '@typescript-eslint/no-implicit-any-catch': 'off',
+        'import/no-duplicates': ['error'],
+        '@typescript-eslint/no-dynamic-delete': 'off',
       },
     },
   ],
@@ -53,5 +54,6 @@ module.exports = {
     'react',
   ],
   rules: {
+    'prefer-promise-reject-errors': 'off',
   },
 };

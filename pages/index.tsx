@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+import type { NextPage, InferGetServerSidePropsType } from 'next';
 
 import React from 'react';
 import { useImmer } from 'use-immer';
@@ -6,8 +6,10 @@ import { useImmer } from 'use-immer';
 import styles from '~/assets/styles/pages/home.module.scss';
 import EmailIcon from '~/assets/images/email.svg';
 import GithubIcon from '~/assets/images/github.svg';
-
 import { Card } from '~/components/Card';
+
+import { withSessionSsr } from '~/lib/withSession';
+import { useUserId, useUser } from '~/hooks/useUser';
 
 type WelcomeType = {
   rawData: {
@@ -26,12 +28,16 @@ type WelcomeType = {
   icons: Array<{ component: React.ReactNode; key: string }>;
 };
 
-const Home: NextPage = () => {
+const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
+  useUserId(props.userId);
+
+  const { user } = useUser();
+
   const [welcome, setWelcome] = useImmer<WelcomeType>({
     rawData: {
       title: ['你', '好', '👋'],
       description: [
-        ['欢', '迎', '来', '到', '牢', '骚', '百', '物', '语', '，', '这', '里', '记', '录', '了', '我', '的', '技', '术', '笔', '记', '和', '一', '些', '学', '习', '笔', '记', '，', '希', '望', '可', '以', '帮', '到', '你', '^', '_', '^'],
+        ['欢', '迎', '来', '到', '牢', '骚', '百', '物', '语', '，', '这', '里', '记', '录', '了', '我', '的', '技', '术', '笔', '记', '和', '一', '些', '学', '读', '书', '记', '，', '希', '望', '可', '以', '帮', '到', '你', '^', '_', '^'],
         ['我', '是', '一', '名', '前', '端', '工', '程', '师', '，', '喜', '欢', '宅', '家', '🤗', '、', '游', '戏', '🎮', '和', '动', '漫', '🍥'],
         ['目', '前', '在', '广', '州', '工', '作', '，', '可', '以', '通', '过', '下', '面', '方', '式', '联', '系', '到', '我', '👇'],
       ],
@@ -152,6 +158,8 @@ const Home: NextPage = () => {
     return unsubscribe;
   }, [typewritersTasks]);
 
+  console.log(user);
+
   return (
     <div className={styles.container}>
       <div className={styles.welcome}>
@@ -174,5 +182,11 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+export const getServerSideProps = withSessionSsr(async context => ({
+  props: {
+    userId: context.req.session.user?.id ?? 0,
+  },
+}));
 
 export default Home;
