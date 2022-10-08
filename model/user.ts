@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-09-30 11:35:06
  * @LastEditors: MADAO
- * @LastEditTime: 2022-09-30 17:54:13
+ * @LastEditTime: 2022-10-08 11:45:12
  */
 import type { User } from '@prisma/client';
 import type { Response } from '~/lib/request';
@@ -48,7 +48,7 @@ class UserModel {
           return formatResponse({ resource: { username: user.username, id: user.id } });
         }
 
-        return formatResponse({ status: 401 });
+        return formatResponse({ status: 401, message: '密码错误' });
       }
 
       const newUser = await prisma.user.create({
