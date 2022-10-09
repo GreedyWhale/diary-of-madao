@@ -79,8 +79,8 @@ $slice-5: inset(80% -6px 5% 0);
     right: 0;
     bottom: 0;
     clip-path: $slice-0;
-    box-shadow: 6px 0px 0px var(--color-blue);
-    text-shadow: -3px -3px 0px var(--color-yellow), 3px 3px 0px var(--color-blue);
+    box-shadow: 6px 0px 0px var(--theme-color-blue);
+    text-shadow: -3px -3px 0px var(--theme-color-yellow), 3px 3px 0px var(--theme-color-blue);
   }
   &:hover:after {
     animation: 1s glitch;
@@ -90,14 +90,14 @@ $slice-5: inset(80% -6px 5% 0);
     color: #fff;
     background: linear-gradient(45deg, transparent 5%, #244e30 5%);
     &::after {
-      background: linear-gradient(45deg, transparent 3%, var(--color-blue) 3%, var(--color-blue) 5%, #244e30 5%);
+      background: linear-gradient(45deg, transparent 3%, var(--theme-color-blue) 3%, var(--theme-color-blue) 5%, #244e30 5%);
     }
   }
   &[data-theme='danger'] {
     color: #fff;
     background: linear-gradient(45deg, transparent 5%, #FF013C 5%);
     &::after {
-      background: linear-gradient(45deg, transparent 3%, var(--color-blue) 3%, var(--color-blue) 5%, #FF013C 5%);
+      background: linear-gradient(45deg, transparent 3%, var(--theme-color-blue) 3%, var(--theme-color-blue) 5%, #FF013C 5%);
     }
   }
   &[data-loading='true'] {

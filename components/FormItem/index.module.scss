@@ -9,18 +9,18 @@
     display: flex;
     align-items: center;
     transition: all ease-in;
-    border-bottom: 2px solid var(--color-yellow);
+    border-bottom: 2px solid var(--theme-color-yellow);
     padding-bottom: 10px;
     margin-bottom: 15px;
     > span {
-      color: var(--color-blue);
+      color: var(--theme-color-blue);
       flex: none;
     }
     > input {
       outline: none;
       border: none;
       padding: 0 0.5em;
-      color: var(--color-white);
+      color: var(--theme-color-white);
       font-size: 16px;
       height: 2em;
       background: transparent;

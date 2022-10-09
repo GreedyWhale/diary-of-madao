@@ -1,0 +1,46 @@
+.bytemd-body {
+  .bytemd-preview, .markdown-body {
+    background: var(--theme-color-black);
+  }
+  .markdown-body{
+    color: #F7DA67 !important;
+    h1,h2,h3,h4,h5,h6 {
+      margin: 24px 0 16px;
+      padding-bottom: 16px;
+      color: rgb(129, 172, 243);
+      font-weight: normal;
+      border-bottom: 1px solid rgb(129, 172, 243);
+      &::before {
+        content: '#';
+      }
+    }
+    p {
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    blockquote {
+      background: #202627;
+      color: #f388c0;
+      padding: 1em;
+      border-left: 1px solid #f388c0;
+    }
+    em {
+      color: #F38E58;
+    }
+    li {
+      position: relative;
+      color: rgb(10, 197, 83);
+      &::before {
+        content: '💊';
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(-100%);
+      }
+    }
+    strong {
+      font-weight: bold;
+      color: #F34573;
+    }
+  }
+}

@@ -3,6 +3,7 @@ import Head from 'next/head';
 
 import '~/assets/styles/global.scss';
 import '~/assets/styles/reset.scss';
+import '~/assets/styles/markdown.scss';
 import { Layout } from '~/components/Layout';
 
 function MyApp({ Component, pageProps }: AppProps) {

@@ -1,11 +1,10 @@
 :root {
-  --color-yellow: #c1f130;
-  --color-green: #5bab3c;
-  --color-blue: #60faf8;
-  --color-black: #2B303B;
-  --color-white: #F9F9F9;
-  --color-black-6: rgba(43, 48, 59, 0.6);
-  --color-white-6: rgb(249, 249, 249, 0.6);
+  --theme-color-yellow: #c1f130;
+  --theme-color-green: #5bab3c;
+  --theme-color-blue: #60faf8;
+  --theme-color-black: #2B303B;
+  --theme-color-white: #F9F9F9;
+  --theme-color-white-6: rgb(249, 249, 249, 0.6);
   --nav-height: 96px;
   --border-radius: 8px;
   --main-width: 1200px;
@@ -17,8 +16,10 @@ html, body {
 
 body {
   font-size: 16px;
-  color: var(--color-white);
-  letter-spacing: 5px;
-  font-family: "LXGW WenKai Screen", "LXGW WenKai", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--theme-color-white);
   -webkit-text-size-adjust: 100%;
+  &, .bytemd-body {
+    font-family: "LXGW WenKai Screen", "LXGW WenKai", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    letter-spacing: 5px;
+  }
 }

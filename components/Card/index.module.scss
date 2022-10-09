@@ -1,6 +1,6 @@
 .container {
   padding: 2em 2em;
-  background: var(--color-black-6);
+  background: rgba(43, 48, 59, 0.6);
   border-radius: var(--border-radius);
   min-height: 150px;
   > h3 {
@@ -17,6 +17,6 @@
     margin-bottom: 20px;
   }
   a {
-    color: var(--color-yellow);
+    color: var(--theme-color-yellow);
   }
 }

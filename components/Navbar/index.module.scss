@@ -1,6 +1,6 @@
 .container {
   height: var(--nav-height);
-  background: var(--color-black);
+  background: var(--theme-color-black);
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
   display: flex;
@@ -12,14 +12,43 @@
     cursor: pointer;
     transition: all 0.2s;
     &[data-active='true'] {
-      color: var(--color-yellow);
+      color: var(--theme-color-yellow);
     }
     &:hover {
-      color: var(--color-yellow);
-      text-shadow: 0 0 10px var(--color-yellow);
+      color: var(--theme-color-yellow);
+      text-shadow: 0 0 10px var(--theme-color-yellow);
     }
-    > a {
+    a {
       text-decoration: none;
+    }
+  }
+  .submenu {
+    position: relative;
+    > ul {
+      padding-top: 20px;
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      border-radius: 4px;
+      color: #fff !important;
+      text-shadow: none !important;
+      > li {
+        font-size: 14px;
+        line-height: 40px;
+        height: 40px;
+        padding: 0 20px;
+        white-space: nowrap;
+        background: rgb(53, 117, 171, 40%);
+        &:hover {
+          background: rgba(53, 118, 171, 0.959);
+        }
+      }
+    }
+    &:hover {
+      > ul {
+        display: block;
+      }
     }
   }
 }

@@ -2,7 +2,7 @@
   transform: rotateZ(45deg);
   perspective: 1000px;
   border-radius: 50%;
-  color: var(--color-white);
+  color: var(--theme-color-white);
   &::before,
   &::after {
     content: '';

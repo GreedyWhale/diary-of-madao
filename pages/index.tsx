@@ -9,7 +9,7 @@ import GithubIcon from '~/assets/images/github.svg';
 import { Card } from '~/components/Card';
 
 import { withSessionSsr } from '~/lib/withSession';
-import { useUserId, useUser } from '~/hooks/useUser';
+import { useUserId } from '~/hooks/useUser';
 
 type WelcomeType = {
   rawData: {
@@ -30,8 +30,6 @@ type WelcomeType = {
 
 const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUserId(props.userId);
-
-  const { user } = useUser();
 
   const [welcome, setWelcome] = useImmer<WelcomeType>({
     rawData: {
@@ -157,8 +155,6 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
     const unsubscribe = typewritersTasks();
     return unsubscribe;
   }, [typewritersTasks]);
-
-  console.log(user);
 
   return (
     <div className={styles.container}>
