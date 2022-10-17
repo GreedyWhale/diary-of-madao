@@ -15,7 +15,7 @@ type WelcomeType = {
   rawData: {
     title: string[];
     description: string[][];
-    icons: Array<{ component: React.ReactNode; key: string }>;
+    icons: Array<{ component: React.ReactNode; key: string; }>;
     titleIndex: number;
     descriptionIndex: {
       index: number;
@@ -25,7 +25,7 @@ type WelcomeType = {
   };
   title: string;
   description: string[];
-  icons: Array<{ component: React.ReactNode; key: string }>;
+  icons: Array<{ component: React.ReactNode; key: string; }>;
 };
 
 const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {

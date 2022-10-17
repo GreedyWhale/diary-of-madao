@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-09-30 15:29:54
  * @LastEditors: MADAO
- * @LastEditTime: 2022-09-30 15:58:31
+ * @LastEditTime: 2022-10-17 22:27:59
  */
 import type { Response } from './index';
 import type { AxiosError } from 'axios';
@@ -14,7 +14,6 @@ import { isBrowser } from '~/lib/env';
 import showNotification from '~/components/Notification';
 
 const axiosInstance = axios.create({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   baseURL: isBrowser ? '' : 'http://localhost:3000',
   retry: 0,
   retryDelay: 0,

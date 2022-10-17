@@ -62,6 +62,7 @@ $slice-5: inset(80% -6px 5% 0);
   justify-content: center;
   cursor: pointer;
   letter-spacing: 5px;
+  color: #fff;
   &,&::after {
     border: 0;
     outline: transparent;
@@ -86,19 +87,14 @@ $slice-5: inset(80% -6px 5% 0);
     animation: 1s glitch;
     animation-timing-function: steps(2, end);
   }
-  &[data-theme='default'] {
-    color: #fff;
-    background: linear-gradient(45deg, transparent 5%, #244e30 5%);
-    &::after {
-      background: linear-gradient(45deg, transparent 3%, var(--theme-color-blue) 3%, var(--theme-color-blue) 5%, #244e30 5%);
-    }
+  &::after {
+    background: linear-gradient(45deg, transparent 3%, var(--theme-color-blue) 3%, var(--theme-color-blue) 5%, #FF013C 5%);
   }
-  &[data-theme='danger'] {
-    color: #fff;
-    background: linear-gradient(45deg, transparent 5%, #FF013C 5%);
-    &::after {
-      background: linear-gradient(45deg, transparent 3%, var(--theme-color-blue) 3%, var(--theme-color-blue) 5%, #FF013C 5%);
-    }
+  &[data-theme='default'] {
+    background: linear-gradient(45deg, transparent 5%, var(--theme-color-pink) 5%);
+  }
+  &[data-theme='secondary'] {
+    background: linear-gradient(45deg, transparent 5%, #3B4246 5%);
   }
   &[data-loading='true'] {
     opacity: 0.5;

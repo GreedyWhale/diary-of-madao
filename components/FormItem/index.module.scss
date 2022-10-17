@@ -34,6 +34,48 @@
     }
   }
 
+  .options_wrap {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-top: 20px;
+    margin-bottom: 20px;
+    > li {
+      margin-right: 20px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      .option_prefix {
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+        border: 1px solid var(--theme-color-pink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        > span {
+          display: none;
+          width: 8px;
+          height: 8px;
+          background: var(--theme-color-pink);
+        }
+        &[data-shape='circle'] {
+          border-radius: 50%;
+          > span {
+            border-radius: 50%;
+          }
+        }
+      }
+      &[data-selected='true'] {
+        .option_prefix > span {
+          display: block;
+        }
+      }
+    }
+  }
+
   .verification_message {
     color: #f4545e;
   }

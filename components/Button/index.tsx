@@ -3,10 +3,10 @@ import React from 'react';
 import styles from './index.module.scss';
 import Loading from '~/components/Loading';
 
-type ButtonProps = {
-  theme: 'default' | 'danger' | 'secondary';
+export type ButtonProps = {
+  theme?: 'default' | 'secondary';
   type?: 'button' | 'submit' | 'reset';
-  onClick: (el: React.MouseEvent<HTMLButtonElement>) => Promise<any>;
+  onClick?: (el: React.MouseEvent<HTMLButtonElement>) => Promise<any>;
   loading?: boolean;
 };
 
@@ -19,14 +19,16 @@ export const Button: React.FC<React.PropsWithChildren<ButtonProps>> = props => {
     }
 
     setLoading(true);
-    props.onClick(el).finally(() => { setLoading(Boolean(props.loading)); });
+    if (props.onClick) {
+      props.onClick(el).finally(() => { setLoading(Boolean(props.loading)); });
+    }
   };
 
   return (
     <button
       className={styles.container}
       type={props.type}
-      data-theme={props.theme}
+      data-theme={props.theme ?? 'default'}
       data-loading={loading}
       onClick={handleClick}
     >

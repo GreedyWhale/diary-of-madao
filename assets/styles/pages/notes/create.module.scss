@@ -1,3 +1,36 @@
 .container {
   padding: 40px 10px;
 }
+
+.submit_form {
+  width: 700px;
+}
+.label_form {
+  width: 300px;
+}
+
+.form_buttons {
+  display: flex;
+  align-items: center;
+  > button + button {
+    margin-left: 20px;
+  }
+}
+
+.labels_item {
+  > ul {
+    max-height: 240px;
+    overflow-y: auto;
+  }
+}
+
+.checkbox_label {
+  display: flex;
+  align-items: center;
+}
+.add_icon {
+  width: 18px;
+  height: 18px;
+  margin-left: 10px;
+  cursor: pointer;
+}

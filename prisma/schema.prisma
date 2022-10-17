@@ -10,10 +10,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Category {
+  TECHNICAL
+  READING
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   username  String   @unique
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  notes     Note[]
+}
+
+model Note {
+  id            Int      @id @default(autoincrement())
+  category      Category
+  title         String
+  introduction  String
+  content       String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  labels        Label[]
+  author        User  @relation(fields: [authorId], references: [id])
+  authorId      Int
+}
+
+model Label {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  notes Note[]
 }

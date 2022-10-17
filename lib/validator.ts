@@ -3,9 +3,9 @@
  * @Author: MADAO
  * @Date: 2022-09-30 11:27:12
  * @LastEditors: MADAO
- * @LastEditTime: 2022-09-30 11:32:32
+ * @LastEditTime: 2022-10-14 18:00:31
  */
-type FormData = Record<string, any>;
+export type FormData = Record<string, any>;
 
 export type Rules<T> = Array<{
   key: keyof T;

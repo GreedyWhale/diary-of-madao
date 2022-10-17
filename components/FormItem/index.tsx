@@ -1,17 +1,19 @@
-/* eslint-disable react/display-name */
 import React from 'react';
+import { isEmpty } from 'lodash';
 
 import styles from './index.module.scss';
 
 type FormItemProps = {
-  label: string;
+  label: React.ReactNode;
   name: string;
-  type?: 'text' | 'password';
+  type?: 'text' | 'password' | 'radio' | 'checkbox';
   placeholder?: string;
   validator?: {
     require: boolean | (<T>(value: T) => boolean);
     message: string;
   };
+  options?: Array<{ label: string; value: string | number | boolean | Record<string, any>; }>;
+  className?: string;
 };
 
 export type FormItemRef = {
@@ -19,26 +21,53 @@ export type FormItemRef = {
   validator: () => boolean;
 };
 
-export const FormItem = React.forwardRef<unknown, FormItemProps>((props, ref) => {
+// eslint-disable-next-line react/display-name
+export const FormItem = React.forwardRef<FormItemRef, FormItemProps>((props, ref) => {
   const valueRef = React.useRef('');
   const [visible, setVisible] = React.useState(false);
   const [verificationMessage, setVerificationMessage] = React.useState('');
+  const [selectedRadioIndex, setSelectedRadioIndex] = React.useState(0);
+  const [selectedCheckboxIndex, setSelectedCheckboxIndex] = React.useState<number[]>([]);
+
+  const fetchOptionsIndex = (index: number) => {
+    if (props.type === 'radio') {
+      setSelectedRadioIndex(index);
+    } else {
+      const newSelectedCheckboxIndex = selectedCheckboxIndex.includes(index)
+        ? selectedCheckboxIndex.filter(i => i !== index)
+        : ([...new Set(selectedCheckboxIndex.concat(index))] as number[]);
+      setSelectedCheckboxIndex(newSelectedCheckboxIndex);
+    }
+  };
+
+  const getItemValue = () => {
+    if (props.type === 'radio') {
+      return {
+        [props.name]: props.options![selectedRadioIndex].value,
+      };
+    }
+
+    if (props.type === 'checkbox') {
+      return {
+        [props.name]: props.options!.filter((item, index) => selectedCheckboxIndex.includes(index)),
+      };
+    }
+
+    return {
+      [props.name]: valueRef.current,
+    };
+  };
 
   React.useImperativeHandle(ref, () => ({
-    getItemValue: () => ({
-      [props.name]: valueRef.current,
-    }),
+    getItemValue,
 
     validator() {
       if (props.validator) {
-        let passed = false;
-        if (typeof props.validator.require === 'boolean') {
-          passed = Boolean(valueRef.current);
-        } else {
-          passed = props.validator.require(valueRef.current);
-        }
+        const values = getItemValue();
+        const passed = typeof props.validator.require === 'boolean'
+          ? typeof values[props.name] === 'object' ? !isEmpty(values[props.name]) : Boolean(values[props.name])
+          : props.validator.require(values);
 
-        console.log(Boolean(valueRef.current), valueRef.current);
         if (!passed) {
           setVerificationMessage(props.validator.message);
         }
@@ -52,36 +81,68 @@ export const FormItem = React.forwardRef<unknown, FormItemProps>((props, ref) =>
   }));
 
   return (
-    <div className={styles.container}>
+    <div className={[styles.container, props.className].join(' ')}>
       <label htmlFor={props.name}>{props.label}</label>
-      <div className={styles.input_wrap}>
-        <span>→</span>
-        <input
-          name={props.name}
-          id={props.name}
-          type={visible ? 'text' : (props.type ?? 'text')}
-          placeholder={props.placeholder}
-          onChange={el => {
-            if (verificationMessage) {
-              setVerificationMessage('');
-            }
+      {['password', 'text'].includes(props.type ?? '') && (
+        <div className={styles.input_wrap}>
+          <span>→</span>
+          <input
+            name={props.name}
+            id={props.name}
+            type={visible ? 'text' : (props.type ?? 'text')}
+            placeholder={props.placeholder}
+            onChange={el => {
+              if (verificationMessage) {
+                setVerificationMessage('');
+              }
 
-            valueRef.current = el.target.value;
-          }}
-          autoComplete='off'
-        />
-        {props.type === 'password' && (
-          <div
-            className={styles.eyes_icon}
-            onClick={() => { setVisible(prev => !prev); }}
-          >
-            {visible ? '🫣' : '😑'}
-          </div>
-        )}
-      </div>
+              valueRef.current = el.target.value;
+            }}
+            autoComplete='off'
+          />
+          {props.type === 'password' && (
+            <div
+              className={styles.eyes_icon}
+              onClick={() => { setVisible(prev => !prev); }}
+            >
+              {visible ? '🫣' : '😑'}
+            </div>
+          )}
+        </div>
+      )}
+      {['radio', 'checkbox'].includes(props.type ?? '') && (
+        <ul className={styles.options_wrap}>
+          {props.options?.map((option, index) => (
+            <li
+              key={option.label}
+              data-selected={props.type === 'radio' ? selectedRadioIndex === index : selectedCheckboxIndex.includes(index)}
+              onClick={() => {
+                if (verificationMessage) {
+                  setVerificationMessage('');
+                }
+
+                fetchOptionsIndex(index);
+              }}
+            >
+              <div
+                className={styles.option_prefix}
+                data-shape={props.type === 'radio' ? 'circle' : ''}
+              >
+                <span />
+              </div>
+              <span>{option.label}</span>
+            </li>
+          ))}
+        </ul>
+      )}
       {verificationMessage && (
         <p className={styles.verification_message}>{verificationMessage}</p>
       )}
     </div>
   );
 });
+
+FormItem.defaultProps = {
+  className: '',
+  type: 'text',
+};

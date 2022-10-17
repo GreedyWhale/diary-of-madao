@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 /*
  * @Description: 请求相关方法
  * @Author: MADAO
  * @Date: 2022-09-30 12:28:32
  * @LastEditors: MADAO
- * @LastEditTime: 2022-09-30 17:47:51
+ * @LastEditTime: 2022-10-17 22:28:04
  */
 export type Response<T = Record<string, any>> = {
   resource?: T;

@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-09-27 11:28:20
  * @LastEditors: MADAO
- * @LastEditTime: 2022-09-30 15:52:26
+ * @LastEditTime: 2022-10-17 22:29:33
  */
 module.exports = {
   env: {
@@ -42,6 +42,17 @@ module.exports = {
         '@typescript-eslint/no-implicit-any-catch': 'off',
         'import/no-duplicates': ['error'],
         '@typescript-eslint/no-dynamic-delete': 'off',
+        '@typescript-eslint/member-delimiter-style': [2, {
+          overrides: {
+            typeLiteral: {
+              singleline: {
+                delimiter: 'semi',
+                requireLast: true,
+              },
+            },
+          },
+        }],
+        '@typescript-eslint/naming-convention': 'off',
       },
     },
   ],
