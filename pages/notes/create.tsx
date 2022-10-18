@@ -22,6 +22,7 @@ import zhHansMermaid from '@bytemd/plugin-mermaid/locales/zh_Hans.json';
 import 'bytemd/dist/index.min.css';
 import 'katex/dist/katex.min.css';
 import 'github-markdown-css/github-markdown-dark.css';
+import 'highlight.js/styles/base16/unikitty-dark.css';
 
 import styles from '~/assets/styles/pages/notes/create.module.scss';
 import AddIcon from '~/assets/images/add.svg';
