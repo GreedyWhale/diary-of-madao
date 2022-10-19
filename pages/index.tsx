@@ -1,4 +1,5 @@
 import type { NextPage, InferGetServerSidePropsType } from 'next';
+import type { NotesResponse } from '~/model/note';
 
 import React from 'react';
 import { useImmer } from 'use-immer';
@@ -10,6 +11,7 @@ import { Card } from '~/components/Card';
 
 import { withSessionSsr } from '~/lib/withSession';
 import { useUserId } from '~/hooks/useUser';
+import { getNotes } from '~/services/note';
 
 type WelcomeType = {
   rawData: {
@@ -53,6 +55,15 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
     title: '',
     description: [],
     icons: [],
+  });
+
+  const [notes, setNotes] = React.useState<NotesResponse['resource']>({
+    list: [],
+    pagination: {
+      page: 1,
+      pageSize: 7,
+      total: 1,
+    },
   });
 
   const typewritersTasks = React.useCallback(() => {
@@ -155,6 +166,10 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
     const unsubscribe = typewritersTasks();
     return unsubscribe;
   }, [typewritersTasks]);
+
+  React.useEffect(() => {
+    getNotes({ page: 1, pageSize: 7 });
+  }, []);
 
   return (
     <div className={styles.container}>

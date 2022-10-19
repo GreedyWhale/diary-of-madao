@@ -63,7 +63,6 @@ const initialFrontmatter: Record<'title' | 'introduction', string> = {
 
 const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUserId(props.userId);
-  const { user } = useUser();
   const router = useRouter();
   const [value, setValue] = React.useState('---\ntitle: \'文章标题\'\nintroduction: \'文章简介\'\n---');
   const [frontmatterValue, setFrontmatterValue] = React.useState(initialFrontmatter);
@@ -88,7 +87,6 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
     if (submitFormRef.current.validator()) {
       const formData = submitFormRef.current.getFormValues() as FormDataType;
       await createNote({
-        userId: user!.id,
         labels: formData.labels.map(label => label.value),
         title: frontmatterValue.title,
         introduction: frontmatterValue.introduction,
