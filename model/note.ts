@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-10-14 17:19:56
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-22 10:51:55
+ * @LastEditTime: 2022-10-22 16:18:27
  */
 import type { Note, Category } from '@prisma/client';
 import type { Response } from '~/lib/api';
@@ -63,7 +63,7 @@ class Notes {
 
   async generateStaticFiles(userId: number, title: string, content: string) {
     try {
-      await fse.outputFile(path.join(process.cwd(), `/public/static/notes/${userId}/${title}.md`), content);
+      await fse.outputFile(path.join(process.cwd(), `/public/notes/${userId}/${title}.md`), content);
     } catch (error) {
       return Promise.reject(formatResponse({ status: 500, message: (error as Error).message }));
     }
