@@ -3,17 +3,17 @@
  * @Author: MADAO
  * @Date: 2022-10-14 17:19:56
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-19 21:59:46
+ * @LastEditTime: 2022-10-22 10:51:55
  */
-import type { Note } from '@prisma/client';
-import type { Response } from '~/lib/request';
+import type { Note, Category } from '@prisma/client';
+import type { Response } from '~/lib/api';
 import type { Rules, FormData } from '~/lib/validator';
 
 import fse from 'fs-extra';
 import path from 'path';
 
 import { validator } from '~/lib/validator';
-import { formatResponse } from '~/lib/request';
+import { formatResponse } from '~/lib/api';
 import { prisma } from '~/lib/db';
 import { NOTE_CATEGORY } from '~/lib/constants';
 import { exclude } from '~/lib/exclude';
@@ -37,7 +37,7 @@ export type NotesResponse = Response<{
 
 export type CreateNoteParams = Pick<Note, 'title' | 'introduction' | 'category' | 'content'>
 & { labels: string[]; userId: number; id?: number; };
-export type GetNotesParams = Pagination & { labelId?: number; };
+export type GetNotesParams = Pagination & { labelId?: number; category?: Category; };
 
 const createNoteRules: Rules<CreateNoteParams> = [
   { key: 'title', message: '标题不可为空', required: true },
@@ -147,14 +147,35 @@ class Notes {
 
   async index(params: GetNotesParams) {
     const getNotes = async (): Promise<NotesResponse> => {
+      const getWhereRules = () => {
+        if (params.labelId && params.category) {
+          return {
+            labels: { every: { id: params.labelId } },
+            category: params.category,
+          };
+        }
+
+        if (params.labelId) {
+          return {
+            labels: { every: { id: params.labelId } },
+          };
+        }
+
+        if (params.category) {
+          return {
+            category: params.category,
+          };
+        }
+
+        return {};
+      };
+
       try {
         const notes = await prisma.$transaction([
           prisma.note.findMany({
             skip: params.page === 1 ? 0 : (params.page - 1) * params.pageSize,
             take: params.pageSize,
-            where: params.labelId
-              ? { labels: { some: { id: params.labelId } } }
-              : {},
+            where: getWhereRules(),
             include: {
               author: {
                 select: { username: true },

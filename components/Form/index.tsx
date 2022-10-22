@@ -42,8 +42,6 @@ export const Form = React.forwardRef<FormRef, React.PropsWithChildren<FormProps>
     getFormValues,
   }));
 
-  console.log(formItemsRef);
-
   return (
     <form className={[styles.container, props.className ?? ''].join(' ')}>
       {React.Children.map(props.children, (child, index) => {

@@ -1,9 +1,9 @@
 import type { NextPage, InferGetServerSidePropsType } from 'next';
 import type { FormRef } from '~/components/Form';
 import type { Note } from '@prisma/client';
+import type { EditorProps } from '@bytemd/react';
 
 import React from 'react';
-import { useAtomValue } from 'jotai';
 import { useRouter } from 'next/router';
 import { Editor } from '@bytemd/react';
 import { isEqual } from 'lodash';
@@ -36,9 +36,10 @@ import submitPlugin from '~/lib/bytemdPlugins/submit';
 import goBackPlugin from '~/lib/bytemdPlugins/goBack';
 import getFrontmatter from '~/lib/bytemdPlugins/getFrontmatter';
 import { createNote } from '~/services/note';
-import { useUser, useUserId } from '~/hooks/useUser';
+import { useUserId } from '~/hooks/useUser';
 import { withSessionSsr } from '~/lib/withSession';
 import { NOTE_CATEGORY } from '~/lib/constants';
+import { upload } from '~/services/upload';
 
 type FormDataType = {
   category: Note['category'];
@@ -98,6 +99,15 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
     }
   };
 
+  const uploadImages: EditorProps['uploadImages'] = async file => {
+    const image = await upload(file[0]);
+    return [{
+      alt: image.data.resource?.originalname,
+      title: image.data.resource?.originalname,
+      url: `/public/upload/${(image.data.resource?.filename ?? '')}`,
+    }];
+  };
+
   return (
     <div className={styles.container}>
       <style jsx global>{`
@@ -119,6 +129,7 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
           goBackPlugin(() => { router.replace('/'); }),
           getFrontmatter(fetchFrontmatterValue),
         ]}
+        uploadImages={uploadImages}
       />
 
       {visibleSubmitModal && (

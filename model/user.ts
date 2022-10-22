@@ -3,16 +3,16 @@
  * @Author: MADAO
  * @Date: 2022-09-30 11:35:06
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-08 11:45:12
+ * @LastEditTime: 2022-10-22 10:52:05
  */
 import type { User } from '@prisma/client';
-import type { Response } from '~/lib/request';
+import type { Response } from '~/lib/api';
 
 import hmacSHA512 from 'crypto-js/hmac-sha512';
 import Base64 from 'crypto-js/enc-base64';
 
 import { prisma } from '~/lib/db';
-import { formatResponse } from '~/lib/request';
+import { formatResponse } from '~/lib/api';
 import { validator } from '~/lib/validator';
 
 export type UserInfo = Pick<User, 'id' | 'username'>;

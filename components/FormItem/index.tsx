@@ -26,30 +26,31 @@ export const FormItem = React.forwardRef<FormItemRef, FormItemProps>((props, ref
   const valueRef = React.useRef('');
   const [visible, setVisible] = React.useState(false);
   const [verificationMessage, setVerificationMessage] = React.useState('');
-  const [selectedRadioIndex, setSelectedRadioIndex] = React.useState(0);
-  const [selectedCheckboxIndex, setSelectedCheckboxIndex] = React.useState<number[]>([]);
+  const [radioSelectedIndex, setRadioSelectedIndex] = React.useState(0);
+  const [checkboxSelectedIndex, setCheckboxSelectedIndex] = React.useState<number[]>([]);
 
   const fetchOptionsIndex = (index: number) => {
     if (props.type === 'radio') {
-      setSelectedRadioIndex(index);
+      setRadioSelectedIndex(index);
     } else {
-      const newSelectedCheckboxIndex = selectedCheckboxIndex.includes(index)
-        ? selectedCheckboxIndex.filter(i => i !== index)
-        : ([...new Set(selectedCheckboxIndex.concat(index))] as number[]);
-      setSelectedCheckboxIndex(newSelectedCheckboxIndex);
+      const newCheckboxSelectedIndex = checkboxSelectedIndex.includes(index)
+        ? checkboxSelectedIndex.filter(i => i !== index)
+        : ([...new Set(checkboxSelectedIndex.concat(index))] as number[]);
+
+      setCheckboxSelectedIndex(newCheckboxSelectedIndex);
     }
   };
 
   const getItemValue = () => {
     if (props.type === 'radio') {
       return {
-        [props.name]: props.options![selectedRadioIndex].value,
+        [props.name]: props.options![radioSelectedIndex].value,
       };
     }
 
     if (props.type === 'checkbox') {
       return {
-        [props.name]: props.options!.filter((item, index) => selectedCheckboxIndex.includes(index)),
+        [props.name]: props.options!.filter((item, index) => checkboxSelectedIndex.includes(index)),
       };
     }
 
@@ -115,7 +116,7 @@ export const FormItem = React.forwardRef<FormItemRef, FormItemProps>((props, ref
           {props.options?.map((option, index) => (
             <li
               key={option.label}
-              data-selected={props.type === 'radio' ? selectedRadioIndex === index : selectedCheckboxIndex.includes(index)}
+              data-selected={props.type === 'radio' ? radioSelectedIndex === index : checkboxSelectedIndex.includes(index)}
               onClick={() => {
                 if (verificationMessage) {
                   setVerificationMessage('');

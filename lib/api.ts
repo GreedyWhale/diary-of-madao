@@ -1,9 +1,9 @@
 /*
- * @Description: 请求相关方法
+ * @Description: 接口相关方法
  * @Author: MADAO
- * @Date: 2022-09-30 12:28:32
+ * @Date: 2022-10-22 10:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-17 22:28:04
+ * @LastEditTime: 2022-10-22 15:15:32
  */
 export type Response<T = Record<string, any>> = {
   resource?: T;
@@ -29,3 +29,4 @@ export const formatResponse = <T extends Record<string, any>>(params: Partial<Re
     errors: params.errors,
   };
 };
+

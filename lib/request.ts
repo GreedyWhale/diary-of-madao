@@ -3,9 +3,9 @@
  * @Author: MADAO
  * @Date: 2022-09-30 15:29:54
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-17 22:27:59
+ * @LastEditTime: 2022-10-22 10:51:23
  */
-import type { Response } from './index';
+import type { Response } from '~/lib/api';
 import type { AxiosError } from 'axios';
 
 import axios from 'axios';
