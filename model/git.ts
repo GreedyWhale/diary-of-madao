@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-10-22 16:01:23
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-22 16:18:47
+ * @LastEditTime: 2022-10-22 16:28:04
  */
 import simpleGit from 'simple-git';
 import path from 'path';
@@ -18,9 +18,9 @@ class GitModel {
         path.join(process.cwd(), './public/upload'),
         path.join(process.cwd(), './public/notes'),
       ])
-      .commit('update：更新upload目录')
-      .pull('origin', 'main')
-      .push(['origin', 'main'])
+      .commit('update：更新笔记相关文件')
+      .pull('origin', 'refactor')
+      .push(['origin', 'refactor'])
       .then(
         () => formatResponse({ status: 200, message: '同步完成' }),
         error => formatResponse({ status: 500, message: (error as Error).message }),
