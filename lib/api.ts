@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-10-22 10:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-22 15:15:32
+ * @LastEditTime: 2022-10-22 15:55:42
  */
 export type Response<T = Record<string, any>> = {
   resource?: T;
