@@ -5,6 +5,7 @@ import Image from 'next/image';
 
 import styles from './index.module.scss';
 import { Navbar } from '~/components/Navbar';
+import GridIcon from '~/assets/images/grid.svg';
 
 const Cube: React.FC = () => (
   <div className={styles.cube}>
@@ -117,6 +118,7 @@ export const Layout: NextPage<React.PropsWithChildren> = props => {
     <div className={styles.container}>
       <div className={styles.bg}>
         <Cube />
+        <GridIcon className={styles.grid} />
         <div className={styles.slogan}>
           <h2>Don&apos;t</h2>
           <h2>Be</h2>

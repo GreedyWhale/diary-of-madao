@@ -33,7 +33,7 @@
 }
 
 .container {
-  background: url('~/assets/images/grid.svg') no-repeat center / 100%, #02010e;
+  background: #02010e;
   height: 100vh;
   width: 100vw;
   position: relative;
@@ -52,6 +52,10 @@
     right: 0;
     bottom: 0;
     @include mixin.zIndex(wallpaper);
+  }
+  .grid {
+    height: 100%;
+    width: 100%;
   }
   .slogan {
     position: absolute;

@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-10-14 17:19:56
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-22 16:18:27
+ * @LastEditTime: 2022-10-27 15:48:54
  */
 import type { Note, Category } from '@prisma/client';
 import type { Response } from '~/lib/api';
@@ -17,21 +17,19 @@ import { formatResponse } from '~/lib/api';
 import { prisma } from '~/lib/db';
 import { NOTE_CATEGORY } from '~/lib/constants';
 import { exclude } from '~/lib/exclude';
-
+export type NoteWithoutContent = Omit<Note, 'content'> & {
+  labels: Array<{
+    name: string;
+  }>;
+  author: { username: string; };
+};
 export type Pagination = {
   pageSize: number;
   page: number;
 };
 export type NoteResponse = Response<Note>;
 export type NotesResponse = Response<{
-  list: Array<Omit<Note, 'content'> & {
-    labels: Array<{
-      name: string;
-    }>;
-    author: {
-      username: string;
-    };
-  }>;
+  list: NoteWithoutContent[];
   pagination: Pagination & { total: number; };
 }>;
 

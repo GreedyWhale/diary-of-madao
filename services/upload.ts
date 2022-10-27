@@ -3,9 +3,9 @@
  * @Author: MADAO
  * @Date: 2022-10-22 11:03:40
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-22 15:43:55
+ * @LastEditTime: 2022-10-27 15:15:37
  */
-import type { FileInfo } from '~/pages/api/v1/upload';
+import type { FileInfo } from '~/model/upload';
 import type { Response } from '~/lib/api';
 
 import request from '~/lib/request';

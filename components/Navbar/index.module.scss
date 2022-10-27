@@ -1,4 +1,5 @@
 .container {
+  flex: none;
   height: var(--nav-height);
   background: var(--theme-color-black);
   border-top-left-radius: var(--border-radius);

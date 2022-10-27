@@ -1,5 +1,4 @@
 import type { NextPage, InferGetServerSidePropsType } from 'next';
-import type { NotesResponse } from '~/model/note';
 
 import React from 'react';
 import { useImmer } from 'use-immer';
@@ -55,15 +54,6 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
     title: '',
     description: [],
     icons: [],
-  });
-
-  const [notes, setNotes] = React.useState<NotesResponse['resource']>({
-    list: [],
-    pagination: {
-      page: 1,
-      pageSize: 7,
-      total: 1,
-    },
   });
 
   const typewritersTasks = React.useCallback(() => {
@@ -167,10 +157,6 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
     return unsubscribe;
   }, [typewritersTasks]);
 
-  React.useEffect(() => {
-    getNotes({ page: 1, pageSize: 7 });
-  }, []);
-
   return (
     <div className={styles.container}>
       <div className={styles.welcome}>
@@ -187,17 +173,24 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
         </ul>
       </div>
 
-      <div className={styles.articles}>
-        <Card />
+      <div className={styles.notes}>
+        {props.notes?.resource?.list.map(note => (
+          <Card key={note.id} {...note} />
+        ))}
       </div>
     </div>
   );
 };
 
-export const getServerSideProps = withSessionSsr(async context => ({
-  props: {
-    userId: context.req.session.user?.id ?? 0,
-  },
-}));
+export const getServerSideProps = withSessionSsr(async context => {
+  const notes = await getNotes({ page: parseInt((context.query.page as string) ?? 1, 10), pageSize: 7 });
+
+  return {
+    props: {
+      userId: context.req.session.user?.id ?? 0,
+      notes: notes ? notes.data : null,
+    },
+  };
+});
 
 export default Home;
