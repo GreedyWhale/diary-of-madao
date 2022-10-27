@@ -82,8 +82,9 @@
     display: flex;
     flex-direction: column;
     &_inner {
-      width: 100%;
-      flex: 1;
+      margin: 40px 60px;
+      height: calc(100vh - 120px - var(--nav-height));
+      overflow-y: auto;
     }
   }
   .footer {

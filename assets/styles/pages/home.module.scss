@@ -1,8 +1,4 @@
 .container {
-  margin: 40px 60px;
-  // 120px = layout-padding + home-margin
-  height: calc(100vh - 120px - var(--nav-height));
-  overflow-y: auto;
   .welcome {
     min-height: 200px;
     > h1 {
