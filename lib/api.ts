@@ -3,9 +3,9 @@
  * @Author: MADAO
  * @Date: 2022-10-22 10:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-22 15:55:42
+ * @LastEditTime: 2022-10-31 17:50:08
  */
-export type Response<T = Record<string, any>> = {
+export type Response<T> = {
   resource?: T;
   status: number;
   message: string;
@@ -19,7 +19,7 @@ const responseMessageMap: Record<string, string> = {
   405: 'Method Not Allowed',
 };
 
-export const formatResponse = <T extends Record<string, any>>(params: Partial<Response<T>>): Response<T> => {
+export const formatResponse = <T>(params: Partial<Response<T>>): Response<T> => {
   const status = params.status ?? 200;
 
   return {

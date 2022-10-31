@@ -19,6 +19,6 @@ export const Card: React.FC<NoteWithoutContent> = props => (
     <p className={styles.summary}>
       {props.introduction}
     </p>
-    <Link href='/'>查看详情 👈</Link>
+    <Link href={`/notes/${props.id}`}>查看详情 👈</Link>
   </div>
 );

@@ -1,3 +1,10 @@
+/*
+ * @Description: 上传接口
+ * @Author: MADAO
+ * @Date: 2022-10-22 15:49:00
+ * @LastEditors: MADAO
+ * @LastEditTime: 2022-10-31 21:24:39
+ */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { Response } from '~/lib/api';
 
@@ -37,7 +44,7 @@ class UploadModel {
   }).any();
 
   async doUpload(req: NextApiRequest, res: NextApiResponse) {
-    return new Promise<Response>(resolve => {
+    return new Promise<Response<FileInfo>>(resolve => {
       // @ts-expect-error: 不知道如何定义
       this.uploader(req, res, error => {
         if (error) {
