@@ -7,6 +7,13 @@
 }
 .label_form {
   width: 300px;
+  &_buttons {
+    display: flex;
+    align-items: center;
+    > button:first-child {
+      margin-right: 20px;
+    }
+  }
 }
 
 .form_buttons {

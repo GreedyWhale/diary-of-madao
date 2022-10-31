@@ -127,9 +127,9 @@ export const Layout: NextPage<React.PropsWithChildren> = props => {
           <h2>Anyone</h2>
         </div>
       </div>
+      <Navbar />
       <main className={styles.main}>
-        <Navbar />
-        <div className={styles.main_inner}>
+        <div>
           {props.children}
         </div>
       </main>

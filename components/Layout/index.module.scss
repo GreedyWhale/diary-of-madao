@@ -33,17 +33,12 @@
 }
 
 .container {
-  background: #02010e;
-  height: 100vh;
-  width: 100vw;
   position: relative;
   @include mixin.zIndex(overlay);
-  padding: 20px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
   color: #F6FBF4;
   .bg {
     position: fixed;
@@ -74,17 +69,15 @@
   }
   .main {
     width: var(--main-width);
-    flex: 1;
-    background: rgba(0, 055, 0, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: var(--border-radius);
-    border: 1px solid rgba(0, 0, 0, 0.416);
-    display: flex;
-    flex-direction: column;
-    &_inner {
-      margin: 40px 60px;
-      height: calc(100vh - 120px - var(--nav-height));
+    padding: 20px 0 20px;
+    > div {
+      background: rgba(0, 055, 0, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(0, 0, 0, 0.416);
+      height: calc(100vh - 40px);
       overflow-y: auto;
+      padding: calc(var(--nav-height) + 20px) 40px 20px;
     }
   }
   .footer {

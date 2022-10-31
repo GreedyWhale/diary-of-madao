@@ -1,5 +1,12 @@
+@use '~/assets/styles/mixin';
+
 .container {
-  flex: none;
+  position: fixed;
+  @include mixin.zIndex(navbar);
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--main-width);
   height: var(--nav-height);
   background: var(--theme-color-black);
   border-top-left-radius: var(--border-radius);

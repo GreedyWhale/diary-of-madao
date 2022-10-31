@@ -1,8 +1,9 @@
-.bytemd-body {
-  .bytemd-preview, .markdown-body {
-    background: var(--theme-color-black);
+.markdown-wrap {
+  .bytemd-preview,
+  .markdown-body {
+    background: var(--theme-color-black) !important;
   }
-  .markdown-body{
+  .markdown-body {
     color: #F7DA67 !important;
     h1,h2,h3,h4,h5,h6 {
       margin: 24px 0 16px;
@@ -42,5 +43,12 @@
       font-weight: bold;
       color: #F34573;
     }
+  }
+}
+
+.markdown-viewer-wrap {
+  padding-top: 40px;
+  .markdown-body {
+    background: transparent !important;
   }
 }

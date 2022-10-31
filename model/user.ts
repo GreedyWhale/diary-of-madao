@@ -3,13 +3,14 @@
  * @Author: MADAO
  * @Date: 2022-09-30 11:35:06
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-31 21:23:39
+ * @LastEditTime: 2022-10-31 23:08:07
  */
 import type { User } from '@prisma/client';
 import type { Response } from '~/lib/api';
 
 import hmacSHA512 from 'crypto-js/hmac-sha512';
 import Base64 from 'crypto-js/enc-base64';
+import { pick } from 'lodash';
 
 import BaseModel from './index';
 import { prisma } from '~/lib/db';
@@ -23,6 +24,7 @@ class UserModel extends BaseModel {
   }
 
   async create(username: string, password: string) {
+    const encryptedPassword = this.encryptPassword(password);
     try {
       await this.validator(
         { username, password },
@@ -31,14 +33,25 @@ class UserModel extends BaseModel {
           { key: 'password', message: '密码格式错误，密码长度为6～15的字母或数字组成', required: value => /^[\w\d]{6,15}$/.test(value) },
         ],
       );
-      await this.index({ username }).then(user => {
-        if (user) {
-          return Promise.reject(formatResponse({ status: 403, message: '用户已存在，请直接登录' }));
-        }
-      });
+      const user = await this.execSql(
+        prisma.user.findUnique({ where: { username } }),
+        user => {
+          if (user) {
+            if (user.password !== encryptedPassword) {
+              return Promise.reject(formatResponse({ status: 401, message: '密码错误' }));
+            }
+
+            return formatResponse({ resource: pick(user, ['id', 'username']) });
+          }
+        },
+      );
+
+      if (user) {
+        return user;
+      }
 
       return await this.execSql(prisma.user.create({
-        data: { username, password: this.encryptPassword(password) },
+        data: { username, password: encryptedPassword },
         select: { username: true, id: true },
       }));
     } catch (error) {

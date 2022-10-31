@@ -1,4 +1,5 @@
 import type { FormItemRef } from '~/components/FormItem';
+import type { ButtonProps } from '~/components/Button';
 
 import React from 'react';
 

@@ -7,22 +7,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Editor } from '@bytemd/react';
 import { isEqual } from 'lodash';
-import breaks from '@bytemd/plugin-breaks';
-import frontmatter from '@bytemd/plugin-frontmatter';
-import gemoji from '@bytemd/plugin-gemoji';
-import gfm from '@bytemd/plugin-gfm';
-import highlight from '@bytemd/plugin-highlight-ssr';
-import math from '@bytemd/plugin-math';
-import mediumZoom from '@bytemd/plugin-medium-zoom';
-import mermaid from '@bytemd/plugin-mermaid';
 import zhHans from 'bytemd/locales/zh_Hans.json';
-import zhHansGfm from '@bytemd/plugin-gfm/locales/zh_Hans.json';
-import zhHansMath from '@bytemd/plugin-math/locales/zh_Hans.json';
-import zhHansMermaid from '@bytemd/plugin-mermaid/locales/zh_Hans.json';
-import 'bytemd/dist/index.min.css';
-import 'katex/dist/katex.min.css';
-import 'github-markdown-css/github-markdown-dark.css';
-import 'highlight.js/styles/base16/unikitty-dark.css';
 
 import styles from '~/assets/styles/pages/notes/create.module.scss';
 import AddIcon from '~/assets/images/add.svg';
@@ -40,22 +25,12 @@ import { useUserId } from '~/hooks/useUser';
 import { withSessionSsr } from '~/lib/withSession';
 import { NOTE_CATEGORY } from '~/lib/constants';
 import { upload } from '~/services/upload';
+import { useMarkdown } from '~/hooks/useMarkdown';
 
 type FormDataType = {
   category: Note['category'];
   labels: Array<{ label: string; value: string; }>;
 };
-
-const plugins = [
-  breaks(),
-  frontmatter(),
-  gemoji(),
-  gfm({ locale: zhHansGfm }),
-  highlight(),
-  math({ locale: zhHansMath }),
-  mediumZoom(),
-  mermaid({ locale: zhHansMermaid }),
-];
 
 const initialFrontmatter: Record<'title' | 'introduction', string> = {
   title: '',
@@ -65,6 +40,7 @@ const initialFrontmatter: Record<'title' | 'introduction', string> = {
 const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUserId(props.userId);
   const router = useRouter();
+  const { plugins } = useMarkdown();
   const [value, setValue] = React.useState('---\ntitle: \'文章标题\'\nintroduction: \'文章简介\'\n---');
   const [frontmatterValue, setFrontmatterValue] = React.useState(initialFrontmatter);
   const [visibleSubmitModal, setVisibleSubmitModal] = React.useState(false);
@@ -118,19 +94,21 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
       </style>
       <Terminal command={`vim ${frontmatterValue.title}`} />
 
-      <Editor
-        mode='auto'
-        locale={zhHans}
-        value={value}
-        onChange={value => { setValue(value); }}
-        plugins={[
-          ...plugins,
-          submitPlugin(() => { setVisibleSubmitModal(true); }),
-          goBackPlugin(() => { router.replace('/'); }),
-          getFrontmatter(fetchFrontmatterValue),
-        ]}
-        uploadImages={uploadImages}
-      />
+      <div className='markdown-wrap'>
+        <Editor
+          mode='auto'
+          locale={zhHans}
+          value={value}
+          onChange={value => { setValue(value); }}
+          plugins={[
+            ...plugins.current,
+            submitPlugin(() => { setVisibleSubmitModal(true); }),
+            goBackPlugin(() => { router.replace('/'); }),
+            getFrontmatter(fetchFrontmatterValue),
+          ]}
+          uploadImages={uploadImages}
+        />
+      </div>
 
       {visibleSubmitModal && (
         <Model hideButtons title='提交笔记'>
@@ -179,8 +157,13 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
       {visibleCreateLabelModal && (
         <Model hideButtons title='创建标签'>
           <Form
-            onFinish={async () => { console.log(''); }}
             className={styles.label_form}
+            customButtons={
+              <div className={styles.label_form_buttons}>
+                <Button theme='secondary' onClick={async () => setVisibleCreateLabelModal(false)}>取消</Button>
+                <Button>创建</Button>
+              </div>
+            }
           >
             <FormItem
               label='标签名'
