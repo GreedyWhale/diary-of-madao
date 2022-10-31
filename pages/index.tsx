@@ -7,6 +7,7 @@ import styles from '~/assets/styles/pages/home.module.scss';
 import EmailIcon from '~/assets/images/email.svg';
 import GithubIcon from '~/assets/images/github.svg';
 import { Card } from '~/components/Card';
+import { Pagination } from '~/components/Pagination';
 
 import { withSessionSsr } from '~/lib/withSession';
 import { useUserId } from '~/hooks/useUser';
@@ -178,12 +179,22 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
           <Card key={note.id} {...note} />
         ))}
       </div>
+
+      <Pagination
+        total={100}
+        current={1}
+        pageSize={7}
+        onClick={index => console.log(index)}
+      />
     </div>
   );
 };
 
 export const getServerSideProps = withSessionSsr(async context => {
-  const notes = await getNotes({ page: parseInt((context.query.page as string) ?? 1, 10), pageSize: 7 });
+  const notes = await getNotes({
+    page: parseInt((context.query.page as string) ?? 1, 10),
+    pageSize: 7,
+  });
 
   return {
     props: {

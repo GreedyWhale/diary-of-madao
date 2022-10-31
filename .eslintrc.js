@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-09-27 11:28:20
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-17 22:29:33
+ * @LastEditTime: 2022-10-31 10:27:21
  */
 module.exports = {
   env: {
@@ -53,6 +53,9 @@ module.exports = {
           },
         }],
         '@typescript-eslint/naming-convention': 'off',
+        '@typescript-eslint/no-confusing-void-expression': ['error', {
+          ignoreArrowShorthand: true,
+        }],
       },
     },
   ],
