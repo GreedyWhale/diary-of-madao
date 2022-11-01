@@ -4,13 +4,13 @@
     background: var(--theme-color-black) !important;
   }
   .markdown-body {
-    color: #F7DA67 !important;
+    color: #03BD9D;
     h1,h2,h3,h4,h5,h6 {
       margin: 24px 0 16px;
       padding-bottom: 16px;
-      color: rgb(129, 172, 243);
+      color: #9595FF;
       font-weight: normal;
-      border-bottom: 1px solid rgb(129, 172, 243);
+      border-bottom: 1px solid #9595FF;
       &::before {
         content: '#';
       }
@@ -30,7 +30,6 @@
     }
     li {
       position: relative;
-      color: rgb(10, 197, 83);
       &::before {
         content: '💊';
         position: absolute;

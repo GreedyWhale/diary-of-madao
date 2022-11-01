@@ -61,7 +61,7 @@ $slice-5: inset(80% -6px 5% 0);
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  letter-spacing: 5px;
+  position: relative;
   color: #fff;
   &,&::after {
     border: 0;
@@ -92,12 +92,29 @@ $slice-5: inset(80% -6px 5% 0);
   }
   &[data-theme='default'] {
     background: linear-gradient(45deg, transparent 5%, var(--theme-color-pink) 5%);
+    .loading_wrap {
+      background: linear-gradient(45deg, transparent 5%, var(--theme-color-pink) 5%);
+    }
   }
   &[data-theme='secondary'] {
     background: linear-gradient(45deg, transparent 5%, #3B4246 5%);
+    .loading_wrap {
+      background: linear-gradient(45deg, transparent 5%, #3B4246 5%);
+    }
   }
   &[data-loading='true'] {
     opacity: 0.5;
     pointer-events: none;
+  }
+
+  .loading_wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

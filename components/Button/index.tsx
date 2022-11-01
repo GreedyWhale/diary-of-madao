@@ -32,7 +32,8 @@ export const Button: React.FC<React.PropsWithChildren<ButtonProps>> = props => {
       data-loading={loading}
       onClick={handleClick}
     >
-      {loading ? <Loading width='1em' height='1em' /> : props.children}
+      {loading && <div className={styles.loading_wrap}><Loading width='1em' height='1em' /></div>}
+      {props.children}
     </button>
   );
 };
