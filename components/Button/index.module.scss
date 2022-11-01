@@ -91,9 +91,9 @@ $slice-5: inset(80% -6px 5% 0);
     background: linear-gradient(45deg, transparent 3%, var(--theme-color-blue) 3%, var(--theme-color-blue) 5%, #FF013C 5%);
   }
   &[data-theme='default'] {
-    background: linear-gradient(45deg, transparent 5%, var(--theme-color-pink) 5%);
+    background: linear-gradient(45deg, transparent 5%, #C2175B 5%);
     .loading_wrap {
-      background: linear-gradient(45deg, transparent 5%, var(--theme-color-pink) 5%);
+      background: linear-gradient(45deg, transparent 5%, #C2175B 5%);
     }
   }
   &[data-theme='secondary'] {

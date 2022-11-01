@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-10-14 17:19:56
  * @LastEditors: MADAO
- * @LastEditTime: 2022-11-01 15:56:21
+ * @LastEditTime: 2022-11-01 16:43:50
  */
 import type { Note, Category, Label, User } from '@prisma/client';
 import type { Response } from '~/lib/api';
@@ -99,7 +99,7 @@ class Notes extends BaseModel {
     const { labels, userId, id, ...rest } = note;
 
     try {
-      await this.validator(note, [{ key: 'id', message: 'id不可为空', required: true }]);
+      await this.validator(note, [...createNoteRules, { key: 'id', message: 'id不可为空', required: true }]);
       await this.generateStaticFiles(userId, note.title, note.content);
       return await this.execSql(prisma.note.update({
         where: { id },

@@ -12,20 +12,23 @@ import zhHans from 'bytemd/locales/zh_Hans.json';
 import styles from '~/assets/styles/pages/notes/create.module.scss';
 import AddIcon from '~/assets/images/add.svg';
 import { Terminal } from '~/components/Terminal';
-import { Model } from '~/components/Modal';
+import { Model, showModal } from '~/components/Modal';
 import { Form } from '~/components/Form';
 import { FormItem } from '~/components/FormItem';
 import { Button } from '~/components/Button';
+import showNotification from '~/components/Notification';
 
 import submitPlugin from '~/lib/bytemdPlugins/submit';
 import goBackPlugin from '~/lib/bytemdPlugins/goBack';
 import getFrontmatter from '~/lib/bytemdPlugins/getFrontmatter';
-import { createNote } from '~/services/note';
+import { createNote, getNoteDetails, updateNote } from '~/services/note';
 import { useUpdateUserId } from '~/hooks/useUser';
 import { withSessionSsr } from '~/lib/withSession';
-import { NOTE_CATEGORY } from '~/lib/constants';
+import { NOTE_CATEGORY, LOCAL_NOTE_DRAFTS } from '~/lib/constants';
 import { upload } from '~/services/upload';
 import { useMarkdown } from '~/hooks/useMarkdown';
+import { getNumberFromString } from '~/lib/number';
+import { syncToGithub } from '~/services/git';
 
 type FormDataType = {
   category: Note['category'];
@@ -45,6 +48,9 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
   const [frontmatterValue, setFrontmatterValue] = React.useState(initialFrontmatter);
   const [visibleSubmitModal, setVisibleSubmitModal] = React.useState(false);
   const [visibleCreateLabelModal, setVisibleCreateLabelModal] = React.useState(false);
+
+  const isUpdateMode = React.useMemo(() => props.noteDetails?.resource?.authorId === props.userId, [props.noteDetails, props.userId]);
+
   const submitFormRef = React.useRef<FormRef>({
     validator: () => true,
     getFormValues: () => ({}),
@@ -63,15 +69,38 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
 
     if (submitFormRef.current.validator()) {
       const formData = submitFormRef.current.getFormValues() as FormDataType;
-      await createNote({
+      const params = {
         labels: formData.labels.map(label => label.value),
         title: frontmatterValue.title,
         introduction: frontmatterValue.introduction,
         content: value,
         category: formData.category,
-      });
+      };
+      let id = 0;
 
-      console.log('成功');
+      if (isUpdateMode) {
+        id = (await updateNote(props.noteId, params)).data.resource!.id;
+      } else {
+        await createNote(params);
+      }
+
+      window.localStorage.removeItem(LOCAL_NOTE_DRAFTS);
+      setVisibleSubmitModal(false);
+      showModal({
+        content: isUpdateMode ? '更新成功' : '创建成功',
+        buttons: [
+          { content: '查看详情', theme: 'secondary' },
+          { content: '同步至 GitHub' },
+        ],
+        async onClick(index) {
+          if (index) {
+            await syncToGithub();
+            showNotification({ content: '同步成功', theme: 'success' });
+          }
+
+          router.replace(`/notes/${id}`);
+        },
+      });
     }
   };
 
@@ -83,6 +112,25 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
       url: `/public/upload/${(image.data.resource?.filename ?? '')}`,
     }];
   };
+
+  React.useEffect(() => {
+    const localDrafts = window.localStorage.getItem(LOCAL_NOTE_DRAFTS);
+    if (props.noteDetails?.resource?.content) {
+      setValue(props.noteDetails?.resource?.content);
+    } else if (localDrafts) {
+      setValue(JSON.parse(localDrafts));
+    }
+  }, [props.noteDetails]);
+
+  React.useEffect(() => {
+    const timer = window.setTimeout(() => {
+      if (value) {
+        window.localStorage.setItem(LOCAL_NOTE_DRAFTS, JSON.stringify(value));
+      }
+    }, 30000);
+
+    return () => window.clearTimeout(timer);
+  }, [value]);
 
   return (
     <div className={styles.container}>
@@ -178,10 +226,16 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
   );
 };
 
-export const getServerSideProps = withSessionSsr(async context => ({
-  props: {
-    userId: context.req.session.user?.id ?? 0,
-  },
-}));
+export const getServerSideProps = withSessionSsr(async context => {
+  const noteId = getNumberFromString(context.query.id);
+  const noteDetails = noteId ? await getNoteDetails(noteId) : null;
+  return {
+    props: {
+      noteId,
+      userId: context.req.session.user?.id ?? 0,
+      noteDetails: noteDetails ? noteDetails?.data : null,
+    },
+  };
+});
 
 export default CreateNotes;
