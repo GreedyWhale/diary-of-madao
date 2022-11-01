@@ -129,9 +129,10 @@ export const Layout: NextPage<React.PropsWithChildren> = props => {
       </div>
       <Navbar />
       <main className={styles.main}>
-        <div>
+        <div className={styles.inner}>
           {props.children}
         </div>
+        <div className={styles.inner_bg} />
       </main>
 
       <div className={styles.footer}>

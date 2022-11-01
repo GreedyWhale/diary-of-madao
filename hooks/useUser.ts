@@ -13,7 +13,7 @@ import { userIdAtom } from '~/store/user';
 import { apiUser } from '~/services/api';
 import { getUserInfo } from '~/services/user';
 
-export const useUserId = (userId?: number) => {
+export const useUpdateUserId = (userId?: number) => {
   const setUserId = useSetAtom(userIdAtom);
   React.useEffect(() => {
     if (userId) {

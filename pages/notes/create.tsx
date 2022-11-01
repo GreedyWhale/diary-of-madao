@@ -21,7 +21,7 @@ import submitPlugin from '~/lib/bytemdPlugins/submit';
 import goBackPlugin from '~/lib/bytemdPlugins/goBack';
 import getFrontmatter from '~/lib/bytemdPlugins/getFrontmatter';
 import { createNote } from '~/services/note';
-import { useUserId } from '~/hooks/useUser';
+import { useUpdateUserId } from '~/hooks/useUser';
 import { withSessionSsr } from '~/lib/withSession';
 import { NOTE_CATEGORY } from '~/lib/constants';
 import { upload } from '~/services/upload';
@@ -38,7 +38,7 @@ const initialFrontmatter: Record<'title' | 'introduction', string> = {
 };
 
 const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
-  useUserId(props.userId);
+  useUpdateUserId(props.userId);
   const router = useRouter();
   const { plugins } = useMarkdown();
   const [value, setValue] = React.useState('---\ntitle: \'文章标题\'\nintroduction: \'文章简介\'\n---');

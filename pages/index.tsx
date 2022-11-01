@@ -10,7 +10,7 @@ import { Card } from '~/components/Card';
 import { Pagination } from '~/components/Pagination';
 
 import { withSessionSsr } from '~/lib/withSession';
-import { useUserId } from '~/hooks/useUser';
+import { useUpdateUserId } from '~/hooks/useUser';
 import { getNotes } from '~/services/note';
 
 type WelcomeType = {
@@ -31,7 +31,7 @@ type WelcomeType = {
 };
 
 const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
-  useUserId(props.userId);
+  useUpdateUserId(props.userId);
 
   const [welcome, setWelcome] = useImmer<WelcomeType>({
     rawData: {

@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-10-14 17:19:56
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-31 18:56:33
+ * @LastEditTime: 2022-11-01 15:56:21
  */
 import type { Note, Category, Label, User } from '@prisma/client';
 import type { Response } from '~/lib/api';
@@ -105,9 +105,7 @@ class Notes extends BaseModel {
         where: { id },
         data: {
           ...rest,
-          author: {
-            connect: { id: userId },
-          },
+          authorId: userId,
           labels: {
             connectOrCreate: labels.map(label => ({
               create: { name: label },

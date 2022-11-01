@@ -70,9 +70,18 @@
   .main {
     width: var(--main-width);
     padding: 20px 0 20px;
-    > div {
-      background: rgba(0, 055, 0, 0.2);
+    position: relative;
+    .inner_bg {
+      position: absolute;
+      @include mixin.zIndex(wallpaper);
+      top: 20px;
+      left: 0;
+      right: 0;
+      bottom: 20px;
       backdrop-filter: blur(10px);
+    }
+    .inner {
+      background: rgba(0, 055, 0, 0.2);
       border-radius: var(--border-radius);
       border: 1px solid rgba(0, 0, 0, 0.416);
       height: calc(100vh - 40px);

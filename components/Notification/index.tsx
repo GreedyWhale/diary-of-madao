@@ -66,7 +66,7 @@ Notification.defaultProps = {
   delay: 3000,
 };
 
-const NotificationWrap = (props: { onMounted: () => void }) => {
+const NotificationWrap = (props: { onMounted: () => void; }) => {
   const [notificationList, setNotificationList] = React.useState<NotificationProps[]>([]);
   React.useEffect(() => {
     const listener = eventHub.on(updateNotificationEvent, (notifications: NotificationProps[]) => {

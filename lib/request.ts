@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-09-30 15:29:54
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-22 10:51:23
+ * @LastEditTime: 2022-11-01 15:43:36
  */
 import type { Response } from '~/lib/api';
 import type { AxiosError } from 'axios';
@@ -21,7 +21,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.response.use(response => response, async (error: AxiosError<Response<any>>) => {
-  let result: Response = {
+  let result: Response<unknown> = {
     message: '',
     status: 0,
   };
