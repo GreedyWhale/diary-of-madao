@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-10-14 17:19:56
  * @LastEditors: MADAO
- * @LastEditTime: 2022-11-01 16:43:50
+ * @LastEditTime: 2022-11-02 10:48:46
  */
 import type { Note, Category, Label, User } from '@prisma/client';
 import type { Response } from '~/lib/api';
@@ -35,7 +35,7 @@ export type NoteResponse = Response<(Note & {
 
 export type NotesResponse = Response<{
   list: NoteWithoutContent[];
-  pagination: Pagination & { total: number; };
+  pagination: Pagination & { total: number; totalPage: number; };
 }>;
 
 export type CreateNoteParams = Pick<Note, 'title' | 'introduction' | 'category' | 'content'>
@@ -181,6 +181,7 @@ class Notes extends BaseModel {
               pageSize: params.pageSize,
               page: params.page,
               total: notes[1],
+              totalPage: Math.ceil(notes[1] / params.pageSize),
             },
           },
         }),

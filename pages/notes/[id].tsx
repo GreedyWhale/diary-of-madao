@@ -23,7 +23,7 @@ const NoteDetails: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
 
   return (
     <div className={styles.container}>
-      <Terminal command={`cat ${12312}`} />
+      <Terminal command={`cat ${props.noteDetails?.resource?.title ?? ''}`} />
 
       <div className={styles.header}>
         <h1>{props.noteDetails?.resource?.title}</h1>

@@ -2,6 +2,7 @@ import type { NextPage, InferGetServerSidePropsType } from 'next';
 
 import React from 'react';
 import { useImmer } from 'use-immer';
+import { useRouter } from 'next/router';
 
 import styles from '~/assets/styles/pages/home.module.scss';
 import EmailIcon from '~/assets/images/email.svg';
@@ -12,6 +13,7 @@ import { Pagination } from '~/components/Pagination';
 import { withSessionSsr } from '~/lib/withSession';
 import { useUpdateUserId } from '~/hooks/useUser';
 import { getNotes } from '~/services/note';
+import { getNumberFromString } from '~/lib/number';
 
 type WelcomeType = {
   rawData: {
@@ -30,8 +32,11 @@ type WelcomeType = {
   icons: Array<{ component: React.ReactNode; key: string; }>;
 };
 
+const pageSize = 7;
+
 const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUpdateUserId(props.userId);
+  const router = useRouter();
 
   const [welcome, setWelcome] = useImmer<WelcomeType>({
     rawData: {
@@ -158,6 +163,8 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
     return unsubscribe;
   }, [typewritersTasks]);
 
+  console.log(props.notes);
+
   return (
     <div className={styles.container}>
       <div className={styles.welcome}>
@@ -181,25 +188,27 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
       </div>
 
       <Pagination
-        total={100}
+        total={props.notes?.resource?.pagination.totalPage ?? 1}
         current={1}
-        pageSize={7}
-        onClick={index => console.log(index)}
+        pageSize={pageSize}
+        onClick={async index => router.push(`/?page=${index}`)}
       />
     </div>
   );
 };
 
 export const getServerSideProps = withSessionSsr(async context => {
+  const currentPage = getNumberFromString(context.query.page) || 1;
   const notes = await getNotes({
-    page: parseInt((context.query.page as string) ?? 1, 10),
-    pageSize: 7,
+    page: currentPage,
+    pageSize,
   });
 
   return {
     props: {
       userId: context.req.session.user?.id ?? 0,
       notes: notes ? notes.data : null,
+      currentPage,
     },
   };
 });

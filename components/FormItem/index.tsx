@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash';
 
 import styles from './index.module.scss';
 
-type FormItemProps = {
+export type FormItemProps = {
   label: React.ReactNode;
   name: string;
   type?: 'text' | 'password' | 'radio' | 'checkbox';

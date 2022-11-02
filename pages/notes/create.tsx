@@ -2,6 +2,7 @@ import type { NextPage, InferGetServerSidePropsType } from 'next';
 import type { FormRef } from '~/components/Form';
 import type { Note } from '@prisma/client';
 import type { EditorProps } from '@bytemd/react';
+import type { FormItemProps } from '~/components/FormItem';
 
 import React from 'react';
 import { useRouter } from 'next/router';
@@ -29,10 +30,15 @@ import { upload } from '~/services/upload';
 import { useMarkdown } from '~/hooks/useMarkdown';
 import { getNumberFromString } from '~/lib/number';
 import { syncToGithub } from '~/services/git';
+import { createLabel, getLabels } from '~/services/label';
 
 type FormDataType = {
   category: Note['category'];
   labels: Array<{ label: string; value: string; }>;
+};
+
+type LabelFormDataType = {
+  labelName: string;
 };
 
 const initialFrontmatter: Record<'title' | 'introduction', string> = {
@@ -45,13 +51,23 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
   const router = useRouter();
   const { plugins } = useMarkdown();
   const [value, setValue] = React.useState('---\ntitle: \'文章标题\'\nintroduction: \'文章简介\'\n---');
+  const [labels, setLabels] = React.useState<FormItemProps['options']>([]);
   const [frontmatterValue, setFrontmatterValue] = React.useState(initialFrontmatter);
   const [visibleSubmitModal, setVisibleSubmitModal] = React.useState(false);
   const [visibleCreateLabelModal, setVisibleCreateLabelModal] = React.useState(false);
 
   const isUpdateMode = React.useMemo(() => props.noteDetails?.resource?.authorId === props.userId, [props.noteDetails, props.userId]);
+  const fetchLabels = React.useCallback(async () => {
+    const result = await getLabels();
+    setLabels(result.data.resource?.map(item => ({ label: item.name, value: item.name })));
+  }, []);
 
   const submitFormRef = React.useRef<FormRef>({
+    validator: () => true,
+    getFormValues: () => ({}),
+  });
+
+  const labelFormRef = React.useRef<FormRef>({
     validator: () => true,
     getFormValues: () => ({}),
   });
@@ -64,7 +80,7 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
     setFrontmatterValue(values);
   };
 
-  const submitNotes = async (el: React.MouseEvent<HTMLButtonElement>) => {
+  const submitNote = async (el: React.MouseEvent<HTMLButtonElement>) => {
     el.preventDefault();
 
     if (submitFormRef.current.validator()) {
@@ -81,7 +97,7 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
       if (isUpdateMode) {
         id = (await updateNote(props.noteId, params)).data.resource!.id;
       } else {
-        await createNote(params);
+        id = (await createNote(params)).data.resource!.id;
       }
 
       window.localStorage.removeItem(LOCAL_NOTE_DRAFTS);
@@ -101,6 +117,18 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
           router.replace(`/notes/${id}`);
         },
       });
+    }
+  };
+
+  const submitLabel = async (el: React.MouseEvent<HTMLButtonElement>) => {
+    el.preventDefault();
+
+    if (labelFormRef.current.validator()) {
+      const formData = labelFormRef.current.getFormValues() as LabelFormDataType;
+      await createLabel({ label: formData.labelName });
+      await fetchLabels();
+      showNotification({ content: '创建成功', theme: 'success' });
+      setVisibleCreateLabelModal(false);
     }
   };
 
@@ -131,6 +159,10 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
 
     return () => window.clearTimeout(timer);
   }, [value]);
+
+  React.useEffect(() => {
+    fetchLabels();
+  }, [fetchLabels]);
 
   return (
     <div className={styles.container}>
@@ -166,7 +198,7 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
             customButtons={
               <div className={styles.form_buttons}>
                 <Button key='cancel' theme='secondary' onClick={async () => { setVisibleSubmitModal(false); }}>取消</Button>
-                <Button key='confirm' theme='default' onClick={submitNotes}>提交</Button>
+                <Button key='confirm' theme='default' onClick={submitNote}>提交</Button>
               </div>
             }
           >
@@ -192,7 +224,7 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
               }
               name='labels'
               type='checkbox'
-              options={[{ label: '测试', value: 'test' }]}
+              options={labels}
               validator={{
                 message: '必选',
                 require: true,
@@ -205,11 +237,12 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
       {visibleCreateLabelModal && (
         <Model hideButtons title='创建标签'>
           <Form
+            ref={labelFormRef}
             className={styles.label_form}
             customButtons={
               <div className={styles.label_form_buttons}>
                 <Button theme='secondary' onClick={async () => setVisibleCreateLabelModal(false)}>取消</Button>
-                <Button>创建</Button>
+                <Button onClick={submitLabel}>创建</Button>
               </div>
             }
           >

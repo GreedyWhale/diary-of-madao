@@ -7,7 +7,7 @@
  * @Author: MADAO
  * @Date: 2022-10-22 14:21:44
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-27 14:42:19
+ * @LastEditTime: 2022-11-01 20:41:22
  */
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 
@@ -47,6 +47,7 @@ export const authMiddleware: MiddlewareType = async (req, res) => {
   switch (true) {
     case url.endsWith('/session'):
     case url.includes('/note') && method === 'GET':
+    case url.endsWith('/label') && method === 'GET':
       return true;
     default:
       if (!user) {
