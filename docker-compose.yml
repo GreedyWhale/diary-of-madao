@@ -9,6 +9,8 @@ services:
       - "5432:5432"
     env_file:
       - .env.database
+    networks:
+      - proxy
 
   app:
     image: node:16
