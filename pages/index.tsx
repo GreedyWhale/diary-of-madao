@@ -188,7 +188,8 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
       </div>
 
       <Pagination
-        total={props.notes?.resource?.pagination.totalPage ?? 1}
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        total={props.notes?.resource?.pagination.totalPage || 1}
         current={1}
         pageSize={pageSize}
         onClick={async index => router.push(`/?page=${index}`)}
