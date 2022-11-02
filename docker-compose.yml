@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:latest
+    container_name: diary-of-madao.db
+    volumes:
+      - "../database/diary-of-madao:/var/lib/postgresql/data"
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env.database
+
+  app:
+    image: node:16
+    container_name: diary-of-madao.app
+    working_dir: /code
+    command: >
+      sh -c "./bin/wait-for-if.sh db:5432 -- corepack enable
+      && corepack prepare yarn@1.22.11 --activate
+      && yarn install
+      && yarn migrate:prod
+      && yarn generate
+      && yarn build
+      && yarn start"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ".:/code"
+      - "/home/app/.ssh:/root/.ssh"
+    depends_on:
+      - db
