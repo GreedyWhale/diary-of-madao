@@ -44,4 +44,4 @@ services:
 networks:
   default:
     external:
-      name: greed-apps-networks
+      name: greed-apps-network
