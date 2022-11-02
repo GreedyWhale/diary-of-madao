@@ -37,5 +37,11 @@ services:
     volumes:
       - "./nginx.conf:/etc/nginx/conf.d/default.conf"
       - "./.next:/usr/share/nginx/html/_next"
+    networks:
+      - greed-apps
     depends_on:
       - app
+
+networks:
+  greed-apps:
+    external: true
