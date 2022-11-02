@@ -40,11 +40,6 @@ services:
     depends_on:
       - app
 
-  reverse-proxy:
-    networks:
-      default:
-        aliases:
-          - diary-of-madao
 
 networks:
   default:
