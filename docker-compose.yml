@@ -28,3 +28,8 @@ services:
       - "/home/app/.ssh:/root/.ssh"
     depends_on:
       - db
+
+networks:
+  default:
+    name: greed-apps
+    external: true
