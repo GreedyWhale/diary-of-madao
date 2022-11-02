@@ -26,6 +26,8 @@ services:
     volumes:
       - ".:/code"
       - "/home/app/.ssh:/root/.ssh"
+    networks:
+      - proxy
     depends_on:
       - db
 
