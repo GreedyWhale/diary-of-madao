@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-09-30 11:35:06
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-31 23:08:07
+ * @LastEditTime: 2022-11-02 11:08:19
  */
 import type { User } from '@prisma/client';
 import type { Response } from '~/lib/api';
@@ -30,6 +30,7 @@ class UserModel extends BaseModel {
         { username, password },
         [
           { key: 'username', message: '用户名格式错误，用户名长度为3～20的字母或数字组成', required: value => /^[\w\d]{3,20}$/.test(value) },
+          { key: 'username', message: '备案原因，暂时不支持非管理员用户登录', required: value => value === process.env.ADMIN_NAME },
           { key: 'password', message: '密码格式错误，密码长度为6～15的字母或数字组成', required: value => /^[\w\d]{6,15}$/.test(value) },
         ],
       );
