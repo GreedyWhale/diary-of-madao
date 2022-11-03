@@ -163,8 +163,6 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
     return unsubscribe;
   }, [typewritersTasks]);
 
-  console.log(props.notes);
-
   return (
     <div className={styles.container}>
       <div className={styles.welcome}>

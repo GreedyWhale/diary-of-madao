@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-10-22 15:49:00
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-31 21:24:39
+ * @LastEditTime: 2022-11-03 14:19:19
  */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { Response } from '~/lib/api';
@@ -33,7 +33,6 @@ class UploadModel {
     storage: multer.diskStorage({
       filename(req, file, cb) {
         const [filename, extname] = file.originalname.split('.');
-        console.log('filename', filename);
         cb(null, `${filename}_${Date.now()}.${extname}`);
       },
       destination: path.join(process.cwd(), './public/upload'),

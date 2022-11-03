@@ -111,45 +111,41 @@ const Cube: React.FC = () => (
   </div>
 );
 
-export const Layout: NextPage<React.PropsWithChildren> = props => {
-  console.log(1);
-
-  return (
-    <div className={styles.container}>
-      <div className={styles.bg}>
-        <Cube />
-        <GridIcon className={styles.grid} />
-        <div className={styles.slogan}>
-          <h2>Don&apos;t</h2>
-          <h2>Be</h2>
-          <h2>Afraid</h2>
-          <h2>Of</h2>
-          <h2>Anyone</h2>
-        </div>
-      </div>
-      <Navbar />
-      <main className={styles.main}>
-        <div className={styles.inner}>
-          {props.children}
-        </div>
-        <div className={styles.inner_bg} />
-      </main>
-
-      <div className={styles.footer}>
-        <a
-          href='https://beian.miit.gov.cn'
-          target='_blank'
-          rel='noreferrer'
-        >
-            陇ICP备2021003360号-1
-        </a>
-        <div>
-          <a className={styles.record} target='_blank' href='http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=62042302000165' rel='noreferrer'>
-            <Image src='/images/record_icon.png' width={15} height={15} alt='record icon' />
-            <p>甘公网安备 62042302000165号</p>
-          </a>
-        </div>
+export const Layout: NextPage<React.PropsWithChildren> = props => (
+  <div className={styles.container}>
+    <div className={styles.bg}>
+      <Cube />
+      <GridIcon className={styles.grid} />
+      <div className={styles.slogan}>
+        <h2>Don&apos;t</h2>
+        <h2>Be</h2>
+        <h2>Afraid</h2>
+        <h2>Of</h2>
+        <h2>Anyone</h2>
       </div>
     </div>
-  );
-};
+    <Navbar />
+    <main className={styles.main}>
+      <div className={styles.inner}>
+        {props.children}
+      </div>
+      <div className={styles.inner_bg} />
+    </main>
+
+    <div className={styles.footer}>
+      <a
+        href='https://beian.miit.gov.cn'
+        target='_blank'
+        rel='noreferrer'
+      >
+            陇ICP备2021003360号-1
+      </a>
+      <div>
+        <a className={styles.record} target='_blank' href='http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=62042302000165' rel='noreferrer'>
+          <Image src='/images/record_icon.png' width={15} height={15} alt='record icon' />
+          <p>甘公网安备 62042302000165号</p>
+        </a>
+      </div>
+    </div>
+  </div>
+);

@@ -20,7 +20,7 @@ const loginPageHref = '/login';
 
 const UserProfile: React.FC = () => {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, logout } = useUser();
 
   return (
     <li data-active={router.asPath === loginPageHref}>
@@ -30,7 +30,7 @@ const UserProfile: React.FC = () => {
             {user.username}
             <ul>
               <li><Link href='/notes/create'>创建笔记</Link></li>
-              <li>退出登录</li>
+              <li onClick={logout}>退出登录</li>
             </ul>
           </div>
         )

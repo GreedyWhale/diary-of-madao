@@ -164,6 +164,13 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
     fetchLabels();
   }, [fetchLabels]);
 
+  React.useEffect(() => {
+    if (!props.userId) {
+      showNotification({ content: '请先登录', theme: 'fail' });
+      router.replace('/');
+    }
+  }, [props.userId, router]);
+
   return (
     <div className={styles.container}>
       <style jsx global>{`
