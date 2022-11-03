@@ -14,6 +14,7 @@ import { withSessionSsr } from '~/lib/withSession';
 import { useUpdateUserId } from '~/hooks/useUser';
 import { getNotes } from '~/services/note';
 import { getNumberFromString } from '~/lib/number';
+import { PAGE_SIZE } from '~/lib/constants';
 
 type WelcomeIconType = { component: React.ReactNode; key: string; onClick: () => void; };
 type WelcomeType = {
@@ -32,8 +33,6 @@ type WelcomeType = {
   description: string[];
   icons: WelcomeIconType[];
 };
-
-const pageSize = 7;
 
 const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUpdateUserId(props.userId);
@@ -199,7 +198,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
           <Pagination
             total={props.notes.resource.pagination.totalPage}
             current={1}
-            pageSize={pageSize}
+            pageSize={PAGE_SIZE}
             onClick={async index => router.push(`/?page=${index}`)}
           />
         )
@@ -213,7 +212,7 @@ export const getServerSideProps = withSessionSsr(async context => {
   const currentPage = getNumberFromString(context.query.page) || 1;
   const notes = await getNotes({
     page: currentPage,
-    pageSize,
+    pageSize: PAGE_SIZE,
   });
 
   return {

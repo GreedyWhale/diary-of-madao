@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-10-14 17:19:56
  * @LastEditors: MADAO
- * @LastEditTime: 2022-11-02 10:48:46
+ * @LastEditTime: 2022-11-03 15:22:31
  */
 import type { Note, Category, Label, User } from '@prisma/client';
 import type { Response } from '~/lib/api';
@@ -168,9 +168,7 @@ class Notes extends BaseModel {
             orderBy: { createdAt: 'desc' },
           }),
           prisma.note.count({
-            where: params.labelId
-              ? { labels: { some: { id: params.labelId } } }
-              : {},
+            where: getWhereRules(),
           }),
         ]),
 
