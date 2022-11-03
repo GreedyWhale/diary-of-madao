@@ -15,7 +15,7 @@ services:
     container_name: diary-of-madao.app
     working_dir: /code
     command: >
-      sh -c "./bin/wait-for-if.sh db:5432 -- corepack enable
+      sh -c "./bin/wait-for-if.sh diary-of-madao.db:5432 -- corepack enable
       && corepack prepare yarn@1.22.11 --activate
       && yarn install
       && yarn migrate:prod
