@@ -137,7 +137,7 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
     return [{
       alt: image.data.resource?.originalname,
       title: image.data.resource?.originalname,
-      url: `/public/upload/${(image.data.resource?.filename ?? '')}`,
+      url: `/_next/upload/${(image.data.resource?.filename ?? '')}`,
     }];
   };
 
