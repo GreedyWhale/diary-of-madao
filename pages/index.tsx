@@ -15,11 +15,12 @@ import { useUpdateUserId } from '~/hooks/useUser';
 import { getNotes } from '~/services/note';
 import { getNumberFromString } from '~/lib/number';
 
+type WelcomeIconType = { component: React.ReactNode; key: string; onClick: () => void; };
 type WelcomeType = {
   rawData: {
     title: string[];
     description: string[][];
-    icons: Array<{ component: React.ReactNode; key: string; }>;
+    icons: WelcomeIconType[];
     titleIndex: number;
     descriptionIndex: {
       index: number;
@@ -29,7 +30,7 @@ type WelcomeType = {
   };
   title: string;
   description: string[];
-  icons: Array<{ component: React.ReactNode; key: string; }>;
+  icons: WelcomeIconType[];
 };
 
 const pageSize = 7;
@@ -47,8 +48,16 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
         ['目', '前', '在', '广', '州', '工', '作', '，', '可', '以', '通', '过', '下', '面', '方', '式', '联', '系', '到', '我', '👇'],
       ],
       icons: [
-        { key: 'email', component: <EmailIcon className={styles.icon} /> },
-        { key: 'github', component: <GithubIcon className={styles.icon} /> },
+        {
+          key: 'email',
+          component: <EmailIcon className={styles.icon} />,
+          onClick: () => window.open('mailto:madaocai@gmail.com'),
+        },
+        {
+          key: 'github',
+          component: <GithubIcon className={styles.icon} />,
+          onClick: () => window.open('https://github.com/GreedyWhale'),
+        },
       ],
       titleIndex: 0,
       descriptionIndex: {
@@ -172,7 +181,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
         ))}
         <ul className={styles.icon_wrap}>
           {welcome.icons.map(value => (
-            <li key={value.key}>
+            <li key={value.key} onClick={value.onClick}>
               {value.component}
             </li>
           ))}
