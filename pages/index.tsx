@@ -187,14 +187,17 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = p
         ))}
       </div>
 
-      {props.notes?.resource?.pagination.totalPage && (
-        <Pagination
-          total={props.notes.resource.pagination.totalPage}
-          current={1}
-          pageSize={pageSize}
-          onClick={async index => router.push(`/?page=${index}`)}
-        />
-      )}
+      {props.notes?.resource?.pagination.totalPage
+        ? (
+          <Pagination
+            total={props.notes.resource.pagination.totalPage}
+            current={1}
+            pageSize={pageSize}
+            onClick={async index => router.push(`/?page=${index}`)}
+          />
+        )
+        : <></>
+      }
     </div>
   );
 };

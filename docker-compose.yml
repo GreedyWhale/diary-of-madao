@@ -37,7 +37,7 @@ services:
     volumes:
       - "./nginx.conf:/etc/nginx/conf.d/default.conf"
       - "./.next:/usr/share/nginx/html/_next"
-      - "./public/upload:/usr/share/nginx/upload"
+      - "./public/upload:/usr/share/nginx/public"
     depends_on:
       - app
 
