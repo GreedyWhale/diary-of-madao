@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-10-14 17:19:56
  * @LastEditors: MADAO
- * @LastEditTime: 2022-11-03 15:22:31
+ * @LastEditTime: 2022-11-03 15:55:35
  */
 import type { Note, Category, Label, User } from '@prisma/client';
 import type { Response } from '~/lib/api';
@@ -129,14 +129,14 @@ class Notes extends BaseModel {
     const getWhereRules = () => {
       if (params.labelId && params.category) {
         return {
-          labels: { every: { id: params.labelId } },
+          labels: { some: { id: params.labelId } },
           category: params.category,
         };
       }
 
       if (params.labelId) {
         return {
-          labels: { every: { id: params.labelId } },
+          labels: { some: { id: params.labelId } },
         };
       }
 
@@ -161,9 +161,7 @@ class Notes extends BaseModel {
               author: {
                 select: { username: true },
               },
-              labels: {
-                select: { name: true },
-              },
+              labels: true,
             },
             orderBy: { createdAt: 'desc' },
           }),

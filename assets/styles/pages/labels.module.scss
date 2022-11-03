@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 20px 40px;
+  > li {
+    padding: 1em 2em;
+    border: 1px dashed var(--theme-color-pink);
+    margin-right: 2em;
+    cursor: pointer;
+    &:hover {
+      color: var(--theme-color-pink);
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import type { NextPage, InferGetServerSidePropsType } from 'next';
 import type { Category } from '@prisma/client';
+import type { GetNotesParams } from '~/model/note';
 
 import React from 'react';
 import { useRouter } from 'next/router';
@@ -13,11 +14,9 @@ import { getNotes } from '~/services/note';
 import { getNumberFromString } from '~/lib/number';
 import { PAGE_SIZE } from '~/lib/constants';
 
-const NotesCategory: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
+const NoteList: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUpdateUserId(props.userId);
   const router = useRouter();
-
-  console.log(props.notes);
 
   return (
     <div>
@@ -43,11 +42,29 @@ const NotesCategory: NextPage<InferGetServerSidePropsType<typeof getServerSidePr
 };
 
 export const getServerSideProps = withSessionSsr(async context => {
-  const currentPage = getNumberFromString(context.query.page) || 1;
+  const { key, slug, page } = context.query;
+  const currentPage = getNumberFromString(page) || 1;
+  const queryParams: Pick<GetNotesParams, 'labelId' | 'category'> = {
+    category: undefined,
+    labelId: 0,
+  };
+  switch (key) {
+    case 'category':
+      queryParams.category = ((slug as string).toLocaleUpperCase() as Category);
+      break;
+
+    case 'labelId':
+      queryParams.labelId = getNumberFromString(slug);
+      break;
+
+    default:
+      break;
+  }
+
   const notes = await getNotes({
     page: currentPage,
     pageSize: PAGE_SIZE,
-    category: context.query.category ? ((context.query.category as string).toLocaleUpperCase() as Category) : undefined,
+    ...queryParams,
   });
 
   return {
@@ -59,4 +76,4 @@ export const getServerSideProps = withSessionSsr(async context => {
   };
 });
 
-export default NotesCategory;
+export default NoteList;

@@ -10,9 +10,9 @@ import { useUser } from '~/hooks/useUser';
 
 const navMap = [
   { text: '首页⛺️', href: '/' },
-  { text: '技术笔记📔', href: '/notes/category/technical' },
-  { text: '读书笔记📚', href: '/notes/category/reading' },
-  { text: '标签🏷️', href: '/tag' },
+  { text: '技术笔记📔', href: '/notes/list/category/technical' },
+  { text: '读书笔记📚', href: '/notes/list/category/reading' },
+  { text: '标签🏷️', href: '/labels' },
   { text: '关于我🧐', href: '/about' },
 ];
 
