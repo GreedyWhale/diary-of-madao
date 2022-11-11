@@ -11,12 +11,13 @@ import { Button } from '~/components/Button';
 import { withSessionSsr } from '~/lib/withSession';
 import { getNoteDetails } from '~/services/note';
 import { getNumberFromString } from '~/lib/number';
-import { useMarkdown } from '~/hooks/useMarkdown';
+import { useMarkdown, useMarkdownCopyButton } from '~/hooks/useMarkdown';
 import { useUser, useUpdateUserId } from '~/hooks/useUser';
 import { formatDate } from '~/lib/date';
 
 const NoteDetails: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
   useUpdateUserId(props.userId);
+  useMarkdownCopyButton();
   const router = useRouter();
   const { user } = useUser();
   const { plugins } = useMarkdown();

@@ -5,6 +5,7 @@ import '~/assets/styles/global.scss';
 import '~/assets/styles/reset.scss';
 import '~/assets/styles/markdown.scss';
 import { Layout } from '~/components/Layout';
+import { Backdrop } from '~/components/Backdrop';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -12,6 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>牢骚百物语</title>
       </Head>
+      <Backdrop />
       <Layout>
         <Component {...pageProps} />
       </Layout>

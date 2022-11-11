@@ -1,3 +1,5 @@
+@use './mixin';
+
 .markdown-wrap {
   .bytemd-preview,
   .markdown-body {
@@ -42,6 +44,23 @@
       font-weight: bold;
       color: #F34573;
     }
+    pre {
+      position: relative;
+      .copy-button {
+        color: #000;
+        box-sizing: border-box;
+        cursor: pointer;
+        user-select: none;
+        background: #adb5bd;
+        border: 1px solid rgba(0, 0, 0, 0);
+        padding: 5px 10px;
+        font-size: 0.8em;
+        position: absolute;
+        top: 0;
+        right: 0;
+        border-radius: 0 0.15rem;
+      }
+    }
   }
 }
 
@@ -50,4 +69,11 @@
   .markdown-body {
     background: transparent !important;
   }
+}
+
+.medium-zoom--opened .medium-zoom-overlay {
+  @include mixin.zIndex(markdownImagePreviewBg);
+}
+.medium-zoom-image .medium-zoom-image--opened {
+  @include mixin.zIndex(markdownImagePreview);
 }
