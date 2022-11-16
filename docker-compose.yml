@@ -17,6 +17,7 @@ services:
     command: >
       sh -c "./bin/wait-for-if.sh diary-of-madao.db:5432 -- npm config set registry http://mirrors.cloud.tencent.com/npm/
       && npm install -g pnpm
+      && pnpm install
       && pnpm migrate:prod
       && pnpm build
       && pnpm start"
