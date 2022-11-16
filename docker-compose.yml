@@ -11,7 +11,7 @@ services:
       - .env.database
 
   app:
-    image: node:16
+    image: node:18
     container_name: diary-of-madao.app
     working_dir: /code
     command: >
