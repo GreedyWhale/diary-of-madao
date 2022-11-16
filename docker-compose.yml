@@ -15,12 +15,11 @@ services:
     container_name: diary-of-madao.app
     working_dir: /code
     command: >
-      sh -c "./bin/wait-for-if.sh diary-of-madao.db:5432 -- corepack enable
-      && corepack prepare pnpm@latest --activate
-      && yarn install
-      && yarn migrate:prod
-      && yarn build
-      && yarn start"
+      sh -c "./bin/wait-for-if.sh diary-of-madao.db:5432 -- npm install -g pnpm
+      && pnpm install
+      && pnpm migrate:prod
+      && pnpm build
+      && pnpm start"
     ports:
       - "3000:3000"
     volumes:
