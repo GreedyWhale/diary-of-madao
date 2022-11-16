@@ -16,6 +16,7 @@ services:
     working_dir: /code
     command: >
       sh -c "./bin/wait-for-if.sh diary-of-madao.db:5432 -- corepack enable
+      && corepack prepare yarn@stable --activate
       && yarn install
       && yarn migrate:prod
       && yarn build
