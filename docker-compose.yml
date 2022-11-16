@@ -16,7 +16,7 @@ services:
     working_dir: /code
     command: >
       sh -c "./bin/wait-for-if.sh diary-of-madao.db:5432 -- npm config set registry http://mirrors.cloud.tencent.com/npm/
-      && yarn install -g yarn@1.22.19
+      && npm install --global yarn
       && yarn install
       && yarn migrate:prod
       && yarn build
