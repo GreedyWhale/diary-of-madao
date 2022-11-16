@@ -16,10 +16,10 @@ services:
     working_dir: /code
     command: >
       sh -c "./bin/wait-for-if.sh diary-of-madao.db:5432 -- npm config set registry http://mirrors.cloud.tencent.com/npm/
-      && npm install
-      && npm run migrate:prod
-      && npm run build
-      && npm run start"
+      && npm install -g pnpm
+      && pnpm migrate:prod
+      && pnpm build
+      && pnpm start"
     ports:
       - "3000:3000"
     volumes:
