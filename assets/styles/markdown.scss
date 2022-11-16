@@ -74,6 +74,6 @@
 .medium-zoom--opened .medium-zoom-overlay {
   @include mixin.zIndex(markdownImagePreviewBg);
 }
-.medium-zoom-image .medium-zoom-image--opened {
+.medium-zoom--opened .medium-zoom-image--opened {
   @include mixin.zIndex(markdownImagePreview);
 }
