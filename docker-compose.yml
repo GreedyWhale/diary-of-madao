@@ -16,8 +16,7 @@ services:
     working_dir: /code
     command: >
       sh -c "./bin/wait-for-if.sh diary-of-madao.db:5432 -- npm config set registry http://mirrors.cloud.tencent.com/npm/
-      && corepack enable
-      && corepack prepare pnpm@latest --activate
+      && npm install -g pnpm
       && pnpm install
       && pnpm migrate:prod
       && pnpm build
