@@ -3,6 +3,8 @@ title: 'MADAO观察日记-博客篇(二).md'
 introduction: '实现用户注册功能'
 ---
 
+![banner_2.jpeg](/_next/upload/banner_2_1668613266370.jpeg "banner_2.jpeg")
+
 ## 0x00 前言
 
 接着上一篇的笔记来实现用户的登录、登出功能。
