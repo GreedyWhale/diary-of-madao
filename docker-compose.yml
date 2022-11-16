@@ -17,11 +17,11 @@ services:
     command: >
       sh -c "./bin/wait-for-if.sh diary-of-madao.db:5432 -- npm config set registry http://mirrors.cloud.tencent.com/npm/
       && corepack enable
-      && corepack prepare yarn@1.22.19 --activate
-      && yarn install
-      && yarn migrate:prod
-      && yarn build
-      && yarn start"
+      && corepack prepare pnpm@latest --activate
+      && pnpm install
+      && pnpm migrate:prod
+      && pnpm build
+      && pnpm start"
     ports:
       - "3000:3000"
     volumes:
