@@ -3,9 +3,9 @@ import React from 'react';
 import styles from './index.module.scss';
 
 type PaginationProps = {
-  total: number;
+  totalPage: number;
   current: number;
-  pageSize: number;
+  viewItem: number;
   onClick: (_page: number) => void;
   step?: number;
 };
@@ -14,30 +14,30 @@ export const Pagination: React.FC<PaginationProps> = props => {
   const [unPassed, setUnPassed] = React.useState(false);
 
   const items = React.useMemo(() => {
-    if (props.total <= props.pageSize) {
-      return Array.from({ length: props.total }, (value, index) => index + 1);
+    if (props.totalPage <= props.viewItem) {
+      return Array.from({ length: props.totalPage }, (value, index) => index + 1);
     }
 
-    const result = [...new Set([1, props.current, props.total])];
+    const result = [...new Set([1, props.current, props.totalPage])];
     // 计算左边填充的元素数量
     const numberOfLeftFill = props.current - 1;
     if (numberOfLeftFill) {
       Array.from({ length: numberOfLeftFill }, (value, index) => index + 1)
         .forEach(value => {
           const child = props.current - value;
-          if (child > 1 && result.length < props.pageSize) {
+          if (child > 1 && result.length < props.viewItem) {
             result.push(child);
           }
         });
     }
 
     // 计算右边填充的元素数量
-    const numberOfRightFill = props.pageSize - result.length;
+    const numberOfRightFill = props.viewItem - result.length;
     if (numberOfRightFill) {
       Array.from({ length: numberOfRightFill }, (value, index) => index + 1)
         .forEach(value => {
           const child = props.current + value;
-          if (child < props.total && result.length < props.pageSize) {
+          if (child < props.totalPage && result.length < props.viewItem) {
             result.push(child);
           }
         });
@@ -64,8 +64,8 @@ export const Pagination: React.FC<PaginationProps> = props => {
 
       case 'add': {
         let index = props.current + payload;
-        if (index > props.total) {
-          index = props.total;
+        if (index > props.totalPage) {
+          index = props.totalPage;
         }
 
         props.onClick(index);
@@ -79,9 +79,9 @@ export const Pagination: React.FC<PaginationProps> = props => {
 
   React.useEffect(() => {
     const rules = [
-      { rule: props.total < 1, message: 'total 必须大于或等于 1' },
-      { rule: props.pageSize < 1, message: 'total 不能小于1' },
-      { rule: props.current > props.total, message: 'current 不能大于 total' },
+      { rule: props.totalPage < 1, message: 'totalPage 必须大于或等于 1' },
+      { rule: props.viewItem < 1, message: 'viewItem 不能小于1' },
+      { rule: props.current > props.totalPage, message: 'current 不能大于 totalPage' },
     ];
 
     rules.some(item => {
@@ -117,7 +117,7 @@ export const Pagination: React.FC<PaginationProps> = props => {
             </React.Fragment>
           );
         })}
-        <li data-disable={props.current === props.total} onClick={() => handleClick('add', 1)}>下一页</li>
+        <li data-disable={props.current === props.totalPage} onClick={() => handleClick('add', 1)}>下一页</li>
       </ul>)}
     </div>
   );

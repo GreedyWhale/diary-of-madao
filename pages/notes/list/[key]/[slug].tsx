@@ -29,9 +29,9 @@ const NoteList: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>>
       {props.notes?.resource?.pagination.totalPage
         ? (
           <Pagination
-            total={props.notes.resource.pagination.totalPage}
+            totalPage={props.notes.resource.pagination.totalPage}
             current={1}
-            pageSize={PAGE_SIZE}
+            viewItem={PAGE_SIZE}
             onClick={async index => router.push(`/?page=${index}`)}
           />
         )
