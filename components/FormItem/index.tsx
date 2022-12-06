@@ -12,7 +12,11 @@ export type FormItemProps = {
     require: boolean | (<T>(value: T) => boolean);
     message: string;
   };
-  options?: Array<{ label: string; value: string | number | boolean | Record<string, any>; }>;
+  options?: Array<{
+    label: string;
+    value: string | number | boolean | Record<string, any>;
+    checked?: boolean;
+  }>;
   className?: string;
 };
 
@@ -80,6 +84,29 @@ export const FormItem = React.forwardRef<FormItemRef, FormItemProps>((props, ref
     },
 
   }));
+
+  React.useEffect(() => {
+    if (props.type === 'radio') {
+      const index = props.options?.findIndex(item => item.checked);
+      if (index && index !== -1) {
+        setRadioSelectedIndex(index);
+      }
+    }
+
+    if (props.type === 'checkbox') {
+      const indexList = props.options?.reduce<number[]>((prev, current, index) => {
+        if (current.checked) {
+          prev.push(index);
+        }
+
+        return prev;
+      }, []);
+
+      if (indexList?.length) {
+        setCheckboxSelectedIndex(indexList);
+      }
+    }
+  }, [props.type, props.options]);
 
   return (
     <div className={[styles.container, props.className].join(' ')}>

@@ -72,6 +72,17 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
     getFormValues: () => ({}),
   });
 
+  const memoizedLabels = React.useMemo(() => {
+    if (props.noteDetails?.resource?.labels) {
+      return labels?.map(item => ({
+        ...item,
+        checked: props.noteDetails?.resource?.labels.some(value => value.name === item.value),
+      }));
+    }
+
+    return labels;
+  }, [labels, props.noteDetails?.resource?.labels]);
+
   const fetchFrontmatterValue = (values: typeof initialFrontmatter) => {
     if (isEqual(values, frontmatterValue)) {
       return;
@@ -214,8 +225,8 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
               name='category'
               type='radio'
               options={[
-                { label: '技术笔记', value: NOTE_CATEGORY[0] },
-                { label: '读书笔记', value: NOTE_CATEGORY[1] },
+                { label: '技术笔记', value: NOTE_CATEGORY[0], checked: props.noteDetails?.resource?.category === NOTE_CATEGORY[0] },
+                { label: '读书笔记', value: NOTE_CATEGORY[1], checked: props.noteDetails?.resource?.category === NOTE_CATEGORY[1] },
               ]}
               validator={{
                 message: '必选',
@@ -231,7 +242,7 @@ const CreateNotes: NextPage<InferGetServerSidePropsType<typeof getServerSideProp
               }
               name='labels'
               type='checkbox'
-              options={labels}
+              options={memoizedLabels}
               validator={{
                 message: '必选',
                 require: true,
