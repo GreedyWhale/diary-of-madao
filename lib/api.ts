@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-10-22 10:46:14
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-31 17:50:08
+ * @LastEditTime: 2022-12-06 12:13:27
  */
 export type Response<T> = {
   resource?: T;
@@ -17,6 +17,7 @@ const responseMessageMap: Record<string, string> = {
   401: 'Unauthorized',
   404: 'Not Found',
   405: 'Method Not Allowed',
+  500: 'Internal Server Error',
 };
 
 export const formatResponse = <T>(params: Partial<Response<T>>): Response<T> => {
