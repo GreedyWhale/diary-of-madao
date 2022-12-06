@@ -3,17 +3,17 @@
  * @Author: MADAO
  * @Date: 2022-10-31 11:09:04
  * @LastEditors: MADAO
- * @LastEditTime: 2022-10-31 18:55:40
+ * @LastEditTime: 2022-12-06 15:09:48
  */
 import type { Response } from '~/lib/api';
-import type { Rules, FormData } from '~/lib/validator';
+import type { Rules, CustomObject } from '~/lib/validator';
 
 import { validator } from '~/lib/validator';
 import { formatResponse } from '~/lib/api';
 
 class BaseModel {
-  async validator<T extends FormData>(formData: T, rules: Rules<T> = []) {
-    const errors = validator(formData, rules);
+  async validator<T extends CustomObject>(dataSource: T, rules: Rules<T> = []) {
+    const errors = validator(dataSource, rules);
 
     if (errors) {
       return Promise.reject(formatResponse({ status: 422, errors: errors as Response<unknown>['errors'] }));
