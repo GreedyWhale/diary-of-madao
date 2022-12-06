@@ -250,10 +250,11 @@ class UserModel {
       }
 
       return {
-      status: 200,
-      message: '成功',
-      // 使用pick的原因是不想把用户密码也一起返回给前端，所以这里进行属性筛选
-      resource: pick(user, ['id', 'username']) };
+        status: 200,
+        message: '成功',
+        // 使用pick的原因是不想把用户密码也一起返回给前端，所以这里进行属性筛选
+        resource: pick(user, ['id', 'username'])
+      };
     }
 
 
@@ -367,10 +368,11 @@ class UserModel {
       }
 
       return {
-      status: 200,
-      message: '成功',
-      // 使用pick的原因是不想把用户密码也一起返回给前端，所以这里进行属性筛选
-      resource: pick(user, ['id', 'username']) };
+        status: 200,
+        message: '成功',
+        // 使用pick的原因是不想把用户密码也一起返回给前端，所以这里进行属性筛选
+        resource: pick(user, ['id', 'username'])
+      };
     }
 
 
