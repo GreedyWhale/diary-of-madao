@@ -3,6 +3,8 @@ title: 'MADAO观察日记-博客篇(三)'
 introduction: '实现登录功能及代码优化'
 ---
 
+![banner_3.jpeg](/_next/upload/banner_3_1670576072877.jpeg "banner_3.jpeg")
+
 ## 0x00 前言
 
 上一篇笔记记录了实现用户注册的过程，还十分简陋，代码也需要优化。
