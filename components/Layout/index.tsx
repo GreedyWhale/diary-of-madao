@@ -139,9 +139,7 @@ export const Layout: NextPage<React.PropsWithChildren> = props => {
 
   React.useLayoutEffect(() => {
     if (router.pathname === '/notes/[id]') {
-      if (scrollElementRef.current?.scrollTop) {
-        scrollElementRef.current.scrollTop = 0;
-      }
+      scrollElementRef.current?.scroll({ top: 0 });
     }
   }, [router.pathname]);
 
