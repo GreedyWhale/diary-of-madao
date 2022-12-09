@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import styles from './index.module.scss';
 import { Navbar } from '~/components/Navbar';
@@ -111,41 +112,86 @@ const Cube: React.FC = () => (
   </div>
 );
 
-export const Layout: NextPage<React.PropsWithChildren> = props => (
-  <div className={styles.container}>
-    <div className={styles.bg}>
-      <Cube />
-      <GridIcon className={styles.grid} />
-      <div className={styles.slogan}>
-        <h2>Don&apos;t</h2>
-        <h2>Be</h2>
-        <h2>Afraid</h2>
-        <h2>Of</h2>
-        <h2>Anyone</h2>
-      </div>
-    </div>
-    <Navbar />
-    <main className={styles.main}>
-      <div className={styles.inner}>
-        {props.children}
-      </div>
-      <div className={styles.inner_bg} />
-    </main>
+export const Layout: NextPage<React.PropsWithChildren> = props => {
+  const router = useRouter();
 
-    <div className={styles.footer}>
-      <a
-        href='https://beian.miit.gov.cn'
-        target='_blank'
-        rel='noreferrer'
-      >
-            陇ICP备2021003360号-1
-      </a>
-      <div>
-        <a className={styles.record} target='_blank' href='http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=62042302000165' rel='noreferrer'>
-          <Image src='/images/record_icon.png' width={15} height={15} alt='record icon' />
-          <p>甘公网安备 62042302000165号</p>
-        </a>
+  const [visibleGoTop, setVisibleGoTop] = React.useState(false);
+
+  const scrollElementRef = React.useRef<HTMLDivElement | null>(null);
+  const scrollTimer = React.useRef(0);
+
+  const handleScroll: React.UIEventHandler<HTMLDivElement> = () => {
+    if (scrollTimer.current) {
+      return;
+    }
+
+    scrollTimer.current = window.setTimeout(() => {
+      window.clearTimeout(scrollTimer.current);
+      scrollTimer.current = 0;
+
+      if ((scrollElementRef.current?.scrollTop ?? 0) < 300) {
+        setVisibleGoTop(false);
+      }
+    }, 10);
+
+    setVisibleGoTop((scrollElementRef.current?.scrollTop ?? 0) > 300);
+  };
+
+  React.useLayoutEffect(() => {
+    if (router.pathname === '/notes/[id]') {
+      if (scrollElementRef.current?.scrollTop) {
+        scrollElementRef.current.scrollTop = 0;
+      }
+    }
+  }, [router.pathname]);
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.bg}>
+        <Cube />
+        <GridIcon className={styles.grid} />
+        <div className={styles.slogan}>
+          <h2>Don&apos;t</h2>
+          <h2>Be</h2>
+          <h2>Afraid</h2>
+          <h2>Of</h2>
+          <h2>Anyone</h2>
+        </div>
       </div>
+      <Navbar />
+      <main className={styles.main}>
+        <div
+          className={styles.inner}
+          ref={scrollElementRef}
+          onScroll={handleScroll}
+        >
+          {props.children}
+        </div>
+        <div className={styles.inner_bg} />
+      </main>
+
+      <div className={styles.footer}>
+        <a
+          href='https://beian.miit.gov.cn'
+          target='_blank'
+          rel='noreferrer'
+        >
+              陇ICP备2021003360号-1
+        </a>
+        <div>
+          <a className={styles.record} target='_blank' href='http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=62042302000165' rel='noreferrer'>
+            <Image src='/images/record_icon.png' width={15} height={15} alt='record icon' />
+            <p>甘公网安备 62042302000165号</p>
+          </a>
+        </div>
+      </div>
+
+      {visibleGoTop && (
+        <div
+          className={styles.go_top}
+          onClick={() => scrollElementRef.current?.scroll({ top: 0, behavior: 'smooth' })}
+        />
+      )}
     </div>
-  </div>
-);
+  );
+};
