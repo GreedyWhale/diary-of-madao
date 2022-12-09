@@ -3,6 +3,8 @@ title: 'MADAO观察日记-博客篇(四)'
 introduction: '实现有关笔记和标签的操作'
 ---
 
+![banner_4.jpeg](/_next/upload/banner_4_1670576230560.jpeg "banner_4.jpeg")
+
 ## 0x00 前言
 
 今天来记录一下有关笔记和标签相关的功能，主要涉及到增、删、改、查这几个基本的数据库操作。
