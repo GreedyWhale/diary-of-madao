@@ -20,7 +20,7 @@ export const Pagination: React.FC<PaginationProps> = props => {
 
     const result = [...new Set([1, props.current, props.totalPage])];
     // 计算左边填充的元素数量
-    const numberOfLeftFill = props.current - 1;
+    const numberOfLeftFill = Math.ceil((props.viewItem - result.length) / 2);
     if (numberOfLeftFill) {
       Array.from({ length: numberOfLeftFill }, (value, index) => index + 1)
         .forEach(value => {
