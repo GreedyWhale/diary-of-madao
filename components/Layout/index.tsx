@@ -146,15 +146,17 @@ export const Layout: NextPage<React.PropsWithChildren> = props => {
   return (
     <div className={styles.container}>
       <div className={styles.bg}>
-        <Cube />
+        { /* 感觉太花里胡哨了，所以暂时隐藏 */ }
+        {/* <Cube /> */}
         <GridIcon className={styles.grid} />
-        <div className={styles.slogan}>
+        { /* 感觉太花里胡哨了，所以暂时隐藏 */ }
+        {/* <div className={styles.slogan}>
           <h2>Don&apos;t</h2>
           <h2>Be</h2>
           <h2>Afraid</h2>
           <h2>Of</h2>
           <h2>Anyone</h2>
-        </div>
+        </div> */}
       </div>
       <Navbar />
       <main className={styles.main}>
