@@ -31,15 +31,8 @@
       color: #F38E58;
     }
     li {
-      position: relative;
       color: #FFD124;
-      &::before {
-        content: '💊';
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: translateX(-100%);
-      }
+      list-style: inherit;
     }
     strong {
       font-weight: bold;
