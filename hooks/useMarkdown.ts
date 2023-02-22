@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2022-10-31 21:30:32
  * @LastEditors: MADAO
- * @LastEditTime: 2022-11-11 18:09:15
+ * @LastEditTime: 2023-02-22 10:57:46
  */
 import React from 'react';
 import breaks from '@bytemd/plugin-breaks';
@@ -20,7 +20,7 @@ import zhHansMermaid from '@bytemd/plugin-mermaid/locales/zh_Hans.json';
 import 'bytemd/dist/index.min.css';
 import 'katex/dist/katex.min.css';
 import 'github-markdown-css/github-markdown-dark.css';
-import 'highlight.js/styles/base16/unikitty-dark.css';
+import 'highlight.js/styles/gradient-dark.css';
 
 import showNotification from '~/components/Notification';
 
