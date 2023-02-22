@@ -20,8 +20,8 @@ body {
   font-size: 16px;
   color: var(--theme-color-white);
   -webkit-text-size-adjust: 100%;
-  &, .bytemd-body {
-    font-family: "LXGW WenKai Screen", "LXGW WenKai", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  &, .bytemd-body, .markdown-body {
+    font-family: "LXGW WenKai Screen", "LXGW WenKai", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" !important;
     letter-spacing: 5px;
   }
 }
