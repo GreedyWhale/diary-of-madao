@@ -218,6 +218,56 @@ Tailwind CSS 的类名写多了之后，感觉非常顺手，以至于我在切�
 
 但是随之带来的就是不能通过类名来确定元素的用途了。
 
+**十、优先级问题**
+
+同样的属性会有优先级的问题，比如要动态修改元素的高度，比如：
+
+```jsx
+<div className={clsx('h-10', opened && 'h-full')}></div>
+```
+
+在我开发的时候会正常，越靠后的类名优先级越高，但是当我打包完成之后，它的优先级就会出现错乱，解决方法就是手动加上`!`提高优先级，或者使用[tailwind-merge
+](https://www.npmjs.com/package/tailwind-merge) 这个库进行类名合并。
+
+注意：这个库需要注意一个问题，自定义类名合并的规则需要配置，比如自定义一个字体大小：
+
+```js
+fontSize: {
+    '22PX': ['22PX']
+}
+```
+
+使用的时候就是这样：
+
+```js
+className='text-22PX'
+```
+
+假如这时候再加一个字体颜色：
+
+```js
+className='text-22PX text-[#001A55]'
+```
+
+这时候合并就会出现问题，`tailwind-merge` 会把`text-22PX` 给合并了，只会留下 `text-[#001A55]`，解决方法是：
+
+```js
+import { extendTailwindMerge } from 'tailwind-merge';
+
+export const twMerge = extendTailwindMerge({
+    classGroups: {
+        'font-size': [
+            { text: ['22PX'] }
+        ]
+    }
+})
+
+```
+
+使用 `extendTailwindMerge` 去配置一下，然后用配置后的方法进行合并。
+
+
+
     
 ## 0x03 结语
 
