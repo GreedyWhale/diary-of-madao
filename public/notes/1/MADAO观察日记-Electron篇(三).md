@@ -3,6 +3,8 @@ title: 'MADAO观察日记-Electron篇(三)'
 introduction: 'Electron'
 ---
 
+![banner_10.jpeg](/_next/upload/banner_10_1681380529882.jpeg "banner_10.jpeg")
+
 ## 0x00 前言
 
 个人的Electron项目做了80%了，目前是烂尾状态，原因是这个项目没有达到我想要系统学习 *Electron Forge* 工具的目的。
