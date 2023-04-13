@@ -3,6 +3,8 @@ title: 'MADAO观察日记-Electron篇(二)'
 introduction: '搭建项目'
 ---
 
+![banner_9.jpeg](/_next/upload/banner_9_1681380491531.jpeg "banner_9.jpeg")
+
 ## 0x00 前言
 
 记录一下个人 Electron 项目的搭建，这部分我认为是 Electron 项目的难点。
