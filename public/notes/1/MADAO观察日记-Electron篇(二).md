@@ -3,11 +3,11 @@ title: 'MADAO观察日记-Electron篇(二)'
 introduction: '搭建项目'
 ---
 
+![banner_9.jpeg](/_next/upload/banner_9_1681380491531.jpeg "banner_9.jpeg")
+
 ## 0x00 前言
 
-记录一下个人Electron项目的搭建，距离上一篇笔记又过去了将近一个月，按照计划现在应该都写完了，因为琐碎的事情太多了，所以我的进度才是刚刚开始-_-。今年的就业形势也不乐观，虽然我现在暂时没什么可担心的，但是说不定就失业了，还是有些慌张的。
-
-## 0x01 搭建项目
+记录一下个人 Electron 项目的搭建，这部分我认为是 Electron 项目的难点。
 
 一开始采用的方案是 *Electron Forge* + *SolidJS*。
 
@@ -22,17 +22,20 @@ introduction: '搭建项目'
 
 *Vite* 不用多说，个人感觉影响力已经超过 *Vue 3*，虽然没有 *webpack* 那么全面，但是要好用一些，内置的模版简直就是我的救星。
 
-*SolidJS* 我觉得是高级版的 *React*，我在做技术选型的时候也考虑过 *Svelte*，主要不喜欢 *Svelte* 的模版语法，总感觉不是在写 *JavaScript*，所以最终选择了*SolidJS*。
+*SolidJS* 我觉得是高级版的 *React*，我在做技术选型的时候也考虑过 *Svelte*，但是不喜欢 *Svelte* 的模版语法，总感觉不是在写 *JavaScript*，所以最终选择了*SolidJS*。
 
 这里吐槽一下 *React*，如果不是 *React* 的生态太丰富了（主要是 *Next.js*），我都准备放弃 *React* 了，放弃的原因就是 `useEffect` 太难用了，而且现在版本的 *React* 如果开启了 `Strict Mode`会在开发模式下默认执行两遍`useEffect`，为的是让开发者更容易找打未清除的副作用，可能想的是好的，但是这让我开发起来非常痛苦，我得确认到底是自己写的有问题导致重复执行还是默认的重复执行。
 
-但是随着 Vercel 团队和 React 团队不断靠拢，感觉 *React* 迟早得 *Next.js* 化。
+随着 Vercel 团队和 React 团队不断靠拢，感觉 *React* 迟早得 *Next.js* 化。
 
 我最近也使用了一下最新 *Next.js* (13版本)，有点不适应，主要不习惯服务端组件和客户端组件，感觉是*Next.js*想把 API 变成组件。
 
 基于这些情况可能以后 *Next.js* 不再是我的主力框架了，惆怅中...
 
 吐槽完毕，开始搭建项目：
+
+## 0x01 搭建项目
+
 
 1. 创建项目
 
