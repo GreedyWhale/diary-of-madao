@@ -1,1 +1,2 @@
-*.mjs
+*.config.mjs
+*.config.js
