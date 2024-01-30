@@ -1,2 +1,5 @@
 *.config.mjs
 *.config.js
+
+// https://github.com/ota-meshi/eslint-plugin-astro/issues/311
+Layout.astro

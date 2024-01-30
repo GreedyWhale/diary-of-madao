@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2024-01-30 16:47:50
  * @LastEditors: MADAO
- * @LastEditTime: 2024-01-30 17:07:54
+ * @LastEditTime: 2024-01-30 18:30:38
  */
 module.exports = {
   extends: [
@@ -23,6 +23,11 @@ module.exports = {
         "semi": ["error", "always"],
         "object-curly-spacing": ["error", "always"]
       },
+    },
+    {
+      files: ["*.astro"],
+      processor: "astro/client-side-ts",
+      rules: {},
     },
   ],
 }
