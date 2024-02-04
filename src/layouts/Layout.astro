@@ -1,5 +1,6 @@
 ---
-import Header from '../components/Header.svelte';
+import Header from "~/components/Header.svelte";
+
 interface Props {
   title: string;
 }
@@ -12,15 +13,24 @@ const { title } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="title" content="牢骚百物语" />
-    <meta name="description" content="探索前端开发世界的精彩，从HTML、CSS到JavaScript和流行的框架，发现最新的编程教程、设计模式和开发工具。技术笔记网站提供丰富的内容，帮助您掌握Web开发的精髓，优化您的工作流程，并学习最佳实践，无论您是初学者还是经验丰富的开发者，都能在这里找到有用的资源和指导。立即开始您的学习之旅！" />
-    <meta name="keywords" content="技术笔记, 前端开发, 编程教程, Web 开发, 前端工具" />
+    <meta
+      name="description"
+      content="探索前端开发世界的精彩，从HTML、CSS到JavaScript和流行的框架，发现最新的编程教程、设计模式和开发工具。技术笔记网站提供丰富的内容，帮助您掌握Web开发的精髓，优化您的工作流程，并学习最佳实践，无论您是初学者还是经验丰富的开发者，都能在这里找到有用的资源和指导。立即开始您的学习之旅！"
+    />
+    <meta
+      name="keywords"
+      content="技术笔记, 前端开发, 编程教程, Web 开发, 前端工具"
+    />
     <meta name="robots" content="index, follow" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="language" content="Chinese" />
     <meta name="revisit-after" content="1 days" />
     <meta name="author" content="madaocai@gmail.com" />
 
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, minimal-ui" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, minimal-ui"
+    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
@@ -28,10 +38,19 @@ const { title } = Astro.props;
     <!-- https://github.com/ota-meshi/eslint-plugin-astro/issues/311 -->
     <style is:global>
       html {
-        font-family: system-ui, sans-serif;
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          Segoe UI,
+          Helvetica,
+          Arial,
+          sans-serif,
+          Apple Color Emoji,
+          Segoe UI Emoji;
       }
 
-      html, body {
+      html,
+      body {
         height: 100%;
       }
 
@@ -46,13 +65,39 @@ const { title } = Astro.props;
           Courier New,
           monospace;
       }
-    </style>
 
+      a:hover,
+      button:hover {
+        opacity: 0.7 !important;
+      }
+    </style>
   </head>
-  <body class="h-full w-full bg-gradient-to-br from-[#ADD8E6] to-[#F0F8FF]">
-    <main class="w-[1200px]">
-      <Header />
+  <body
+    class="flex h-full w-full flex-col items-center overflow-hidden bg-gradient-to-br from-[#D3E0EA] via-[#D6E4E5] to-[#EAE3D2] text-[#444346]"
+  >
+    <Header />
+    <main class="hidden-scrollbar flex-1 overflow-x-auto">
       <slot />
     </main>
+    <footer>
+      <a
+        href="https://www.flaticon.com/free-icons/loch-ness-monster"
+        title="loch ness monster icons"
+      >
+        Loch ness monster icons created by Freepik - Flaticon
+      </a>
+      <a
+        href="https://www.flaticon.com/free-icons/miscellaneous"
+        title="miscellaneous icons"
+      >
+        Miscellaneous icons created by aputpalace - Flaticon
+      </a>
+      <a
+        href="https://www.flaticon.com/free-icons/unicorn"
+        title="unicorn icons"
+      >
+        Unicorn icons created by Roundicons Premium - Flaticon
+      </a>
+    </footer>
   </body>
 </html>

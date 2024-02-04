@@ -1,8 +1,62 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import { Image } from "astro:assets";
+
+import Layout from "~/layouts/Layout.astro";
+import FeatureCard from "~/components/FeatureCard.svelte";
+import monsterIcon from "~/assets/images/loch-ness-monster.png";
+import unicornIcon from "~/assets/images/unicorn.png";
+import frogIcon from "~/assets/images/frog.png";
+
+import post1 from "~/assets/images/poster-1.jpg";
 ---
 
 <Layout title="牢骚百物语">
-  
-</Layout>
+  <div class="glass-block">
+    <h1
+      class="h-[280px] animate-focus-in-contract-bck text-center text-6xl font-bold leading-[280px]"
+    >
+      👋 Hi, I'm Caisr
+    </h1>
+  </div>
 
+  <div class="glass-block mt-8 flex">
+    <FeatureCard
+      class="h-[280px] flex-1"
+      title="noun."
+      description="Front-end developer, Otaku"
+      icon={monsterIcon.src}
+    />
+    <FeatureCard
+      class="h-[280px] flex-1 border-l border-r"
+      title="adj."
+      description="Curious, Cautious, Attention To Detail"
+      icon={unicornIcon.src}
+    />
+    <FeatureCard
+      class="h-[280px] flex-1"
+      title="verb."
+      description="Reflect, Absorb, Breakthrough"
+      icon={frogIcon.src}
+    />
+  </div>
+
+  <div
+    class="glass-block mt-12 flex bg-gradient-to-br from-[#1C512C] to-[#95B579]"
+  >
+    <div class="relative flex-1">
+      <div class="absolute bottom-[20%] right-[20%] text-white">
+        <h4 class="mb-2 text-2xl">教练，我想学 Three.js！</h4>
+        <p class="mb-8">零图形知识的前端学习 Three.js 的笔记</p>
+        <ul class="mb-4 flex text-base">
+          <li class="mr-4"># Three.js</li>
+          <li class="mr-4"># WebGL</li>
+        </ul>
+
+        <a href="/blog?tag=threejs" class="underline">查看详情 👈</a>
+      </div>
+    </div>
+    <div>
+      <Image src={post1} alt="Three.js Poster Image" />
+    </div>
+  </div>
+</Layout>
