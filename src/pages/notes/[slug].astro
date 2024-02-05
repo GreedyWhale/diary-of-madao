@@ -1,0 +1,59 @@
+---
+import type { GetStaticPaths } from "astro";
+
+import { getCollection } from "astro:content";
+import dayjs from "dayjs";
+
+import Layout from "~/layouts/Layout.astro";
+
+interface Props {
+  notes: Awaited<ReturnType<typeof getCollection<"notes">>>;
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const slugList = ["all", "threejs"];
+  const allNotes = await getCollection("notes");
+
+  return slugList.map((slug) => {
+    const notes = allNotes.filter((item) => item.slug.includes(slug));
+    console.log(notes);
+    return {
+      params: { slug },
+      props: { notes: notes.length ? notes : allNotes },
+    };
+  });
+};
+
+const { notes } = Astro.props;
+---
+
+<Layout title="牢骚百物语">
+  <ul class="w-full">
+    {
+      notes &&
+        notes.map(({ data, slug }) => (
+          <li class="mb-4 border-b border-dashed border-primary pb-4">
+            <a href={slug}>
+              <h4 class="mb-6 text-2xl font-bold">{data.title}</h4>
+              <p class="mb-4">Author: {data.author}</p>
+              <p class="mb-2 text-sm text-secondary">{data.description}</p>
+              <div class="mb-4 text-sm text-secondary">
+                <time datetime={data.publishedAt.toISOString()} class="mr-2">
+                  {dayjs(data.publishedAt).format("YYYY-MM-DD HH:mm")}
+                </time>
+                <time datetime={data.updatedAt.toISOString()}>
+                  [UpdatedAt: {dayjs(data.updatedAt).format("YYYY-MM-DD HH:mm")}
+                  ]
+                </time>
+              </div>
+              <ul class="text-sm italic text-[#CD505A]">
+                {data.tags.map((tag) => (
+                  <li class="mr-2">#{tag}</li>
+                ))}
+              </ul>
+            </a>
+          </li>
+        ))
+    }
+  </ul>
+</Layout>

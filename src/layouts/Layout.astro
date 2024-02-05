@@ -1,18 +1,18 @@
 ---
-import Header from "~/components/Header.svelte";
+import Header from "~/components/Header.astro";
 
 interface Props {
-  title: string;
+  title?: string;
 }
 
-const { title } = Astro.props;
+const { title = "牢骚百物语" } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="title" content="牢骚百物语" />
+    <meta name="title" content={title} />
     <meta
       name="description"
       content="探索前端开发世界的精彩，从HTML、CSS到JavaScript和流行的框架，发现最新的编程教程、设计模式和开发工具。技术笔记网站提供丰富的内容，帮助您掌握Web开发的精髓，优化您的工作流程，并学习最佳实践，无论您是初学者还是经验丰富的开发者，都能在这里找到有用的资源和指导。立即开始您的学习之旅！"
@@ -70,13 +70,17 @@ const { title } = Astro.props;
       button:hover {
         opacity: 0.7 !important;
       }
+
+      a:active {
+        color: inherit;
+      }
     </style>
   </head>
   <body
-    class="flex h-full w-full flex-col items-center overflow-hidden bg-gradient-to-br from-[#D3E0EA] via-[#D6E4E5] to-[#EAE3D2] text-[#444346]"
+    class="text-primary flex h-full w-full flex-col items-center overflow-hidden bg-gradient-to-br from-[#D3E0EA] via-[#D6E4E5] to-[#EAE3D2]"
   >
     <Header />
-    <main class="hidden-scrollbar flex-1 overflow-x-auto">
+    <main class="hidden-scrollbar main-block flex-1 overflow-x-auto">
       <slot />
     </main>
     <footer>

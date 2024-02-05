@@ -50,19 +50,25 @@ export default {
           },
         },
       },
+      colors: {
+        primary: "#444346",
+        secondary: "#616263",
+      },
     },
   },
   plugins: [
     plugin(function ({ addUtilities, addComponents, theme }) {
       addComponents({
+        ".main-block": {
+          width: "1200px",
+          "margin-left": "auto",
+          "margin-right": "auto",
+        },
         ".glass-block": {
           "border-radius": theme("borderRadius.xl"),
           "background-color": "rgb(185 188 190 / 60%)",
-          "margin-left": "auto",
-          "margin-right": "auto",
           overflow: "hidden",
           border: "0.5px solid rgb(255 255 255)",
-          width: "1200px",
         },
       });
       addUtilities({

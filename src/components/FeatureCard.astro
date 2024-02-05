@@ -1,11 +1,13 @@
-<script lang="ts">
-  let classes: string = "";
-  export let title: string = "";
-  export let description: string = "";
-  export let icon: string = "";
+---
+interface Props {
+  class?: string;
+  title?: string;
+  description?: string;
+  icon?: string;
+}
 
-  export { classes as class };
-</script>
+const { class: classes, title, description, icon } = Astro.props;
+---
 
 <div class={`${classes} flex flex-col items-center justify-center`}>
   <img class="mb-4 h-[50px] w-[50px]" src={icon} alt="feature icon" />

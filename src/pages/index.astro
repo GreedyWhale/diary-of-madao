@@ -2,15 +2,15 @@
 import { Image } from "astro:assets";
 
 import Layout from "~/layouts/Layout.astro";
-import FeatureCard from "~/components/FeatureCard.svelte";
+import FeatureCard from "~/components/FeatureCard.astro";
+
 import monsterIcon from "~/assets/images/loch-ness-monster.png";
 import unicornIcon from "~/assets/images/unicorn.png";
 import frogIcon from "~/assets/images/frog.png";
-
 import post1 from "~/assets/images/poster-1.jpg";
 ---
 
-<Layout title="牢骚百物语">
+<Layout>
   <div class="glass-block">
     <h1
       class="h-[280px] animate-focus-in-contract-bck text-center text-6xl font-bold leading-[280px]"
@@ -52,7 +52,7 @@ import post1 from "~/assets/images/poster-1.jpg";
           <li class="mr-4"># WebGL</li>
         </ul>
 
-        <a href="/blog?tag=threejs" class="underline">查看详情 👈</a>
+        <a href="/notes/threejs" class="underline">查看详情 👈</a>
       </div>
     </div>
     <div>
