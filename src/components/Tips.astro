@@ -1,0 +1,25 @@
+---
+interface Props {
+  title: string;
+  content: string;
+  theme?: "success" | "info" | "warning" | "error";
+  class?: string;
+}
+import clsx from "clsx";
+
+const { title, content, theme = "info", class: classes } = Astro.props;
+---
+
+<div
+  class={clsx(
+    "px-6 py-5 rounded-lg border border-solid",
+    classes,
+    theme === "success" && "border-[#b7eb8f] bg-[##f6ffed]",
+    theme === "info" && "border-[#91caff] bg-[#e6f4ff]",
+    theme === "warning" && "border-[#ffe58f] bg-[#fffbe6]",
+    theme === "error" && "border-[#ffccc7] bg-[#fff2f0]",
+  )}
+>
+  <h5 class="mb-2 text-base text-primary">{title}</h5>
+  <p class="text-sm text-primary">{content}</p>
+</div>

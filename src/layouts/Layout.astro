@@ -75,12 +75,14 @@ const { title = "牢骚百物语" } = Astro.props;
         color: inherit;
       }
     </style>
+
+    <slot name="style" />
   </head>
   <body
-    class="text-primary flex h-full w-full flex-col items-center overflow-hidden bg-gradient-to-br from-[#D3E0EA] via-[#D6E4E5] to-[#EAE3D2]"
+    class="flex h-full w-full flex-col items-center overflow-hidden bg-gradient-to-br from-[#D3E0EA] via-[#D6E4E5] to-[#EAE3D2] text-primary"
   >
     <Header />
-    <main class="hidden-scrollbar main-block flex-1 overflow-x-auto">
+    <main class="main-block flex-1 overflow-x-auto hidden-scrollbar">
       <slot />
     </main>
     <footer>

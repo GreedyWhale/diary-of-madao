@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2024-02-05 15:39:08
  * @LastEditors: MADAO
- * @LastEditTime: 2024-02-05 17:51:17
+ * @LastEditTime: 2024-02-06 16:07:02
  */
 // 从 `astro:content` 导入辅助工具
 import { z, defineCollection } from "astro:content";
@@ -12,11 +12,12 @@ const notesCollection = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    publishedAt: z.date(),
+    createdAt: z.date(),
     updatedAt: z.date(),
     description: z.string(),
     author: z.string(),
     tags: z.array(z.string()),
+    demo: z.string(),
   }),
 });
 

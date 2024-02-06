@@ -16,7 +16,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return slugList.map((slug) => {
     const notes = allNotes.filter((item) => item.slug.includes(slug));
-    console.log(notes);
+
     return {
       params: { slug },
       props: { notes: notes.length ? notes : allNotes },
@@ -27,19 +27,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
 const { notes } = Astro.props;
 ---
 
-<Layout title="牢骚百物语">
+<Layout>
   <ul class="w-full">
     {
       notes &&
         notes.map(({ data, slug }) => (
           <li class="mb-4 border-b border-dashed border-primary pb-4">
-            <a href={slug}>
+            <a href={`/notes/details/${slug}`}>
               <h4 class="mb-6 text-2xl font-bold">{data.title}</h4>
               <p class="mb-4">Author: {data.author}</p>
               <p class="mb-2 text-sm text-secondary">{data.description}</p>
               <div class="mb-4 text-sm text-secondary">
-                <time datetime={data.publishedAt.toISOString()} class="mr-2">
-                  {dayjs(data.publishedAt).format("YYYY-MM-DD HH:mm")}
+                <time datetime={data.createdAt.toISOString()} class="mr-2">
+                  {dayjs(data.createdAt).format("YYYY-MM-DD HH:mm")}
                 </time>
                 <time datetime={data.updatedAt.toISOString()}>
                   [UpdatedAt: {dayjs(data.updatedAt).format("YYYY-MM-DD HH:mm")}

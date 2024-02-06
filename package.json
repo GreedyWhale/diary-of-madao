@@ -16,11 +16,15 @@
     "astro": "^4.2.6",
     "clsx": "^2.1.0",
     "dayjs": "^1.11.10",
+    "github-markdown-css": "^5.5.1",
+    "lil-gui": "^0.19.1",
     "svelte": "^4.2.9",
     "tailwindcss": "^3.4.1",
+    "three": "^0.161.0",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@types/three": "^0.161.2",
     "@typescript-eslint/parser": "^6.20.0",
     "eslint": "^8.56.0",
     "eslint-plugin-astro": "^0.31.3",
@@ -29,6 +33,7 @@
     "prettier": "^3.2.4",
     "prettier-plugin-astro": "^0.13.0",
     "prettier-plugin-svelte": "^3.1.2",
-    "prettier-plugin-tailwindcss": "^0.5.11"
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "sass": "^1.70.0"
   }
 }
