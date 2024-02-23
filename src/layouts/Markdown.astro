@@ -1,0 +1,56 @@
+---
+import type { MarkdownLayoutProps } from "astro";
+import type { MarkdownFileInfo } from "~/types/markdown";
+
+import dayjs from "dayjs";
+
+import "katex/dist/katex.min.css";
+import "github-markdown-css/github-markdown-light.css";
+import "~/assets/styles/markdown.scss";
+
+import Layout from "~/layouts/Layout.astro";
+
+type Props = MarkdownLayoutProps<MarkdownFileInfo["frontmatter"]>;
+
+const { frontmatter, compiledContent } = Astro.props;
+---
+
+<Layout>
+  <div class="mb-8 mt-4 border-b border-dotted border-[#000] pb-4">
+    <h1 class="mb-4 text-2xl font-bold">{frontmatter.title}</h1>
+    <ul class="flex text-sm italic text-secondary">
+      <li class="mr-4">Author: {frontmatter.author}</li>
+      <li class="mr-4">
+        CreatedAt:
+        <time datetime={frontmatter.createdAt} class="mr-2">
+          {dayjs(frontmatter.createdAt).format("YYYY-MM-DD HH:mm")}
+        </time>
+      </li>
+      <li>
+        UpdatedAt:
+        <time datetime={frontmatter.createdAt} class="mr-2">
+          {dayjs(frontmatter.createdAt).format("YYYY-MM-DD HH:mm")}
+        </time>
+      </li>
+      {
+        frontmatter.demo && (
+          <li class="ml-4">
+            <span>👉</span>
+            <a
+              href={frontmatter.demo}
+              target="_blank"
+              class="text-[#59B4C3] underline"
+            >
+              Demo
+            </a>
+          </li>
+        )
+      }
+    </ul>
+  </div>
+
+  <article
+    class="markdown-body !bg-transparent pb-16"
+    set:html={compiledContent()}
+  />
+</Layout>

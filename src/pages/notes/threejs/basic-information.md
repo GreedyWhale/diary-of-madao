@@ -1,4 +1,5 @@
 ---
+layout: ../../../layouts/Markdown.astro
 title: 一. Three.js 简介
 author: Caisr
 description: 了解 Three.js 的基础信息
@@ -7,6 +8,12 @@ updatedAt: 2023-12-29T07:09:00.000Z
 tags: [Three.js]
 demo: /playground/threejs/basic-information
 ---
+
+### # 0.0 关于笔记的说明
+
+这个笔记是我学习 Bruno Simon 的 Three.js 课程的笔记，他的官网是：[threejs-journey](https://threejs-journey.com/)。
+
+我在刚做前端的时候就很想学 Three.js 了，当时有买慕课网的一个做跳一跳小游戏的课程，可惜那个课程讲的太笼统了，学到矩阵部分就失去了兴趣，希望这次可以坚持下来。
 
 ### # 0.1 Hello Three.js
 

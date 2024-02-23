@@ -18,6 +18,8 @@
     "dayjs": "^1.11.10",
     "github-markdown-css": "^5.5.1",
     "lil-gui": "^0.19.1",
+    "rehype-katex": "^7.0.0",
+    "remark-math": "^6.0.0",
     "svelte": "^4.2.9",
     "tailwindcss": "^3.4.1",
     "three": "^0.161.0",

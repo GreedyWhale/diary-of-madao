@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2024-02-05 11:05:23
  * @LastEditors: MADAO
- * @LastEditTime: 2024-02-05 11:13:08
+ * @LastEditTime: 2024-02-22 12:41:25
  */
 export interface MarkdownFileInfo {
   url: string;
@@ -11,6 +11,9 @@ export interface MarkdownFileInfo {
     title: string;
     author: string;
     description: string;
-    tag: string;
+    createdAt: string;
+    updatedAt: string;
+    tags: string[];
+    demo?: string;
   };
 }
