@@ -1,11 +1,10 @@
 <script lang="ts">
   import * as THREE from "three";
-  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
   import GUI from "lil-gui";
   import { onMount } from "svelte";
 
-  onMount(() => {
-    const root = document.querySelector(".app")!;
+  const initTransformExample = () => {
+    const root = document.querySelector(".transformExample")!;
     const { width } = root.getBoundingClientRect();
 
     const sizes = {
@@ -69,13 +68,8 @@
     scene.add(mesh, camera);
     renderer.render(scene, camera);
 
-    const control = new OrbitControls(camera, renderer.domElement);
-    control.enableDamping = true;
-    control.update();
-
     const tick = () => {
       renderer.render(scene, camera);
-      control.update();
       requestAnimationFrame(tick);
     };
 
@@ -254,9 +248,58 @@
     root.appendChild(canvas);
     initGUI();
     tick();
+  };
+
+  const initAnimationExample = () => {
+    const root = document.querySelector(".animationExample")!;
+    const { width } = root.getBoundingClientRect();
+
+    const sizes = {
+      width,
+      height: 600,
+    };
+
+    const scene = new THREE.Scene();
+
+    const mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshBasicMaterial({ color: 0xffff00 }),
+    );
+
+    const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+    camera.position.z = 5;
+
+    const canvas = document.createElement("canvas");
+    const renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(sizes.width, sizes.height);
+
+    scene.add(mesh, camera);
+    renderer.render(scene, camera);
+
+    const clock = new THREE.Clock();
+    const tick = () => {
+      const elapsedTime = clock.getElapsedTime();
+      mesh.position.x = Math.cos(elapsedTime);
+      mesh.position.y = Math.sin(elapsedTime);
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    };
+
+    root.appendChild(canvas);
+    tick();
+  };
+
+  onMount(() => {
+    initTransformExample();
+    initAnimationExample();
   });
 </script>
 
-<div class="app relative">
-  <div class="gui absolute right-0 top-0"></div>
+<div class="pb-16">
+  <div class="transformExample relative mb-4">
+    <div class="gui absolute right-0 top-0"></div>
+  </div>
+
+  <div class="animationExample"></div>
 </div>

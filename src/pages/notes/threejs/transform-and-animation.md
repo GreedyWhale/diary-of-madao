@@ -198,3 +198,41 @@ group.position.y = 1;
 
 scene.add(group);
 ```
+
+### # 0.6 Animation
+
+Three.js 中动画效果是通过不断重新渲染 canvas 元素中的场景来实现的，浏览器提供了一个非常适合这种需求的api：`requestAnimationFrame`，这个方法可以让浏览器在下一次重绘之前调用一下传入的回调函数，调用的频率通常是60次每秒。
+
+比如这样可以使物体做圆周运动：
+
+```javascript
+const clock = new THREE.Clock();
+const tick = () => {
+  const elapsedTime = clock.getElapsedTime();
+  mesh.position.x = Math.cos(elapsedTime);
+  mesh.position.y = Math.sin(elapsedTime);
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+};
+
+tick();
+```
+
+[👉点击查看](/playground/threejs/transform-and-animation)
+
+```javascript
+mesh.position.x = Math.cos(elapsedTime);
+mesh.position.y = Math.sin(elapsedTime);
+```
+
+这样设置就可以让物体做圆周运动是因为单位圆的概念，如果把物体看成单位圆上的一个点，那么物体的坐标：
+
+```
+cos(t) = x
+sin(t) = y
+```
+
+elapsedTime 是`const clock = new THREE.Clock();` 对象声明到当前经过的时间，如果把它看作成一个角度，那么就可以运用单位圆的概念让物体做圆周运动。
+
+复杂的动画可以借助第三方库来实现[GSAP](https://gsap.com/resources/get-started/)。
