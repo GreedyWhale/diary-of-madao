@@ -17,6 +17,7 @@
     "clsx": "^2.1.0",
     "dayjs": "^1.11.10",
     "github-markdown-css": "^5.5.1",
+    "gsap": "^3.12.5",
     "lil-gui": "^0.19.1",
     "rehype-katex": "^7.0.0",
     "remark-math": "^6.0.0",

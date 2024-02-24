@@ -12,8 +12,13 @@ interface Props {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const slugList = ["all", "threejs"];
-  const allNotes =
-    await Astro.glob<MarkdownFileInfo["frontmatter"]>("../notes/**/*.md");
+  const allNotes = (
+    await Astro.glob<MarkdownFileInfo["frontmatter"]>("../notes/**/*.md")
+  ).sort(
+    (a, b) =>
+      new Date(a.frontmatter.createdAt).getTime() -
+      new Date(b.frontmatter.createdAt).getTime(),
+  );
 
   return slugList.map((slug) => {
     const notes = allNotes.filter((item) => item.file.includes(slug));

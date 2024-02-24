@@ -1,6 +1,6 @@
 ---
 import Header from "~/components/Header.astro";
-
+import Footer from "~/components/Footer.astro";
 interface Props {
   title?: string;
 }
@@ -73,31 +73,14 @@ const { title = "牢骚百物语" } = Astro.props;
     <slot name="style" />
   </head>
   <body
-    class="flex h-full w-full flex-col items-center overflow-hidden bg-gradient-to-br from-[#D3E0EA] via-[#D6E4E5] to-[#EAE3D2] text-primary"
+    class="flex flex-col overflow-hidden bg-gradient-to-br from-[#D3E0EA] via-[#D6E4E5] to-[#EAE3D2] text-primary"
   >
     <Header />
-    <main class="main-block flex-1 overflow-x-auto hidden-scrollbar">
-      <slot />
-    </main>
-    <footer>
-      <a
-        href="https://www.flaticon.com/free-icons/loch-ness-monster"
-        title="loch ness monster icons"
-      >
-        Loch ness monster icons created by Freepik - Flaticon
-      </a>
-      <a
-        href="https://www.flaticon.com/free-icons/miscellaneous"
-        title="miscellaneous icons"
-      >
-        Miscellaneous icons created by aputpalace - Flaticon
-      </a>
-      <a
-        href="https://www.flaticon.com/free-icons/unicorn"
-        title="unicorn icons"
-      >
-        Unicorn icons created by Roundicons Premium - Flaticon
-      </a>
-    </footer>
+    <div class="w-full flex-1 flex-col overflow-y-auto hidden-scrollbar">
+      <main class="main-block">
+        <slot />
+      </main>
+      <Footer />
+    </div>
   </body>
 </html>
