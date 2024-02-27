@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2024-01-30 16:47:50
  * @LastEditors: MADAO
- * @LastEditTime: 2024-02-22 17:59:18
+ * @LastEditTime: 2024-02-26 16:49:36
  */
 module.exports = {
   extends: [
@@ -43,7 +43,7 @@ module.exports = {
     },
   ],
   rules: {
-    indent: ["error", 2, 2, { offsetTernaryExpressions: true }],
+    indent: ["error", 2, { offsetTernaryExpressions: true }],
     semi: ["error", "always"],
     "object-curly-spacing": ["error", "always"],
   },

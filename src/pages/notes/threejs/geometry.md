@@ -2,7 +2,7 @@
 layout: ../../../layouts/Markdown.astro
 title: 四. 几何形状
 author: Caisr
-description: 3D物体的重要组成部分几何形状
+description: 3D物体的重要组成部分 -- 几何形状
 createdAt: 2024-01-05T02:51:00.000Z
 updatedAt: 2024-01-08T08:21:00.000Z
 tags: [Three.js, Geometry]

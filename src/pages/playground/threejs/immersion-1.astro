@@ -1,0 +1,120 @@
+<style>
+  body {
+    margin: 0;
+  }
+
+  html,
+  body {
+    overflow: hidden;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+  }
+</style>
+
+<div class="app"></div>
+
+<script>
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import * as THREE from "three";
+  import { gsap, Linear } from "gsap";
+
+  const initImmersionExample = () => {
+    const root = document.querySelector(".app")!;
+
+    const sizes = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
+
+    const scene = new THREE.Scene();
+
+    const geometry = new THREE.BufferGeometry();
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x00ff00,
+      wireframe: true,
+    });
+
+    const trianglesConfig = {
+      counts: 300,
+    };
+
+    const getPositionAttribute = (counts: number) => {
+      const positionsArray = new Float32Array(counts * 9);
+      for (let index = 0; index < positionsArray.length; index++) {
+        positionsArray[index] = Math.random() - 0.5;
+      }
+      // 将这些坐标变为 Three.js 可以接受的数据格式
+      const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
+      return positionsAttribute;
+    };
+
+    geometry.setAttribute(
+      "position",
+      getPositionAttribute(trianglesConfig.counts),
+    );
+    const mesh = new THREE.Mesh(geometry, material);
+    const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+    camera.position.z = 1;
+
+    const canvas = document.createElement("canvas");
+    const renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const axes = new THREE.AxesHelper(10);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.update();
+
+    scene.add(mesh, camera, axes);
+    renderer.render(scene, camera);
+
+    gsap.to(mesh.rotation, {
+      y: 2 * Math.PI, // 围绕 Y 轴旋转一圈（用弧度单位）
+      ease: Linear.easeNone, // 缓动函数，匀速旋转
+      duration: 5, // 动画持续时间
+      repeat: -1, // 重复次数，-1 表示无限次数
+    });
+
+    const tick = () => {
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    };
+
+    const bindListeners = () => {
+      window.addEventListener("resize", () => {
+        sizes.width = window.innerWidth;
+        sizes.height = window.innerHeight;
+
+        // 更新相机
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix(); // 修改完相机参数后需要更新一下相机的投影矩阵
+
+        // 更新渲染器
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.render(scene, camera);
+      });
+
+      window.addEventListener("dblclick", () => {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else {
+          canvas.requestFullscreen();
+        }
+      });
+    };
+
+    root.appendChild(canvas);
+    tick();
+    bindListeners();
+  };
+
+  initImmersionExample();
+</script>

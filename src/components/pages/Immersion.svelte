@@ -1,0 +1,98 @@
+<script lang="ts">
+  import * as THREE from "three";
+  import { onMount } from "svelte";
+
+  const initCameraExample = () => {
+    const root = document.querySelector(".app")!;
+    const { width } = root.getBoundingClientRect();
+
+    const sizes = {
+      width,
+      height: 600,
+    };
+
+    const cursor = {
+      x: 0,
+      y: 0,
+    };
+
+    const scene = new THREE.Scene();
+    const geometry = new THREE.BoxGeometry(1, 1, 1).toNonIndexed();
+    const material = new THREE.MeshBasicMaterial({ vertexColors: true });
+
+    const vertices = geometry.getAttribute("position");
+    const colors = [];
+    const color = new THREE.Color();
+    for (let i = 0; i < vertices.count; i += 6) {
+      color.setHex(0xffffff * Math.random());
+
+      colors.push(color.r, color.g, color.b);
+      colors.push(color.r, color.g, color.b);
+      colors.push(color.r, color.g, color.b);
+
+      colors.push(color.r, color.g, color.b);
+      colors.push(color.r, color.g, color.b);
+      colors.push(color.r, color.g, color.b);
+    }
+
+    geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+
+    const mesh = new THREE.Mesh(geometry, material);
+    const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+    camera.position.z = 10;
+
+    const canvas = document.createElement("canvas");
+    const renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(sizes.width, sizes.height);
+
+    scene.add(mesh, camera);
+    renderer.render(scene, camera);
+
+    // 代替 getBoundingClientRect，因为频繁调用 getBoundingClientRect 会有性能问题
+    const getElementRect = (element: HTMLElement) => {
+      return new Promise<DOMRect>((resolve) => {
+        const observer = new IntersectionObserver((entries) => {
+          resolve(entries[0].boundingClientRect);
+          observer.disconnect();
+        });
+
+        observer.observe(element);
+      });
+    };
+
+    const bindListeners = () => {
+      canvas.addEventListener("mousemove", async ({ clientX, clientY }) => {
+        const { x, y } = await getElementRect(canvas);
+        const startX = clientX - Math.abs(x);
+        const startY = clientY - Math.abs(y);
+
+        cursor.x = startX / sizes.width - 0.5;
+        cursor.y = startY / sizes.height - 0.5;
+      });
+    };
+
+    const tick = () => {
+      camera.position.x = Math.sin(Math.PI * 2 * cursor.x) * 5;
+      camera.position.z = Math.cos(Math.PI * 2 * cursor.x) * 5;
+      camera.position.y = -cursor.y * 5;
+
+      camera.lookAt(mesh.position);
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    };
+
+    root.appendChild(canvas);
+    tick();
+    bindListeners();
+  };
+
+  onMount(() => {
+    initCameraExample();
+  });
+</script>
+
+<div class="pb-16">
+  <div class="app relative mb-4">
+    <div class="gui absolute right-0 top-0"></div>
+  </div>
+</div>
