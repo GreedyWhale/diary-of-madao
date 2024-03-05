@@ -9,6 +9,7 @@
     },
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "moduleResolution": "Bundler"
   },
   "exclude": [
     "**/node_modules/**",

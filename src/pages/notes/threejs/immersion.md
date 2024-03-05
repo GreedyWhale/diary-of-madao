@@ -6,7 +6,7 @@ description: 有关相机和使用 CSS 技巧和一些辅助工具提升体验�
 createdAt: 2024-01-04T02:02:00.000Z
 updatedAt: 2024-01-04T06:53:00.000Z
 tags: [Three.js, FullScreen, Camera, Control, Helper]
-demo: /playground/threejs/immersion
+demo: /playground/threejs/immersion-1
 ---
 
 ### # 0.1 相机

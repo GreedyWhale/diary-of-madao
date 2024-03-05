@@ -1,0 +1,125 @@
+---
+import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
+---
+
+<FullScreenCanvas />
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import GUI from "lil-gui";
+
+  import colorTexture from "/static/textures/door/Door_Wood_001_basecolor.jpg?url";
+
+  const gui = new GUI();
+  const root = document.querySelector(".app")!;
+  const canvas = document.createElement("canvas");
+  root.appendChild(canvas);
+
+  const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+
+  let scene: THREE.Scene;
+  let camera: THREE.PerspectiveCamera;
+  let renderer: THREE.WebGLRenderer;
+  let cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>;
+  let texture: THREE.Texture;
+  let control: OrbitControls;
+
+  const initCamera = () => {
+    camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+    camera.position.z = 3;
+  };
+
+  const initTexture = () => {
+    const loader = new THREE.TextureLoader();
+    texture = loader.load(colorTexture);
+
+    texture.repeat.x = 2;
+  };
+
+  const initMesh = () => {
+    const material = new THREE.MeshBasicMaterial({ map: texture });
+    cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1.5, 1), material);
+  };
+
+  const initScene = () => {
+    scene = new THREE.Scene();
+    scene.add(camera, cube);
+  };
+
+  const initRenderer = () => {
+    renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.render(scene, camera);
+  };
+
+  const initControl = () => {
+    control = new OrbitControls(camera, renderer.domElement);
+    control.enableDamping = true;
+    control.update();
+  };
+
+  const initGUI = () => {
+    const config = {
+      setTextureWrapS: () => {
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.needsUpdate = true;
+      },
+      reset: () => {
+        texture.wrapS = THREE.ClampToEdgeWrapping;
+        texture.needsUpdate = true;
+      },
+    };
+
+    gui.add(config, "setTextureWrapS").name("修改材质重复方式");
+    gui.add(config, "reset").name("重置");
+  };
+
+  const bindListeners = () => {
+    window.addEventListener("resize", () => {
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+
+      // 更新相机;
+      if (camera) {
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix(); // 修改完相机参数后需要更新一下相机的投影矩阵
+      }
+
+      // 更新渲染器
+      if (renderer) {
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.render(scene, camera);
+      }
+    });
+
+    window.addEventListener("dblclick", () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        canvas.requestFullscreen();
+      }
+    });
+  };
+
+  const tick = () => {
+    control.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  };
+
+  initCamera();
+  initTexture();
+  initMesh();
+  initScene();
+  initRenderer();
+  initControl();
+  initGUI();
+  bindListeners();
+  tick();
+</script>

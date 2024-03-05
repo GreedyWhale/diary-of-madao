@@ -1,0 +1,207 @@
+---
+import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
+---
+
+<FullScreenCanvas />
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import { GUI } from "lil-gui";
+
+  import doorColorTexturePath from "/static/textures/door/Door_Wood_001_basecolor.jpg?url";
+  import doorAoTexturePath from "/static/textures/door/Door_Wood_001_ambientOcclusion.jpg?url";
+  import doorRoughnessTexturePath from "/static/textures/door/Door_Wood_001_roughness.jpg?url";
+  import doorMetalnessTexturePath from "/static/textures/door/Door_Wood_001_metallic.jpg?url";
+  import doorNormalTexturePath from "/static/textures/door/Door_Wood_001_normal.jpg?url";
+  import doorOpacityTexturePath from "/static/textures/door/Door_Wood_001_opacity.jpg?url";
+  import doorHeightTexturePath from "/static/textures/door/Door_Wood_001_height.png?url";
+
+  const root = document.querySelector(".app")!;
+  const canvas = document.createElement("canvas");
+  root.appendChild(canvas);
+
+  const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+
+  const loader = new THREE.TextureLoader();
+  const ambientLight = new THREE.AmbientLight(0xffffff);
+  let scene: THREE.Scene;
+  let camera: THREE.PerspectiveCamera;
+  let renderer: THREE.WebGLRenderer;
+  let door: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial>;
+  let control: OrbitControls;
+
+  const initCamera = () => {
+    camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+    camera.position.z = 2;
+  };
+
+  const initMesh = () => {
+    door = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.8, 2.5, 100, 100),
+      new THREE.MeshStandardMaterial(),
+    );
+  };
+
+  const initScene = () => {
+    scene = new THREE.Scene();
+    scene.add(camera, door, ambientLight);
+  };
+
+  const initRenderer = () => {
+    renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.render(scene, camera);
+  };
+
+  const initControl = () => {
+    control = new OrbitControls(camera, renderer.domElement);
+    control.enableDamping = true;
+    control.update();
+  };
+
+  const initGUI = () => {
+    const gui = new GUI();
+    const options = {
+      addColorTexture: () => {
+        const texture = loader.load(doorColorTexturePath);
+        door.material.map = texture;
+        door.material.needsUpdate = true;
+      },
+
+      addAoTexture: () => {
+        const texture = loader.load(doorAoTexturePath);
+        door.geometry.setAttribute(
+          "uv2",
+          new THREE.BufferAttribute(door.geometry.attributes.uv.array, 2),
+        );
+        door.material.aoMap = texture;
+        door.material.needsUpdate = true;
+      },
+
+      addRoughnessTexture: () => {
+        const texture = loader.load(doorRoughnessTexturePath);
+        door.material.roughnessMap = texture;
+        door.material.needsUpdate = true;
+      },
+
+      addMetalnessTexture: () => {
+        const texture = loader.load(doorMetalnessTexturePath);
+        door.material.metalnessMap = texture;
+        door.material.needsUpdate = true;
+      },
+
+      addNormalTextures: () => {
+        const texture = loader.load(doorNormalTexturePath);
+        door.material.normalMap = texture;
+        door.material.needsUpdate = true;
+      },
+
+      addOpacityTexture: () => {
+        const texture = loader.load(doorOpacityTexturePath);
+        door.material.transparent = true;
+        door.material.alphaMap = texture;
+        door.material.needsUpdate = true;
+      },
+
+      addHeightTexture: () => {
+        const texture = loader.load(doorHeightTexturePath);
+        door.material.displacementMap = texture;
+        door.material.displacementScale = 0.1;
+        door.material.needsUpdate = true;
+      },
+
+      addLight: () => {
+        const light = new THREE.DirectionalLight(0xffffff, 0.1);
+        light.position.set(0, 1.2, 3);
+        light.target.position.set(0, 0, 0);
+        scene.add(light, light.target);
+      },
+    };
+
+    gui.add(options, "addColorTexture").name("1. 添加颜色纹理");
+
+    const aoMapGroup = gui.addFolder("遮挡纹理");
+    aoMapGroup.add(options, "addAoTexture").name("2. 添加遮挡纹理");
+    aoMapGroup
+      .add(door.material, "aoMapIntensity")
+      .min(0)
+      .max(10)
+      .step(0.01)
+      .name("aoMapIntensity");
+
+    const roughnessMapGroup = gui.addFolder("粗糙度纹理");
+    roughnessMapGroup
+      .add(options, "addRoughnessTexture")
+      .name("3. 添加粗糙度纹理");
+    roughnessMapGroup
+      .add(door.material, "roughness")
+      .min(0)
+      .max(1)
+      .step(0.01)
+      .name("roughness");
+
+    const metalnessMapGroup = gui.addFolder("金属度纹理");
+    metalnessMapGroup
+      .add(options, "addMetalnessTexture")
+      .name("4. 添加金属度纹理");
+    metalnessMapGroup
+      .add(door.material, "metalness")
+      .min(0)
+      .max(1)
+      .step(0.01)
+      .name("metalness");
+
+    gui.add(options, "addNormalTextures").name("5. 添加法线纹理");
+    gui.add(options, "addLight").name("6. 添加光源，显示更多细节");
+    gui.add(options, "addOpacityTexture").name("7. 添加透明度纹理");
+    gui.add(options, "addHeightTexture").name("7. 添加位移纹理");
+  };
+
+  const bindListeners = () => {
+    window.addEventListener("resize", () => {
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+
+      // 更新相机;
+      if (camera) {
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix(); // 修改完相机参数后需要更新一下相机的投影矩阵
+      }
+
+      // 更新渲染器
+      if (renderer) {
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.render(scene, camera);
+      }
+    });
+
+    window.addEventListener("dblclick", () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        canvas.requestFullscreen();
+      }
+    });
+  };
+
+  const tick = () => {
+    control.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  };
+
+  initCamera();
+  initMesh();
+  initScene();
+  initRenderer();
+  initControl();
+  initGUI();
+  bindListeners();
+  tick();
+</script>

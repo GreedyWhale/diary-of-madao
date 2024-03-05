@@ -49,8 +49,5 @@ const { frontmatter, compiledContent } = Astro.props;
     </ul>
   </div>
 
-  <article
-    class="markdown-body !bg-transparent pb-16"
-    set:html={compiledContent()}
-  />
+  <article class="markdown-body !bg-transparent" set:html={compiledContent()} />
 </Layout>

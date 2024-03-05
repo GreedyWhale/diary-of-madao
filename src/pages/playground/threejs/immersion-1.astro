@@ -1,22 +1,8 @@
-<style>
-  body {
-    margin: 0;
-  }
+---
+import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
+---
 
-  html,
-  body {
-    overflow: hidden;
-  }
-
-  canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    outline: none;
-  }
-</style>
-
-<div class="app"></div>
+<FullScreenCanvas />
 
 <script>
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";

@@ -1,0 +1,394 @@
+---
+import Layout from "~/layouts/Layout.astro";
+import Tips from "~/components/Tips.astro";
+---
+
+<Layout>
+  <Tips
+    title="小提示: "
+    content="可画布通过右上角的控件进行调试"
+    class="mb-4"
+  />
+
+  <h4 class="mb-2 text-lg font-bold">1. MeshBasicMaterial</h4>
+  <div class="mesh-basic-material relative mb-4"></div>
+
+  <h4 class="mb-2 text-lg font-bold">2. MeshNormalMaterial</h4>
+  <div class="mesh-normal-material relative mb-4">
+    <div class="gui absolute right-0 top-0"></div>
+  </div>
+
+  <h4 class="mb-2 text-lg font-bold">3. MeshMatcapMaterial</h4>
+  <div class="mesh-matcap-material relative mb-4">
+    <div class="gui absolute right-0 top-0"></div>
+  </div>
+
+  <h4 class="mb-2 text-lg font-bold">4. MeshStandardMaterial</h4>
+  <div class="mesh-standard-material relative mb-4">
+    <div class="gui absolute right-0 top-0"></div>
+  </div>
+</Layout>
+
+<script>
+  import * as THREE from "three";
+  import GUI from "lil-gui";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+  import matCapTexturePath from "/static/textures/matCap/586A51_CCD5AA_8C9675_8DBBB7-64px.png?url";
+
+  const initMeshBasicMaterialExample = () => {
+    const root = document.querySelector(".mesh-basic-material")!;
+    const { width } = root.getBoundingClientRect();
+
+    const canvas = document.createElement("canvas");
+    root.appendChild(canvas);
+
+    const sizes = {
+      width,
+      height: 600,
+    };
+
+    const material = new THREE.MeshBasicMaterial();
+    let scene: THREE.Scene;
+    let camera: THREE.PerspectiveCamera;
+    let renderer: THREE.WebGLRenderer;
+    let control: OrbitControls;
+    let cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>;
+    let sphere: THREE.Mesh<THREE.SphereGeometry, THREE.MeshBasicMaterial>;
+    let torus: THREE.Mesh<THREE.TorusGeometry, THREE.MeshBasicMaterial>;
+
+    const initCamera = () => {
+      camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+      camera.position.z = 5;
+    };
+
+    const initMesh = () => {
+      cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1.5, 1), material);
+      torus = new THREE.Mesh(new THREE.TorusGeometry(1, 0.4), material);
+      sphere = new THREE.Mesh(new THREE.SphereGeometry(1), material);
+
+      torus.position.x = -3;
+      sphere.position.x = 3;
+    };
+
+    const initScene = () => {
+      scene = new THREE.Scene();
+      scene.add(camera, cube, torus, sphere);
+    };
+
+    const initRenderer = () => {
+      renderer = new THREE.WebGLRenderer({ canvas });
+      renderer.setSize(sizes.width, sizes.height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.render(scene, camera);
+    };
+
+    const initControl = () => {
+      control = new OrbitControls(camera, renderer.domElement);
+      control.enableDamping = true;
+      control.update();
+    };
+
+    const tick = () => {
+      control.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    };
+
+    initCamera();
+    initMesh();
+    initScene();
+    initRenderer();
+    initControl();
+    tick();
+  };
+
+  const initMeshNormalMaterialExample = () => {
+    const root = document.querySelector(".mesh-normal-material")!;
+    const { width } = root.getBoundingClientRect();
+
+    const canvas = document.createElement("canvas");
+    root.appendChild(canvas);
+
+    const sizes = {
+      width,
+      height: 600,
+    };
+
+    const material = new THREE.MeshNormalMaterial();
+    let scene: THREE.Scene;
+    let camera: THREE.PerspectiveCamera;
+    let renderer: THREE.WebGLRenderer;
+    let control: OrbitControls;
+    let cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshNormalMaterial>;
+    let sphere: THREE.Mesh<THREE.SphereGeometry, THREE.MeshNormalMaterial>;
+    let torus: THREE.Mesh<THREE.TorusGeometry, THREE.MeshNormalMaterial>;
+
+    const initCamera = () => {
+      camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+      camera.position.z = 5;
+    };
+
+    const initMesh = () => {
+      cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1.5, 1), material);
+      torus = new THREE.Mesh(new THREE.TorusGeometry(1, 0.4), material);
+      sphere = new THREE.Mesh(new THREE.SphereGeometry(1), material);
+
+      torus.position.x = -3;
+      sphere.position.x = 3;
+    };
+
+    const initScene = () => {
+      scene = new THREE.Scene();
+      scene.add(camera, cube, torus, sphere);
+    };
+
+    const initRenderer = () => {
+      renderer = new THREE.WebGLRenderer({ canvas });
+      renderer.setSize(sizes.width, sizes.height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.render(scene, camera);
+    };
+
+    const initControl = () => {
+      control = new OrbitControls(camera, renderer.domElement);
+      control.enableDamping = true;
+      control.update();
+    };
+
+    const initGUI = () => {
+      const gui = new GUI({
+        container: document.querySelector(
+          ".mesh-normal-material .gui",
+        ) as unknown as HTMLElement,
+      });
+      gui
+        .add(material, "flatShading")
+        .onChange(() => (material.needsUpdate = true))
+        .name("flatShading");
+    };
+
+    const tick = () => {
+      control.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    };
+
+    initCamera();
+    initMesh();
+    initScene();
+    initRenderer();
+    initControl();
+    initGUI();
+    tick();
+  };
+
+  const initMeshMatcapMaterialExample = () => {
+    const root = document.querySelector(".mesh-matcap-material")!;
+    const { width } = root.getBoundingClientRect();
+
+    const canvas = document.createElement("canvas");
+    root.appendChild(canvas);
+
+    const sizes = {
+      width,
+      height: 600,
+    };
+
+    const material = new THREE.MeshMatcapMaterial();
+    let scene: THREE.Scene;
+    let camera: THREE.PerspectiveCamera;
+    let renderer: THREE.WebGLRenderer;
+    let control: OrbitControls;
+    let cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshMatcapMaterial>;
+    let sphere: THREE.Mesh<THREE.SphereGeometry, THREE.MeshMatcapMaterial>;
+    let torus: THREE.Mesh<THREE.TorusGeometry, THREE.MeshMatcapMaterial>;
+    let texture: THREE.Texture;
+
+    const initCamera = () => {
+      camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+      camera.position.z = 5;
+    };
+
+    const initTextures = () => {
+      const texturesLoader = new THREE.TextureLoader();
+      texture = texturesLoader.load(matCapTexturePath);
+
+      material.matcap = texture;
+    };
+
+    const initMesh = () => {
+      cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1.5, 1), material);
+      torus = new THREE.Mesh(new THREE.TorusGeometry(1, 0.4), material);
+      sphere = new THREE.Mesh(new THREE.SphereGeometry(1), material);
+
+      torus.position.x = -3;
+      sphere.position.x = 3;
+    };
+
+    const initScene = () => {
+      scene = new THREE.Scene();
+      scene.add(camera, cube, torus, sphere);
+    };
+
+    const initRenderer = () => {
+      renderer = new THREE.WebGLRenderer({ canvas });
+      renderer.setSize(sizes.width, sizes.height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.render(scene, camera);
+    };
+
+    const initControl = () => {
+      control = new OrbitControls(camera, renderer.domElement);
+      control.enableDamping = true;
+      control.update();
+    };
+
+    const tick = () => {
+      control.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    };
+
+    initCamera();
+    initTextures();
+    initMesh();
+    initScene();
+    initRenderer();
+    initControl();
+    tick();
+  };
+
+  const initMeshStandardMaterialExample = () => {
+    const root = document.querySelector(".mesh-standard-material")!;
+    const { width } = root.getBoundingClientRect();
+
+    const canvas = document.createElement("canvas");
+    root.appendChild(canvas);
+
+    const sizes = {
+      width,
+      height: 600,
+    };
+
+    const material = new THREE.MeshStandardMaterial();
+    material.roughness = 0.4;
+    material.metalness = 0.6;
+
+    let scene: THREE.Scene;
+    let camera: THREE.PerspectiveCamera;
+    let renderer: THREE.WebGLRenderer;
+    let control: OrbitControls;
+    let cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshStandardMaterial>;
+    let sphere: THREE.Mesh<THREE.SphereGeometry, THREE.MeshStandardMaterial>;
+    let torus: THREE.Mesh<THREE.TorusGeometry, THREE.MeshStandardMaterial>;
+    let directionalLight: THREE.DirectionalLight;
+    let pointLight: THREE.PointLight;
+
+    const initCamera = () => {
+      camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+      camera.position.z = 5;
+    };
+
+    const initMesh = () => {
+      cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1.5, 1), material);
+      torus = new THREE.Mesh(new THREE.TorusGeometry(1, 0.4), material);
+      sphere = new THREE.Mesh(new THREE.SphereGeometry(1), material);
+
+      torus.position.x = -3;
+      sphere.position.x = 3;
+    };
+
+    const initLights = () => {
+      directionalLight = new THREE.DirectionalLight(0xffffff);
+      directionalLight.position.set(1, 1, 1);
+
+      pointLight = new THREE.PointLight(new THREE.Color("#FF407D"), 5, 5, 0.1);
+      pointLight.position.y = 3;
+      pointLight.position.z = 3;
+    };
+
+    const initScene = () => {
+      scene = new THREE.Scene();
+      scene.add(camera, cube, torus, sphere, directionalLight, pointLight);
+    };
+
+    const initRenderer = () => {
+      renderer = new THREE.WebGLRenderer({ canvas });
+      renderer.setSize(sizes.width, sizes.height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.render(scene, camera);
+    };
+
+    const initControl = () => {
+      control = new OrbitControls(camera, renderer.domElement);
+      control.enableDamping = true;
+      control.update();
+    };
+
+    const initGUI = () => {
+      const gui = new GUI({
+        container: document.querySelector(
+          ".mesh-standard-material .gui",
+        ) as unknown as HTMLElement,
+      });
+
+      const options = {
+        pointLight: true,
+        directionalLight: true,
+      };
+
+      const lights = gui.addFolder("灯光");
+      lights
+        .add(options, "directionalLight")
+        .onChange(() => {
+          options.directionalLight
+            ? scene.add(directionalLight)
+            : scene.remove(directionalLight);
+        })
+        .name("平行光");
+
+      lights
+        .add(options, "pointLight")
+        .onChange(() => {
+          options.pointLight ? scene.add(pointLight) : scene.remove(pointLight);
+        })
+        .name("点光源");
+
+      const materials = gui.addFolder("材质");
+      materials
+        .add(material, "roughness")
+        .min(0)
+        .max(1)
+        .step(0.01)
+        .name("roughness");
+
+      materials
+        .add(material, "metalness")
+        .min(0)
+        .max(1)
+        .step(0.01)
+        .name("metalness");
+    };
+
+    const tick = () => {
+      control.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    };
+
+    initCamera();
+    initMesh();
+    initLights();
+    initScene();
+    initRenderer();
+    initControl();
+    initGUI();
+    tick();
+  };
+
+  initMeshBasicMaterialExample();
+  initMeshNormalMaterialExample();
+  initMeshMatcapMaterialExample();
+  initMeshStandardMaterialExample();
+</script>

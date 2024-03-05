@@ -1,79 +1,58 @@
 ---
 import Header from "~/components/Header.astro";
 import Footer from "~/components/Footer.astro";
+import BaseLayout from "~/layouts/Base.astro";
 interface Props {
   title?: string;
 }
 
-const { title = "牢骚百物语" } = Astro.props;
+const { title } = Astro.props;
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="title" content={title} />
-    <meta name="description" content="一个自学前端的大龄肥宅的技术笔记" />
-    <meta name="keywords" content="技术笔记, 前端开发, 编程教程, Web 开发" />
-    <meta name="robots" content="index, follow" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="language" content="Chinese" />
-    <meta name="revisit-after" content="1 days" />
-    <meta name="author" content="madaocai@gmail.com" />
+<BaseLayout title={title}>
+  <!-- https://github.com/ota-meshi/eslint-plugin-astro/issues/311 -->
+  <style slot="style" is:global>
+    html {
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        Segoe UI,
+        Helvetica,
+        Arial,
+        sans-serif,
+        Apple Color Emoji,
+        Segoe UI Emoji;
+    }
 
-    <meta
-      name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, minimal-ui"
-    />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    html,
+    body {
+      height: 100%;
+    }
 
-    <!-- https://github.com/ota-meshi/eslint-plugin-astro/issues/311 -->
-    <style is:global>
-      html {
-        font-family:
-          -apple-system,
-          BlinkMacSystemFont,
-          Segoe UI,
-          Helvetica,
-          Arial,
-          sans-serif,
-          Apple Color Emoji,
-          Segoe UI Emoji;
-      }
+    code {
+      font-family:
+        Menlo,
+        Monaco,
+        Lucida Console,
+        Liberation Mono,
+        DejaVu Sans Mono,
+        Bitstream Vera Sans Mono,
+        Courier New,
+        monospace;
+    }
 
-      html,
-      body {
-        height: 100%;
-      }
+    a:hover,
+    button:hover {
+      opacity: 0.7 !important;
+    }
 
-      code {
-        font-family:
-          Menlo,
-          Monaco,
-          Lucida Console,
-          Liberation Mono,
-          DejaVu Sans Mono,
-          Bitstream Vera Sans Mono,
-          Courier New,
-          monospace;
-      }
+    a:active {
+      color: inherit;
+    }
+  </style>
 
-      a:hover,
-      button:hover {
-        opacity: 0.7 !important;
-      }
-
-      a:active {
-        color: inherit;
-      }
-    </style>
-
-    <slot name="style" />
-  </head>
-  <body
-    class="flex flex-col overflow-hidden bg-gradient-to-br from-[#D3E0EA] via-[#D6E4E5] to-[#EAE3D2] text-primary"
+  <div
+    class="flex h-full flex-col overflow-hidden bg-gradient-to-br from-[#D3E0EA] via-[#D6E4E5] to-[#EAE3D2] text-primary"
   >
     <Header />
     <div class="w-full flex-1 overflow-y-auto hidden-scrollbar">
@@ -82,5 +61,5 @@ const { title = "牢骚百物语" } = Astro.props;
       </main>
       <Footer />
     </div>
-  </body>
-</html>
+  </div>
+</BaseLayout>

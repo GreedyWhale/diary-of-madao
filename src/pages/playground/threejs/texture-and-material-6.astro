@@ -1,0 +1,120 @@
+---
+import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
+---
+
+<FullScreenCanvas />
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+  import pxTexturePath from "/static/textures/envMap/px.png?url";
+  import nxTexturePath from "/static/textures/envMap/nx.png?url";
+  import pyTexturePath from "/static/textures/envMap/py.png?url";
+  import nyTexturePath from "/static/textures/envMap/ny.png?url";
+  import pzTexturePath from "/static/textures/envMap/pz.png?url";
+  import nzTexturePath from "/static/textures/envMap/nz.png?url";
+
+  const root = document.querySelector(".app")!;
+  const canvas = document.createElement("canvas");
+  root.appendChild(canvas);
+
+  const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+
+  const ambientLight = new THREE.AmbientLight(0xffffff);
+  let scene: THREE.Scene;
+  let camera: THREE.PerspectiveCamera;
+  let renderer: THREE.WebGLRenderer;
+  let sphere: THREE.Mesh<THREE.SphereGeometry, THREE.MeshStandardMaterial>;
+  let texture: THREE.CubeTexture;
+  let control: OrbitControls;
+
+  const initCamera = () => {
+    camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+    camera.position.z = 3;
+  };
+
+  const initTexture = () => {
+    const loader = new THREE.CubeTextureLoader();
+    texture = loader.load([
+      pxTexturePath,
+      nxTexturePath,
+      pyTexturePath,
+      nyTexturePath,
+      pzTexturePath,
+      nzTexturePath,
+    ]);
+  };
+
+  const initMesh = () => {
+    const material = new THREE.MeshStandardMaterial({ envMap: texture });
+    material.roughness = 0;
+    material.metalness = 1;
+    sphere = new THREE.Mesh(new THREE.SphereGeometry(1), material);
+  };
+
+  const initScene = () => {
+    scene = new THREE.Scene();
+    scene.add(camera, sphere, ambientLight);
+    scene.background = texture;
+  };
+
+  const initRenderer = () => {
+    renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.render(scene, camera);
+  };
+
+  const initControl = () => {
+    control = new OrbitControls(camera, renderer.domElement);
+    control.enableDamping = true;
+    control.update();
+  };
+
+  const bindListeners = () => {
+    window.addEventListener("resize", () => {
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+
+      // 更新相机;
+      if (camera) {
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix(); // 修改完相机参数后需要更新一下相机的投影矩阵
+      }
+
+      // 更新渲染器
+      if (renderer) {
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.render(scene, camera);
+      }
+    });
+
+    window.addEventListener("dblclick", () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        canvas.requestFullscreen();
+      }
+    });
+  };
+
+  const tick = () => {
+    control.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  };
+
+  initCamera();
+  initTexture();
+  initMesh();
+  initScene();
+  initRenderer();
+  initControl();
+  bindListeners();
+  tick();
+</script>
