@@ -1,0 +1,268 @@
+---
+import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
+---
+
+<FullScreenCanvas />
+
+<script>
+  import type { Font } from "three/addons/loaders/FontLoader.js";
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
+  import { FontLoader } from "three/addons/loaders/FontLoader.js";
+  import droidFont from "three/examples/fonts/droid/droid_serif_regular.typeface.json?url";
+
+  import { GUI } from "lil-gui";
+  import { gsap, Linear } from "gsap";
+
+  const gui = new GUI();
+  const root = document.querySelector(".app")!;
+  const canvas = document.createElement("canvas");
+  root.appendChild(canvas);
+
+  const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+
+  const loader = new FontLoader();
+  const ambientLight = new THREE.AmbientLight(0xffffff);
+  const meshesGroup = new THREE.Group();
+  const textConfig = {
+    text: "Hello Three.js",
+    font: {
+      // 字体大小
+      size: 0.5,
+      // 字体厚度（z轴）
+      height: 0.2,
+      // 字体曲面的分段数
+      curveSegments: 12,
+      // 以下部分都是关于字体斜角的配置
+      bevelEnabled: false,
+      bevelThickness: 0.03,
+      bevelSize: 0.02,
+      bevelOffset: 0,
+      bevelSegments: 5,
+    },
+  };
+  let scene: THREE.Scene;
+  let camera: THREE.PerspectiveCamera;
+  let renderer: THREE.WebGLRenderer;
+  let text: THREE.Mesh<TextGeometry, THREE.MeshNormalMaterial>;
+  let font: Font;
+  let control: OrbitControls;
+
+  const createText = () => {
+    const geometry = new TextGeometry(textConfig.text, {
+      font,
+      ...textConfig.font,
+    });
+
+    text = new THREE.Mesh(
+      geometry,
+      new THREE.MeshNormalMaterial({ wireframe: true }),
+    );
+
+    text.geometry.center();
+    // text.geometry.computeBoundingBox();
+    // const { max, min } = text.geometry.boundingBox!;
+
+    // text.geometry.translate(
+    //   -(max.x - min.x) / 2,
+    //   -(max.y - Math.abs(min.y)) / 2,
+    //   -(max.z - min.z) / 2,
+    // );
+    scene.add(text);
+  };
+
+  const createMeshes = () => {
+    const material = new THREE.MeshNormalMaterial();
+    const donutGeometry = new THREE.TorusGeometry(0.4, 0.2);
+    const cubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+
+    const counts = 150;
+
+    for (let index = 0; index < counts; index++) {
+      const cube = new THREE.Mesh(cubeGeometry, material);
+      const donut = new THREE.Mesh(donutGeometry, material);
+
+      cube.position.set(
+        (Math.random() - 0.5) * 2 * 20,
+        (Math.random() - 0.5) * 2 * 20,
+        (Math.random() - 0.5) * 2 * 20,
+      );
+
+      donut.position.set(
+        (Math.random() - 0.5) * 2 * 20,
+        (Math.random() - 0.5) * 2 * 20,
+        (Math.random() - 0.5) * 2 * 20,
+      );
+
+      meshesGroup.add(cube, donut);
+    }
+  };
+
+  const initCamera = () => {
+    camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+    camera.position.z = 10;
+  };
+
+  const initText = async () => {
+    const loadFont = () =>
+      new Promise<Font>((resolve) => {
+        loader.load(droidFont, (font) => resolve(font));
+      });
+
+    font = await loadFont();
+    createText();
+  };
+
+  const initScene = () => {
+    scene = new THREE.Scene();
+    scene.add(camera, ambientLight, meshesGroup);
+  };
+
+  const initRenderer = () => {
+    renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.render(scene, camera);
+  };
+
+  const initControl = () => {
+    control = new OrbitControls(camera, renderer.domElement);
+    control.enableDamping = true;
+    control.update();
+  };
+
+  const initGUI = () => {
+    const fontGroup = gui.addFolder("文字几何图形");
+    fontGroup
+      .add(textConfig.font, "size")
+      .min(0.1)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        scene.remove(text);
+        createText();
+      })
+      .name("size");
+
+    fontGroup
+      .add(textConfig.font, "height")
+      .min(0.1)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        scene.remove(text);
+        createText();
+      })
+      .name("height");
+
+    fontGroup
+      .add(textConfig.font, "bevelEnabled")
+      .onChange(() => {
+        scene.remove(text);
+        createText();
+      })
+      .name("bevelEnabled");
+
+    fontGroup
+      .add(textConfig.font, "bevelThickness")
+      .min(0.01)
+      .max(1)
+      .step(0.01)
+      .onChange(() => {
+        scene.remove(text);
+        createText();
+      })
+      .name("bevelThickness");
+
+    fontGroup
+      .add(textConfig.font, "bevelSize")
+      .min(0.01)
+      .max(1)
+      .step(0.01)
+      .onChange(() => {
+        scene.remove(text);
+        createText();
+      })
+      .name("bevelSize");
+
+    fontGroup
+      .add(textConfig.font, "bevelOffset")
+      .min(0.01)
+      .max(1)
+      .step(0.01)
+      .onChange(() => {
+        scene.remove(text);
+        createText();
+      })
+      .name("bevelOffset");
+
+    fontGroup
+      .add(textConfig.font, "bevelSegments")
+      .min(1)
+      .max(100)
+      .step(1)
+      .onChange(() => {
+        scene.remove(text);
+        createText();
+      })
+      .name("bevelSegments");
+  };
+
+  const initAnimation = () => {
+    gsap.to(meshesGroup.rotation, {
+      y: Math.PI * 2,
+      x: Math.PI * 2,
+      duration: 25,
+      ease: Linear.easeNone,
+      repeat: -1,
+    });
+  };
+
+  const bindListeners = () => {
+    window.addEventListener("resize", () => {
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+
+      // 更新相机;
+      if (camera) {
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix(); // 修改完相机参数后需要更新一下相机的投影矩阵
+      }
+
+      // 更新渲染器
+      if (renderer) {
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.render(scene, camera);
+      }
+    });
+
+    window.addEventListener("dblclick", () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        canvas.requestFullscreen();
+      }
+    });
+  };
+
+  const tick = () => {
+    control.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  };
+
+  initCamera();
+  initScene();
+  initRenderer();
+  initControl();
+  initText().then(initGUI);
+  createMeshes();
+  initAnimation();
+  bindListeners();
+  tick();
+</script>
