@@ -1,0 +1,574 @@
+---
+import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
+---
+
+<FullScreenCanvas />
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+  import { GUI } from "lil-gui";
+
+  import { getSearchParams } from "~/utils/url";
+
+  const { light } = getSearchParams();
+  const gui = new GUI();
+  const root = document.querySelector(".app")!;
+  const canvas = document.createElement("canvas");
+  root.appendChild(canvas);
+
+  const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+
+  const lightOptions = {
+    ambientLight: {
+      color: "#fff",
+      intensity: ["all", "ambientLight"].includes(light) ? 1 : 0,
+    },
+    directionalLight: {
+      color: "#fff",
+      intensity: ["all", "directionalLight"].includes(light) ? 1 : 0,
+    },
+    hemisphereLight: {
+      skyColor: "#6420AA",
+      groundColor: "#FAA300",
+      intensity: ["all", "hemisphereLight"].includes(light) ? 1 : 0,
+    },
+    pointLight: {
+      color: "#FC6736",
+      intensity: ["all", "pointLight"].includes(light) ? 10 : 0,
+    },
+    rectAreaLight: {
+      color: "#F8E559",
+      intensity: ["all", "rectAreaLight"].includes(light) ? 1 : 0,
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+    spotLight: {
+      color: "#5FBDFF",
+      intensity: ["all", "spotLight"].includes(light) ? 10 : 0,
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+  };
+
+  const ambientLight = new THREE.AmbientLight(
+    lightOptions.ambientLight.color,
+    lightOptions.ambientLight.intensity
+  );
+  const meshesGroup = new THREE.Group();
+  let scene: THREE.Scene;
+  let camera: THREE.PerspectiveCamera;
+  let renderer: THREE.WebGLRenderer;
+  let control: OrbitControls;
+  let directionalLight: THREE.DirectionalLight;
+  let directionalLightHelper: THREE.DirectionalLightHelper;
+  let hemisphereLight: THREE.HemisphereLight;
+  let hemisphereLightHelper: THREE.HemisphereLightHelper;
+  let pointLight: THREE.PointLight;
+  let pointLightHelper: THREE.PointLightHelper;
+  let rectAreaLight: THREE.RectAreaLight;
+  let spotLight: THREE.SpotLight;
+  let spotLightHelper: THREE.SpotLightHelper;
+
+  const createMeshes = () => {
+    const material = new THREE.MeshStandardMaterial({
+      side: THREE.DoubleSide,
+    });
+    const donutGeometry = new THREE.TorusGeometry(0.4, 0.2);
+    const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const sphereGeometry = new THREE.SphereGeometry(0.6);
+    const planeGeometry = new THREE.PlaneGeometry(10, 10);
+
+    const cube = new THREE.Mesh(cubeGeometry, material);
+    const donut = new THREE.Mesh(donutGeometry, material);
+    const sphere = new THREE.Mesh(sphereGeometry, material);
+    const plane = new THREE.Mesh(planeGeometry, material);
+
+    donut.position.x = -3;
+    sphere.position.x = 3;
+    plane.position.y = -0.6;
+    plane.rotateX(Math.PI * 0.5);
+
+    meshesGroup.add(cube, donut, sphere, plane);
+  };
+
+  const initDirectionalLight = () => {
+    directionalLight = new THREE.DirectionalLight(
+      lightOptions.directionalLight.color,
+      lightOptions.directionalLight.intensity
+    );
+    directionalLightHelper = new THREE.DirectionalLightHelper(
+      directionalLight,
+      1
+    );
+
+    directionalLight.position.set(2, 5, 0);
+    scene.add(directionalLight, directionalLightHelper);
+  };
+
+  const initHemisphereLight = () => {
+    hemisphereLight = new THREE.HemisphereLight(
+      lightOptions.hemisphereLight.skyColor,
+      lightOptions.hemisphereLight.groundColor,
+      lightOptions.hemisphereLight.intensity
+    );
+    hemisphereLightHelper = new THREE.HemisphereLightHelper(hemisphereLight, 1);
+
+    hemisphereLight.position.set(-2, 5, 0);
+    scene.add(hemisphereLight, hemisphereLightHelper);
+  };
+
+  const initPointLight = () => {
+    pointLight = new THREE.PointLight(
+      lightOptions.pointLight.color,
+      lightOptions.pointLight.intensity,
+      0,
+      0.1
+    );
+    pointLightHelper = new THREE.PointLightHelper(pointLight, 1);
+
+    pointLight.position.set(0, 4, 0);
+
+    scene.add(pointLight, pointLightHelper);
+  };
+
+  const initRectAreaLight = () => {
+    rectAreaLight = new THREE.RectAreaLight(
+      lightOptions.rectAreaLight.color,
+      lightOptions.rectAreaLight.intensity,
+      3,
+      2
+    );
+    rectAreaLight.position.set(2, 0, 3);
+    scene.add(rectAreaLight);
+  };
+
+  const initSpotLight = () => {
+    spotLight = new THREE.SpotLight(
+      lightOptions.spotLight.color,
+      lightOptions.spotLight.intensity,
+      0,
+      Math.PI * 0.05
+    );
+    spotLightHelper = new THREE.SpotLightHelper(spotLight);
+
+    spotLight.position.y = 10;
+    scene.add(spotLight, spotLightHelper, spotLight.target);
+  };
+
+  const initCamera = () => {
+    camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+    camera.position.z = 10;
+  };
+
+  const initScene = () => {
+    scene = new THREE.Scene();
+    scene.add(camera, ambientLight, meshesGroup);
+  };
+
+  const initRenderer = () => {
+    renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.render(scene, camera);
+  };
+
+  const initControl = () => {
+    control = new OrbitControls(camera, renderer.domElement);
+    control.enableDamping = true;
+    control.update();
+  };
+
+  const initGUI = () => {
+    const ambientLightGroup = gui.addFolder("ambientLight");
+    const directionalLightGroup = gui.addFolder("directionalLight");
+    const hemisphereLightGroup = gui.addFolder("hemisphereLight");
+    const pointLightGroup = gui.addFolder("pointLight");
+    const rectAreaLightGroup = gui.addFolder("rectAreaLight");
+    const spotLightGroup = gui.addFolder("spotLight");
+
+    ambientLightGroup
+      .add(lightOptions.ambientLight, "intensity")
+      .min(0)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        ambientLight.intensity = lightOptions.ambientLight.intensity;
+      })
+      .name("intensity");
+
+    ambientLightGroup
+      .addColor(lightOptions.ambientLight, "color")
+      .onChange(() => {
+        ambientLight.color = new THREE.Color(lightOptions.ambientLight.color);
+      })
+      .name("color");
+
+    directionalLightGroup
+      .add(lightOptions.directionalLight, "intensity")
+      .min(0)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        directionalLight.intensity = lightOptions.directionalLight.intensity;
+      })
+      .name("intensity");
+
+    directionalLightGroup
+      .addColor(lightOptions.directionalLight, "color")
+      .onChange(() => {
+        directionalLight.color = new THREE.Color(
+          lightOptions.directionalLight.color
+        );
+      })
+      .name("color");
+
+    directionalLightGroup
+      .add(directionalLight.position, "x")
+      .min(-5)
+      .max(5)
+      .step(0.01)
+      .onChange(() => {
+        directionalLightHelper.update();
+      })
+      .name("position x");
+
+    directionalLightGroup
+      .add(directionalLight.position, "y")
+      .min(-5)
+      .max(5)
+      .step(0.01)
+      .onChange(() => {
+        directionalLightHelper.update();
+      })
+      .name("position y");
+
+    directionalLightGroup
+      .add(directionalLight.position, "z")
+      .min(-5)
+      .max(5)
+      .step(0.01)
+      .onChange(() => {
+        directionalLightHelper.update();
+      })
+      .name("position z");
+
+    hemisphereLightGroup
+      .add(lightOptions.hemisphereLight, "intensity")
+      .min(0)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        hemisphereLight.intensity = lightOptions.hemisphereLight.intensity;
+      })
+      .name("intensity");
+
+    hemisphereLightGroup
+      .addColor(lightOptions.hemisphereLight, "skyColor")
+      .onChange(() => {
+        hemisphereLight.color = new THREE.Color(
+          lightOptions.hemisphereLight.skyColor
+        );
+        hemisphereLightHelper.update();
+      })
+      .name("sky color");
+
+    hemisphereLightGroup
+      .addColor(lightOptions.hemisphereLight, "groundColor")
+      .onChange(() => {
+        hemisphereLight.groundColor = new THREE.Color(
+          lightOptions.hemisphereLight.groundColor
+        );
+        hemisphereLightHelper.update();
+      })
+      .name("ground color");
+
+    hemisphereLightGroup
+      .add(hemisphereLight.position, "y")
+      .min(-5)
+      .max(5)
+      .step(0.01)
+      .onChange(() => {
+        hemisphereLightHelper.update();
+      })
+      .name("position y");
+
+    hemisphereLightGroup
+      .add(hemisphereLight.position, "x")
+      .min(-5)
+      .max(5)
+      .step(0.01)
+      .onChange(() => {
+        hemisphereLightHelper.update();
+      })
+      .name("position x");
+
+    hemisphereLightGroup
+      .add(hemisphereLight.position, "z")
+      .min(-5)
+      .max(5)
+      .step(0.01)
+      .onChange(() => {
+        hemisphereLightHelper.update();
+      })
+      .name("position z");
+
+    pointLightGroup
+      .add(lightOptions.pointLight, "intensity")
+      .min(0)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        pointLight.intensity = lightOptions.pointLight.intensity;
+      })
+      .name("intensity");
+
+    pointLightGroup
+      .addColor(lightOptions.pointLight, "color")
+      .onChange(() => {
+        pointLight.color = new THREE.Color(lightOptions.pointLight.color);
+      })
+      .name("color");
+
+    pointLightGroup
+      .add(pointLight.position, "y")
+      .min(-5)
+      .max(5)
+      .step(0.01)
+      .onChange(() => {
+        pointLightHelper.update();
+      })
+      .name("position y");
+
+    pointLightGroup
+      .add(pointLight.position, "x")
+      .min(-5)
+      .max(5)
+      .step(0.01)
+      .onChange(() => {
+        pointLightHelper.update();
+      })
+      .name("position x");
+
+    pointLightGroup
+      .add(pointLight.position, "z")
+      .min(-5)
+      .max(5)
+      .step(0.01)
+      .onChange(() => {
+        pointLightHelper.update();
+      })
+      .name("position z");
+
+    rectAreaLightGroup
+      .add(lightOptions.rectAreaLight, "intensity")
+      .min(0)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        rectAreaLight.intensity = lightOptions.rectAreaLight.intensity;
+      })
+      .name("intensity");
+
+    rectAreaLightGroup
+      .addColor(lightOptions.rectAreaLight, "color")
+      .onChange(() => {
+        rectAreaLight.color = new THREE.Color(lightOptions.rectAreaLight.color);
+      })
+      .name("color");
+
+    rectAreaLightGroup
+      .add(lightOptions.rectAreaLight, "x")
+      .min(0)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        rectAreaLight.lookAt(
+          new THREE.Vector3(
+            lightOptions.rectAreaLight.x,
+            lightOptions.rectAreaLight.y,
+            lightOptions.rectAreaLight.z
+          )
+        );
+      })
+      .name("lookAt x");
+
+    rectAreaLightGroup
+      .add(lightOptions.rectAreaLight, "y")
+      .min(0)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        rectAreaLight.lookAt(
+          new THREE.Vector3(
+            lightOptions.rectAreaLight.x,
+            lightOptions.rectAreaLight.y,
+            lightOptions.rectAreaLight.z
+          )
+        );
+      })
+      .name("lookAt y");
+
+    rectAreaLightGroup
+      .add(lightOptions.rectAreaLight, "z")
+      .min(0)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        rectAreaLight.lookAt(
+          new THREE.Vector3(
+            lightOptions.rectAreaLight.x,
+            lightOptions.rectAreaLight.y,
+            lightOptions.rectAreaLight.z
+          )
+        );
+      })
+      .name("lookAt z");
+
+    spotLightGroup
+      .add(lightOptions.spotLight, "intensity")
+      .min(0)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        spotLight.intensity = lightOptions.spotLight.intensity;
+      })
+      .name("intensity");
+
+    spotLightGroup
+      .addColor(lightOptions.spotLight, "color")
+      .onChange(() => {
+        spotLight.color = new THREE.Color(lightOptions.spotLight.color);
+      })
+      .name("color");
+
+    spotLightGroup
+      .add(spotLight.position, "y")
+      .min(-10)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        spotLightHelper.update();
+      })
+      .name("position y");
+
+    spotLightGroup
+      .add(spotLight.position, "x")
+      .min(-10)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        spotLightHelper.update();
+      })
+      .name("position x");
+
+    spotLightGroup
+      .add(spotLight.position, "z")
+      .min(-10)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        spotLightHelper.update();
+      })
+      .name("position z");
+
+    spotLightGroup
+      .add(lightOptions.spotLight, "y")
+      .min(-10)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        spotLight.target.position.set(
+          lightOptions.spotLight.x,
+          lightOptions.spotLight.y,
+          lightOptions.spotLight.z
+        );
+        spotLightHelper.update();
+      })
+      .name("target y");
+
+    spotLightGroup
+      .add(lightOptions.spotLight, "x")
+      .min(-10)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        spotLight.target.position.set(
+          lightOptions.spotLight.x,
+          lightOptions.spotLight.y,
+          lightOptions.spotLight.z
+        );
+        spotLightHelper.update();
+      })
+      .name("target x");
+
+    spotLightGroup
+      .add(lightOptions.spotLight, "z")
+      .min(-10)
+      .max(10)
+      .step(0.01)
+      .onChange(() => {
+        spotLight.target.position.set(
+          lightOptions.spotLight.x,
+          lightOptions.spotLight.y,
+          lightOptions.spotLight.z
+        );
+        spotLightHelper.update();
+      })
+      .name("target z");
+  };
+
+  const bindListeners = () => {
+    window.addEventListener("resize", () => {
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+
+      // 更新相机;
+      if (camera) {
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix(); // 修改完相机参数后需要更新一下相机的投影矩阵
+      }
+
+      // 更新渲染器
+      if (renderer) {
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.render(scene, camera);
+      }
+    });
+
+    window.addEventListener("dblclick", () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        canvas.requestFullscreen();
+      }
+    });
+  };
+
+  const tick = () => {
+    control.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  };
+
+  initCamera();
+  initScene();
+  createMeshes();
+  initDirectionalLight();
+  initHemisphereLight();
+  initPointLight();
+  initRectAreaLight();
+  initSpotLight();
+  initRenderer();
+  initControl();
+  initGUI();
+  bindListeners();
+  tick();
+</script>
