@@ -1,0 +1,277 @@
+---
+import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
+---
+
+<FullScreenCanvas />
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import { gsap } from "gsap";
+
+  import { GUI } from "lil-gui";
+
+  import { getSearchParams } from "~/utils/url";
+
+  const { step } = getSearchParams();
+  const gui = new GUI();
+  const root = document.querySelector(".app")!;
+  const canvas = document.createElement("canvas");
+  root.appendChild(canvas);
+
+  const isGreaterOrEqual = (num: number) => {
+    const currentNum = parseInt(step ?? 0);
+
+    return currentNum >= num;
+  };
+
+  const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+
+  const shadowOptions = {
+    mapSize: isGreaterOrEqual(2) ? 1024 : 512,
+    camera: {
+      near: isGreaterOrEqual(3) ? 1 : 0.1,
+      far: isGreaterOrEqual(3) ? 8 : 2000,
+      top: isGreaterOrEqual(3) ? 2 : 5,
+      bottom: isGreaterOrEqual(3) ? -2 : -5,
+      right: isGreaterOrEqual(3) ? 2 : 5,
+      left: isGreaterOrEqual(3) ? -2 : -5,
+    },
+    radius: isGreaterOrEqual(4) ? 10 : 1,
+  };
+
+  let scene: THREE.Scene;
+  let camera: THREE.PerspectiveCamera;
+  let sphere: THREE.Mesh<THREE.SphereGeometry, THREE.MeshStandardMaterial>;
+  let renderer: THREE.WebGLRenderer;
+  let control: OrbitControls;
+  let directionalLight: THREE.DirectionalLight;
+  let cameraHelper: THREE.CameraHelper;
+
+  const createMeshes = () => {
+    const material = new THREE.MeshStandardMaterial({
+      side: THREE.DoubleSide,
+    });
+
+    const sphereGeometry = new THREE.SphereGeometry(0.6);
+    const planeGeometry = new THREE.PlaneGeometry(10, 10);
+
+    sphere = new THREE.Mesh(sphereGeometry, material);
+    const plane = new THREE.Mesh(planeGeometry, material);
+
+    sphere.castShadow = true;
+    sphere.position.y = 1;
+    plane.receiveShadow = true;
+    plane.position.y = -0.6;
+    plane.rotateX(Math.PI * 0.5);
+
+    scene.add(sphere, plane);
+  };
+
+  const initDirectionalLight = () => {
+    directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = shadowOptions.mapSize;
+    directionalLight.shadow.mapSize.height = shadowOptions.mapSize;
+    directionalLight.position.set(2, 5, 0);
+
+    directionalLight.shadow.camera.near = shadowOptions.camera.near;
+    directionalLight.shadow.camera.far = shadowOptions.camera.far;
+    directionalLight.shadow.camera.top = shadowOptions.camera.top;
+    directionalLight.shadow.camera.bottom = shadowOptions.camera.bottom;
+    directionalLight.shadow.camera.right = shadowOptions.camera.right;
+    directionalLight.shadow.camera.left = shadowOptions.camera.left;
+    directionalLight.shadow.radius = shadowOptions.radius;
+    cameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+    cameraHelper.visible = isGreaterOrEqual(3);
+
+    scene.add(directionalLight, cameraHelper);
+  };
+
+  const initCamera = () => {
+    camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+    camera.position.z = 10;
+  };
+
+  const initScene = () => {
+    scene = new THREE.Scene();
+    scene.add(camera);
+  };
+
+  const initRenderer = () => {
+    renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.shadowMap.enabled = true;
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.render(scene, camera);
+  };
+
+  const initControl = () => {
+    control = new OrbitControls(camera, renderer.domElement);
+    control.enableDamping = true;
+    control.update();
+  };
+
+  const initAnimation = () => {
+    gsap.to(sphere.position, {
+      duration: 5,
+      repeat: -1,
+      onUpdate: () => {
+        sphere.position.z = Math.cos(gsap.ticker.time);
+        sphere.position.x = Math.sin(gsap.ticker.time);
+        sphere.position.y = Math.abs(Math.sin(gsap.ticker.time));
+      },
+    });
+  };
+
+  const initGUI = () => {
+    const mapSizeGroup = gui.addFolder("mapSize");
+    const cameraGroup = gui.addFolder("camera");
+
+    mapSizeGroup
+      .add(shadowOptions, "mapSize")
+      .min(256)
+      .max(2048)
+      .step(2)
+      .onChange(() => {
+        directionalLight.shadow.mapSize.width = shadowOptions.mapSize;
+        directionalLight.shadow.mapSize.height = shadowOptions.mapSize;
+        directionalLight.shadow.map?.dispose();
+        directionalLight.shadow.map = null;
+      })
+      .name("width & height");
+
+    cameraGroup
+      .add(shadowOptions.camera, "near")
+      .min(0.1)
+      .max(10)
+      .step(0.1)
+      .onChange(() => {
+        directionalLight.shadow.camera.near = shadowOptions.camera.near;
+        directionalLight.shadow.camera.updateProjectionMatrix();
+        cameraHelper.update();
+      })
+      .name("near");
+
+    cameraGroup
+      .add(shadowOptions.camera, "far")
+      .min(0.1)
+      .max(2000)
+      .step(0.1)
+      .onChange(() => {
+        directionalLight.shadow.camera.far = shadowOptions.camera.far;
+        directionalLight.shadow.camera.updateProjectionMatrix();
+        cameraHelper.update();
+      })
+      .name("far");
+
+    cameraGroup
+      .add(shadowOptions.camera, "top")
+      .min(1)
+      .max(10)
+      .step(0.1)
+      .onChange(() => {
+        directionalLight.shadow.camera.top = shadowOptions.camera.top;
+        directionalLight.shadow.camera.updateProjectionMatrix();
+        cameraHelper.update();
+      })
+      .name("top");
+
+    cameraGroup
+      .add(shadowOptions.camera, "bottom")
+      .min(-1)
+      .max(-10)
+      .step(0.1)
+      .onChange(() => {
+        directionalLight.shadow.camera.bottom = shadowOptions.camera.bottom;
+        directionalLight.shadow.camera.updateProjectionMatrix();
+        cameraHelper.update();
+      })
+      .name("bottom");
+
+    cameraGroup
+      .add(shadowOptions.camera, "right")
+      .min(1)
+      .max(10)
+      .step(0.1)
+      .onChange(() => {
+        directionalLight.shadow.camera.right = shadowOptions.camera.right;
+        directionalLight.shadow.camera.updateProjectionMatrix();
+        cameraHelper.update();
+      })
+      .name("right");
+
+    cameraGroup
+      .add(shadowOptions.camera, "left")
+      .min(-1)
+      .max(-10)
+      .step(0.1)
+      .onChange(() => {
+        directionalLight.shadow.camera.left = shadowOptions.camera.left;
+        directionalLight.shadow.camera.updateProjectionMatrix();
+        cameraHelper.update();
+      })
+      .name("left");
+
+    gui
+      .add(shadowOptions, "radius")
+      .min(1)
+      .max(20)
+      .step(0.1)
+      .onChange(() => {
+        directionalLight.shadow.radius = shadowOptions.radius;
+        directionalLight.shadow.map?.dispose();
+        directionalLight.shadow.map = null;
+      })
+      .name("radius");
+  };
+
+  const bindListeners = () => {
+    window.addEventListener("resize", () => {
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+
+      // 更新相机;
+      if (camera) {
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix(); // 修改完相机参数后需要更新一下相机的投影矩阵
+      }
+
+      // 更新渲染器
+      if (renderer) {
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.render(scene, camera);
+      }
+    });
+
+    window.addEventListener("dblclick", () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        canvas.requestFullscreen();
+      }
+    });
+  };
+
+  const tick = () => {
+    control.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  };
+
+  initCamera();
+  initScene();
+  createMeshes();
+  initDirectionalLight();
+  initRenderer();
+  initControl();
+  initGUI();
+  isGreaterOrEqual(5) && initAnimation();
+  bindListeners();
+  tick();
+</script>

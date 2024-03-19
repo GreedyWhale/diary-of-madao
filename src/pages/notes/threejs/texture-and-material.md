@@ -179,7 +179,7 @@ texture.wrapT = THREE.RepeatWrapping;
 
 GPU 会选择最合适的纹理，当物体远离相机时，GPU使用较小尺寸的纹理，所以会显得有些模糊。当靠近相机时，GPU使用使用尺寸较大的纹理呈现更精致的画面。
 
-如果不想使用 Mipmapping[minFilter](https://threejs.org/docs/index.html#api/en/textures/Texture.minFilter)属性来改变这种效果：
+如果不想使用 Mipmapping[minFilter](https://threejs.org/docs/index.html#api/en/textures/Texture.minFilter)属性可以关闭它：
 
 ```javascript
 texture.minFilter = THREE.NearestFilter;
