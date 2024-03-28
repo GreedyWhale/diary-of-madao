@@ -12,35 +12,39 @@ import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
   import { GUI } from "lil-gui";
 
   import { getSearchParams } from "~/utils/url";
+  import { isGreaterOrEqual } from "~/utils/math";
 
-  const { step } = getSearchParams();
   const gui = new GUI();
   const root = document.querySelector(".app")!;
   const canvas = document.createElement("canvas");
   root.appendChild(canvas);
-
-  const isGreaterOrEqual = (num: number) => {
-    const currentNum = parseInt(step ?? 0);
-
-    return currentNum >= num;
-  };
 
   const sizes = {
     width: window.innerWidth,
     height: window.innerHeight,
   };
 
+  const { step } = getSearchParams();
+  const steps: Record<string, number> = {
+    mapSize: 1,
+    camera: 2,
+    radius: 3,
+    animation: 4,
+  };
+
+  const currentStep = steps[step] ?? Infinity;
+
   const shadowOptions = {
-    mapSize: isGreaterOrEqual(2) ? 1024 : 512,
+    mapSize: isGreaterOrEqual(currentStep, steps.mapSize) ? 1024 : 512,
     camera: {
-      near: isGreaterOrEqual(3) ? 1 : 0.1,
-      far: isGreaterOrEqual(3) ? 8 : 2000,
-      top: isGreaterOrEqual(3) ? 2 : 5,
-      bottom: isGreaterOrEqual(3) ? -2 : -5,
-      right: isGreaterOrEqual(3) ? 2 : 5,
-      left: isGreaterOrEqual(3) ? -2 : -5,
+      near: isGreaterOrEqual(currentStep, steps.camera) ? 1 : 0.1,
+      far: isGreaterOrEqual(currentStep, steps.camera) ? 8 : 2000,
+      top: isGreaterOrEqual(currentStep, steps.camera) ? 2 : 5,
+      bottom: isGreaterOrEqual(currentStep, steps.camera) ? -2 : -5,
+      right: isGreaterOrEqual(currentStep, steps.camera) ? 2 : 5,
+      left: isGreaterOrEqual(currentStep, steps.camera) ? -2 : -5,
     },
-    radius: isGreaterOrEqual(4) ? 10 : 1,
+    radius: isGreaterOrEqual(currentStep, steps.radius) ? 10 : 1,
   };
 
   let scene: THREE.Scene;
@@ -87,7 +91,7 @@ import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
     directionalLight.shadow.camera.left = shadowOptions.camera.left;
     directionalLight.shadow.radius = shadowOptions.radius;
     cameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
-    cameraHelper.visible = isGreaterOrEqual(3);
+    cameraHelper.visible = isGreaterOrEqual(currentStep, steps.camera);
 
     scene.add(directionalLight, cameraHelper);
   };
@@ -271,7 +275,7 @@ import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
   initRenderer();
   initControl();
   initGUI();
-  isGreaterOrEqual(5) && initAnimation();
+  isGreaterOrEqual(currentStep, steps.animation) && initAnimation();
   bindListeners();
   tick();
 </script>

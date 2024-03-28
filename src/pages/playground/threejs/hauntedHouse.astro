@@ -1,0 +1,708 @@
+---
+import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
+---
+
+<FullScreenCanvas />
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import { gsap } from "gsap";
+
+
+  import grassColorTexturePath from "/static/textures/hauntedHouse/grass/Ground037_1K-JPG_Color.jpg?url";
+  import grassAmbientOcclusionTexturePath from "/static/textures/hauntedHouse/grass/Ground037_1K-JPG_AmbientOcclusion.jpg?url";
+  import grassRoughnessTexturePath from "/static/textures/hauntedHouse/grass/Ground037_1K-JPG_Roughness.jpg?url";
+  import grassNormalTexturePath from "/static/textures/hauntedHouse/grass/Ground037_1K-JPG_NormalGL.jpg?url";
+  import grassDisplacementTexturePath from "/static/textures/hauntedHouse/grass/Ground037_1K-JPG_Displacement.jpg?url";
+
+  import wallsColorTexturePath from "/static/textures/hauntedHouse/walls/Bricks060_1K-JPG_Color.jpg?url";
+  import wallsAmbientOcclusionTexturePath from "/static/textures/hauntedHouse/walls/Bricks060_1K-JPG_AmbientOcclusion.jpg?url";
+  import wallsRoughnessTexturePath from "/static/textures/hauntedHouse/walls/Bricks060_1K-JPG_Roughness.jpg?url";
+  import wallsNormalTexturePath from "/static/textures/hauntedHouse/walls/Bricks060_1K-JPG_NormalGL.jpg?url";
+
+  import roofColorTexturePath from "/static/textures/hauntedHouse/roof/RoofingTiles011B_1K-JPG_Color.jpg?url";
+  import roofAmbientOcclusionTexturePath from "/static/textures/hauntedHouse/roof/RoofingTiles011B_1K-JPG_AmbientOcclusion.jpg?url";
+  import roofRoughnessTexturePath from "/static/textures/hauntedHouse/roof/RoofingTiles011B_1K-JPG_Roughness.jpg?url";
+  import roofNormalTexturePath from "/static/textures/hauntedHouse/roof/RoofingTiles011B_1K-JPG_NormalGL.jpg?url";
+  import roofOpacityTexturePath from "/static/textures/hauntedHouse/roof/RoofingTiles011B_1K-JPG_Opacity.jpg?url";
+
+  import doorColorTexturePath from "/static/textures/door/Door_Wood_001_basecolor.jpg?url";
+  import doorAmbientOcclusionTexturePath from "/static/textures/door/Door_Wood_001_ambientOcclusion.jpg?url";
+  import doorRoughnessTexturePath from "/static/textures/door/Door_Wood_001_roughness.jpg?url";
+  import doorNormalTexturePath from "/static/textures/door/Door_Wood_001_normal.jpg?url";
+  import doorOpacityTexturePath from "/static/textures/door/Door_Wood_001_opacity.jpg?url";
+  import doorGlossinessTexturePath from "/static/textures/door/Door_Wood_001_metallic.jpg?url";
+  import doorDisplacementTexturePath from "/static/textures/door/Door_Wood_001_height.png?url";
+
+  import windowColorTexturePath from "/static/textures/hauntedHouse/window/Window_001_basecolor.jpg?url";
+  import windowAmbientOcclusionTexturePath from "/static/textures/hauntedHouse/window/Window_001_ambientOcclusion.jpg?url";
+  import windowRoughnessTexturePath from "/static/textures/hauntedHouse/window/Window_001_roughness.jpg?url";
+  import windowNormalTexturePath from "/static/textures/hauntedHouse/window/Window_001_normal.jpg?url";
+  import windowOpacityTexturePath from "/static/textures/hauntedHouse/window/Window_001_opacity.jpg?url";
+  import windowGlossinessTexturePath from "/static/textures/hauntedHouse/window/Window_001_metallic.jpg?url";
+  import windowDisplacementTexturePath from "/static/textures/hauntedHouse/window/Window_001_height.png?url";
+
+  import glassColorTexturePath from "/static/textures/hauntedHouse/glass/Glass_Frosted_001_basecolor.jpg?url";
+  import glassAmbientOcclusionTexturePath from "/static/textures/hauntedHouse/glass/Glass_Frosted_001_ambientOcclusion.jpg?url";
+  import glassRoughnessTexturePath from "/static/textures/hauntedHouse/glass/Glass_Frosted_001_roughness.jpg?url";
+  import glassNormalTexturePath from "/static/textures/hauntedHouse/glass/Glass_Frosted_001_normal.jpg?url";
+
+  import stairsColorTexturePath from "/static/textures/hauntedHouse/stone/Rock028_1K-JPG_Color.jpg?url";
+  import stairsAmbientOcclusionTexturePath from "/static/textures/hauntedHouse/stone/Rock028_1K-JPG_AmbientOcclusion.jpg?url";
+  import stairsRoughnessTexturePath from "/static/textures/hauntedHouse/stone/Rock028_1K-JPG_Roughness.jpg?url";
+  import stairsNormalTexturePath from "/static/textures/hauntedHouse/stone/Rock028_1K-JPG_NormalGL.jpg?url";
+
+  import fenceColorTexturePath from "/static/textures/hauntedHouse/stoneWall/Stone_wall_005_COLOR.jpg?url";
+  import fenceAmbientOcclusionTexturePath from "/static/textures/hauntedHouse/stoneWall/Stone_wall_005_OCC.jpg?url";
+  import fenceRoughnessTexturePath from "/static/textures/hauntedHouse/stoneWall/Stone_wall_005_ROUGH.jpg?url";
+  import fenceNormalTexturePath from "/static/textures/hauntedHouse/stoneWall/Stone_wall_005_NORM.jpg?url";
+
+  import graveColorTexturePath from "/static/textures/hauntedHouse/grave/Slate_Rock_001_COLOR.jpg?url";
+  import graveAmbientOcclusionTexturePath from "/static/textures/hauntedHouse/grave/Slate_Rock_001_OCC.jpg?url";
+  import graveRoughnessTexturePath from "/static/textures/hauntedHouse/grave/Slate_Rock_001_ROUGH.jpg?url";
+  import graveNormalTexturePath from "/static/textures/hauntedHouse/grave/Slate_Rock_001_NORM.jpg?url";
+
+  import { getSearchParams } from "~/utils/url";
+  import { isGreaterOrEqual, generatePoints } from "~/utils/math";
+
+  const root = document.querySelector(".app")!;
+  const canvas = document.createElement("canvas");
+  root.appendChild(canvas);
+
+  const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+
+  const { step } = getSearchParams();
+  const steps: Record<string, number> = {
+    floor: 1,
+    walls: 2,
+    roof: 3,
+    door: 4,
+    graves: 5,
+    light: 6,
+    ghost: 7,
+    fog: 8,
+    shadow: 9,
+  };
+  const currentStep = steps[step] ?? Infinity;
+
+  const textureLoader = new THREE.TextureLoader();
+  const clock = new THREE.Clock();
+  const houseGroup = new THREE.Group();
+  let scene: THREE.Scene;
+  let camera: THREE.PerspectiveCamera;
+  let renderer: THREE.WebGLRenderer;
+  let controls: OrbitControls;
+
+  const initCamera = () => {
+    camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+    camera.position.z = 20;
+    camera.position.y = 20;
+  };
+
+  const initScene = () => {
+    scene = new THREE.Scene();
+    scene.add(camera, houseGroup);
+  };
+
+  const initRenderer = () => {
+    renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = isGreaterOrEqual(currentStep, steps.shadow);
+    renderer.render(scene, camera);
+  };
+
+  const initAmbientLight = () => {
+    const ambientLight = isGreaterOrEqual(currentStep, steps.light)
+      ? new THREE.AmbientLight('#b9d5ff', 0.1)
+      : new THREE.AmbientLight(0xffffff);
+    scene.add(ambientLight);
+  };
+
+  const initPointLight = () => {
+    if (isGreaterOrEqual(currentStep, steps.light)) {
+      const pointLight = new THREE.PointLight('#b9d5ff', 1, 0, 0.1);
+      pointLight.position.set(4, 10, -5);
+      pointLight.castShadow = isGreaterOrEqual(currentStep, steps.shadow);
+      scene.add(pointLight);
+    }
+  };
+
+  const initFloor = () => {
+    if (!isGreaterOrEqual(currentStep, steps.floor)) {
+      return;
+    }
+
+    const colorTexture = textureLoader.load(grassColorTexturePath);
+    const ambientOcclusionTexture = textureLoader.load(
+      grassAmbientOcclusionTexturePath
+    );
+    const roughnessTexture = textureLoader.load(grassRoughnessTexturePath);
+    const normalTexture = textureLoader.load(grassNormalTexturePath);
+    const displacementTexture = textureLoader.load(
+      grassDisplacementTexturePath
+    );
+
+    [
+      colorTexture,
+      ambientOcclusionTexture,
+      roughnessTexture,
+      normalTexture,
+      displacementTexture,
+    ].forEach((texture) => {
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(2, 2);
+    });
+
+    const geometry = new THREE.PlaneGeometry(40, 40, 256, 256);
+    const material = new THREE.MeshStandardMaterial({
+      side: THREE.DoubleSide,
+      map: colorTexture,
+      aoMap: ambientOcclusionTexture,
+      roughnessMap: roughnessTexture,
+      normalMap: normalTexture,
+      displacementMap: displacementTexture,
+    });
+
+    geometry.setAttribute(
+      "uv2",
+      new THREE.BufferAttribute(geometry.attributes.uv.array, 2)
+    );
+
+    const plane = new THREE.Mesh(geometry, material);
+
+    plane.rotateX(-Math.PI / 2);
+    plane.position.y = -0.55;
+    plane.receiveShadow = isGreaterOrEqual(currentStep, steps.shadow);
+    scene.add(plane);
+  };
+
+  const initHouse = () => {
+    createWalls();
+    createRoof();
+    createDoor();
+    createWindows();
+    createDecorations();
+    createFoyerLight();
+    houseGroup.traverse(child => {
+      child.castShadow = isGreaterOrEqual(currentStep, steps.shadow);
+      child.receiveShadow = isGreaterOrEqual(currentStep, steps.shadow);
+    });
+  };
+
+  const createWalls = () => {
+    if (!isGreaterOrEqual(currentStep, steps.walls)) {
+      return;
+    }
+
+    const createMesh = (shape: THREE.Shape) =>
+      new THREE.Mesh(
+        new THREE.ExtrudeGeometry(shape, {
+          depth: 0.1,
+          bevelEnabled: false,
+        }),
+        new THREE.MeshStandardMaterial({
+          map: wallsColorTexture,
+          aoMap: wallsAmbientOcclusionTexture,
+          roughnessMap: wallsRoughnessTexture,
+          normalMap: wallsNormalTexture,
+        })
+      );
+
+    const wallsColorTexture = textureLoader.load(wallsColorTexturePath);
+    const wallsAmbientOcclusionTexture = textureLoader.load(
+      wallsAmbientOcclusionTexturePath
+    );
+    const wallsRoughnessTexture = textureLoader.load(wallsRoughnessTexturePath);
+    const wallsNormalTexture = textureLoader.load(wallsNormalTexturePath);
+    [
+      wallsColorTexture,
+      wallsAmbientOcclusionTexture,
+      wallsRoughnessTexture,
+      wallsNormalTexture,
+    ].forEach((texture) => {
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(0.5, 0.5);
+    });
+
+    const wallSizes = {
+      front: {
+        width: 10,
+        height: 4,
+      },
+      left: {
+        width: 6,
+        height: 4,
+        triangleHeight: 1.5,
+      },
+    };
+
+    const frontWallShape = new THREE.Shape()
+      .moveTo(0, 0)
+      .lineTo(0, wallSizes.front.height)
+      .lineTo(wallSizes.front.width, wallSizes.front.height)
+      .lineTo(wallSizes.front.width, 0)
+      .lineTo(0, 0);
+
+    const leftWallShape = new THREE.Shape()
+      .moveTo(0, 0)
+      .lineTo(0, wallSizes.left.height)
+      .lineTo(
+        wallSizes.left.width * 0.5,
+        wallSizes.left.height + wallSizes.left.triangleHeight
+      )
+      .lineTo(wallSizes.left.width, wallSizes.left.height)
+      .lineTo(wallSizes.left.width, 0)
+      .lineTo(0, 0);
+
+    const frontWall = createMesh(frontWallShape);
+    const backWall = createMesh(frontWallShape);
+    const leftWall = createMesh(leftWallShape);
+    const rightWall = createMesh(leftWallShape);
+
+    frontWall.geometry.center();
+    backWall.geometry.center();
+    leftWall.geometry.center();
+    rightWall.geometry.center();
+
+    leftWall.position.set(
+      (-wallSizes.front.width - 0.1) * 0.5,
+      (wallSizes.left.height + wallSizes.left.triangleHeight) * 0.5,
+      0
+    );
+
+    rightWall.position.set(
+      (wallSizes.front.width + 0.1) * 0.5,
+      (wallSizes.left.height + wallSizes.left.triangleHeight) * 0.5,
+      0
+    );
+
+    leftWall.rotateY(Math.PI * 0.5);
+    rightWall.rotateY(Math.PI * 0.5);
+
+    frontWall.position.set(
+      0,
+      wallSizes.front.height * 0.5,
+      (wallSizes.left.width - 0.1) * 0.5
+    );
+    backWall.position.set(
+      0,
+      wallSizes.front.height * 0.5,
+      (-wallSizes.left.width + 0.1) * 0.5
+    );
+
+    houseGroup.add(frontWall, backWall, leftWall, rightWall);
+  };
+
+  const createRoof = () => {
+    if (!isGreaterOrEqual(currentStep, steps.roof)) {
+      return;
+    }
+
+    const colorTexture = textureLoader.load(roofColorTexturePath);
+    const ambientOcclusionTexture = textureLoader.load(
+      roofAmbientOcclusionTexturePath
+    );
+    const roughnessTexture = textureLoader.load(roofRoughnessTexturePath);
+    const normalTexture = textureLoader.load(roofNormalTexturePath);
+    const opacityTexture = textureLoader.load(roofOpacityTexturePath);
+
+    [
+      colorTexture,
+      ambientOcclusionTexture,
+      roughnessTexture,
+      normalTexture,
+      opacityTexture,
+    ].forEach((texture) => {
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(0.5, 0.5);
+    });
+
+    const createMesh = (shape: THREE.Shape) =>
+      new THREE.Mesh(
+        new THREE.ExtrudeGeometry(shape, {
+          depth: 0.05,
+          bevelEnabled: true,
+          bevelSize: 0.1,
+          bevelThickness: 0.1,
+        }),
+        new THREE.MeshStandardMaterial({
+          map: colorTexture,
+          aoMap: ambientOcclusionTexture,
+          roughnessMap: roughnessTexture,
+          normalMap: normalTexture,
+          alphaMap: opacityTexture,
+          transparent: true,
+        })
+      );
+
+    const shape = new THREE.Shape()
+      .moveTo(0, 0)
+      .lineTo(0, 4)
+      .lineTo(12, 4)
+      .lineTo(12, 0)
+      .lineTo(0, 0);
+
+    const frontRoof = createMesh(shape);
+    const backRoof = createMesh(shape);
+
+    frontRoof.geometry.center();
+    backRoof.geometry.center();
+
+    frontRoof.position.set(0, 4.78, 1.75);
+    backRoof.position.set(0, 4.78, -1.75);
+
+    frontRoof.rotation.x = -(Math.PI / 180) * 63.435;
+    backRoof.rotation.x = (Math.PI / 180) * 63.435;
+
+    houseGroup.add(frontRoof, backRoof);
+  };
+
+  const createDoor = () => {
+    if (!isGreaterOrEqual(currentStep, steps.door)) {
+      return;
+    }
+
+    const colorTexture = textureLoader.load(doorColorTexturePath);
+    const aoTexture = textureLoader.load(doorAmbientOcclusionTexturePath);
+    const roughnessTexture = textureLoader.load(doorRoughnessTexturePath);
+    const normalTexture = textureLoader.load(doorNormalTexturePath);
+    const opacityTexture = textureLoader.load(doorOpacityTexturePath);
+    const displacementTexture = textureLoader.load(doorDisplacementTexturePath);
+    const metalnessTexture = textureLoader.load(doorGlossinessTexturePath);
+
+    const door = new THREE.Mesh(
+      new THREE.PlaneGeometry(2, 2.5, 256, 256),
+      new THREE.MeshStandardMaterial({
+        map: colorTexture,
+        aoMap: aoTexture,
+        roughnessMap: roughnessTexture,
+        metalnessMap: metalnessTexture,
+        normalMap: normalTexture,
+        alphaMap: opacityTexture,
+        displacementMap: displacementTexture,
+        transparent: true,
+        displacementScale: 0.1,
+      })
+    );
+
+    door.position.set(0, 1.35, 3);
+
+    houseGroup.add(door);
+  };
+
+  const createDecorations = () => {
+    if (!isGreaterOrEqual(currentStep, steps.door)) {
+      return;
+    }
+
+    const stairsColorTexture = textureLoader.load(stairsColorTexturePath);
+    const stairsAoTexture = textureLoader.load(
+      stairsAmbientOcclusionTexturePath
+    );
+    const stairsRoughnessTexture = textureLoader.load(
+      stairsRoughnessTexturePath
+    );
+    const stairsNormalTexture = textureLoader.load(stairsNormalTexturePath);
+
+    const fenceColorTexture = textureLoader.load(fenceColorTexturePath);
+    const fenceAoTexture = textureLoader.load(
+      fenceAmbientOcclusionTexturePath
+    );
+    const fenceRoughnessTexture = textureLoader.load(
+      fenceRoughnessTexturePath
+    );
+    const fenceNormalTexture = textureLoader.load(fenceNormalTexturePath);
+
+    const stairs = new THREE.Mesh(
+      new THREE.BoxGeometry(10, 0.2, 2),
+      new THREE.MeshStandardMaterial({
+        map: stairsColorTexture,
+        aoMap: stairsAoTexture,
+        roughnessMap: stairsRoughnessTexture,
+        normalMap: stairsNormalTexture,
+      })
+    );
+
+    stairs.position.set(0, 0.1, 4);
+
+    const fenceShape = new THREE.Shape()
+      .moveTo(0, 0)
+      .lineTo(0.2, 0)
+      .lineTo(0.2, 2)
+      .lineTo(4, 2)
+      .lineTo(4, 2.2)
+      .lineTo(0, 2.2)
+      .lineTo(0, 0);
+
+    [fenceColorTexture,
+      fenceAoTexture,
+      fenceNormalTexture,
+      fenceRoughnessTexture,
+    ].forEach(texture => {
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(1, 1);
+    });
+
+    const createFence = () => new THREE.Mesh(
+      new THREE.ExtrudeGeometry(fenceShape, {
+        bevelEnabled: false,
+        depth: 1.2,
+      }),
+      new THREE.MeshStandardMaterial({
+        map: fenceColorTexture,
+        aoMap: fenceAoTexture,
+        normalMap: fenceNormalTexture,
+        roughnessMap: fenceRoughnessTexture,
+      })
+    );
+
+    const leftFence = createFence();
+    const rightFence = createFence();
+
+    leftFence.geometry.center();
+    rightFence.geometry.center();
+
+    leftFence.position.set(-3.15, 0.5, 4.01);
+    rightFence.position.set(3.15, 0.5, 4.01);
+    leftFence.rotateX(Math.PI * 0.5);
+    rightFence.rotateX(Math.PI * 0.5);
+    rightFence.rotateY(Math.PI);
+
+    houseGroup.add(stairs, leftFence, rightFence);
+  };
+
+  const createWindows = () => {
+    if (!isGreaterOrEqual(currentStep, steps.door)) {
+      return;
+    }
+
+    const colorTexture = textureLoader.load(windowColorTexturePath);
+    const aoTexture = textureLoader.load(windowAmbientOcclusionTexturePath);
+    const roughnessTexture = textureLoader.load(windowRoughnessTexturePath);
+    const normalTexture = textureLoader.load(windowNormalTexturePath);
+    const opacityTexture = textureLoader.load(windowOpacityTexturePath);
+    const displacementTexture = textureLoader.load(
+      windowDisplacementTexturePath
+    );
+    const metalnessTexture = textureLoader.load(windowGlossinessTexturePath);
+
+    const glassColorTexture = textureLoader.load(glassColorTexturePath);
+    const glassAoTexture = textureLoader.load(glassAmbientOcclusionTexturePath);
+    const glassRoughnessTexture = textureLoader.load(glassRoughnessTexturePath);
+    const glassNormalTexture = textureLoader.load(glassNormalTexturePath);
+
+    const rightWindow = new THREE.Mesh(
+      new THREE.PlaneGeometry(2, 4, 256, 256),
+      new THREE.MeshStandardMaterial({
+        map: colorTexture,
+        aoMap: aoTexture,
+        roughnessMap: roughnessTexture,
+        metalnessMap: metalnessTexture,
+        normalMap: normalTexture,
+        alphaMap: opacityTexture,
+        displacementMap: displacementTexture,
+        transparent: true,
+        displacementScale: 0.1,
+      })
+    );
+
+    const leftWindow = new THREE.Mesh(
+      new THREE.PlaneGeometry(2, 2, 256, 256),
+      new THREE.MeshStandardMaterial({
+        map: colorTexture,
+        aoMap: aoTexture,
+        roughnessMap: roughnessTexture,
+        metalnessMap: metalnessTexture,
+        normalMap: normalTexture,
+        alphaMap: opacityTexture,
+        displacementMap: displacementTexture,
+        transparent: true,
+        displacementScale: 0.1,
+      })
+    );
+
+    const leftGlass = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.5, 1.4),
+      new THREE.MeshStandardMaterial({
+        map: glassColorTexture,
+        aoMap: glassAoTexture,
+        roughnessMap: glassRoughnessTexture,
+        normalMap: glassNormalTexture,
+      })
+    );
+
+    const rightGlass = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.8, 2.1),
+      new THREE.MeshStandardMaterial({
+        map: glassColorTexture,
+        aoMap: glassAoTexture,
+        roughnessMap: glassRoughnessTexture,
+        normalMap: glassNormalTexture,
+      })
+    );
+
+    leftWindow.position.set(-3, 2, 3);
+    rightWindow.position.set(3, 2, 3);
+
+    leftGlass.position.set(-3, 2, 3.01);
+    rightGlass.position.set(3, 2, 3.01);
+
+    houseGroup.add(leftWindow, rightWindow, leftGlass, rightGlass);
+  };
+
+  const createFoyerLight = () => {
+    if (!isGreaterOrEqual(currentStep, steps.door)) {
+      return;
+    }
+
+    const light = new THREE.PointLight('#ff7d46', 3);
+    light.castShadow = isGreaterOrEqual(currentStep, steps.shadow);
+
+    const foyerLight = new THREE.Mesh(
+      new THREE.BoxGeometry(0.25, 0.1, 0.05),
+      new THREE.MeshStandardMaterial({
+        color: '#ffffff',
+        opacity: 0.8,
+        transparent: true,
+        emissive: 0xffffee,
+      })
+    );
+
+    light.position.set(
+      0,
+      2.8,
+      3.01
+    );
+
+    foyerLight.material.emissiveIntensity = 0.5;
+    light.add(foyerLight);
+    houseGroup.add(light);
+  };
+
+  const initGraves = () => {
+    if (!isGreaterOrEqual(currentStep, steps.graves)) {
+      return;
+    }
+
+    const colorTexture = textureLoader.load(graveColorTexturePath);
+    const ambientOcclusionTexture = textureLoader.load(graveAmbientOcclusionTexturePath);
+    const roughnessTexture = textureLoader.load(graveRoughnessTexturePath);
+    const normalTexture = textureLoader.load(graveNormalTexturePath);
+
+    const houseGroupBoundingBox = new THREE.Box3().setFromObject(houseGroup);
+    const area = {
+      max: { x: houseGroupBoundingBox.max.x, y: houseGroupBoundingBox.max.z },
+      min: { x: houseGroupBoundingBox.min.x, y: houseGroupBoundingBox.min.z },
+    };
+
+    const points = generatePoints(30, area, 39, 0.5);
+    const geometry = new THREE.BoxGeometry(0.5, 1, 0.2);
+    const material = new THREE.MeshStandardMaterial({
+      map: colorTexture,
+      aoMap: ambientOcclusionTexture,
+      roughnessMap: roughnessTexture,
+      normalMap: normalTexture,
+    });
+
+    points.forEach(point => {
+      const grave = new THREE.Mesh(geometry, material);
+      grave.castShadow = isGreaterOrEqual(currentStep, steps.shadow);
+      grave.receiveShadow = isGreaterOrEqual(currentStep, steps.shadow);
+      grave.position.set(point.x, 0.3, point.y);
+      grave.rotation.z = (Math.random() - 0.5) * 0.4;
+
+      scene.add(grave);
+    });
+
+  };
+
+  const initGhost = () => {
+    if (isGreaterOrEqual(currentStep, steps.ghost)) {
+      const ghost = new THREE.PointLight('#4CCD99', 10);
+      ghost.castShadow = isGreaterOrEqual(currentStep, steps.shadow);
+      scene.add(ghost);
+
+      gsap.to(ghost.position, {
+        duration: 3,
+        repeat: -1,
+        onUpdate: () => {
+          ghost.position.z = Math.cos(clock.getElapsedTime()) * 16;
+          ghost.position.x = Math.sin(clock.getElapsedTime()) * 16;
+          ghost.position.y = Math.sin(clock.getElapsedTime()) * 5;
+        },
+      });
+    }
+  };
+
+  const initFog = () => {
+    if (!isGreaterOrEqual(currentStep, steps.fog)) {
+      return;
+    }
+
+    const fog = new THREE.Fog('#262837', 1, 40);
+    scene.fog = fog;
+  };
+
+  const initControl = () => {
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.update();
+  };
+
+  const bindListeners = () => {
+    window.addEventListener("resize", () => {
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+
+      // 更新相机;
+      if (camera) {
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix(); // 修改完相机参数后需要更新一下相机的投影矩阵
+      }
+
+      // 更新渲染器
+      if (renderer) {
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.render(scene, camera);
+      }
+    });
+
+    window.addEventListener("dblclick", () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        canvas.requestFullscreen();
+      }
+    });
+  };
+
+  const tick = () => {
+    controls.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  };
+
+  initCamera();
+  initScene();
+  initAmbientLight();
+  initPointLight();
+  initFloor();
+  initHouse();
+  initGraves();
+  initGhost();
+  initFog();
+  initRenderer();
+  initControl();
+  bindListeners();
+  tick();
+</script>

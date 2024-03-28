@@ -6,7 +6,7 @@ description: 阴影是增强场景逼真度的重要因素，记录一下如何�
 createdAt: 2024-01-15T02:14:00.000Z
 updatedAt: 2024-01-16T02:33:00.000Z
 tags: [Three.js, Shadow]
-demo: /playground/threejs/shadow?step=5
+demo: /playground/threejs/shadow
 ---
 
 ### # 0.1 开启阴影
@@ -39,7 +39,7 @@ sphere.castShadow = true;
 directionalLight.castShadow = true;
 ```
 
-[👉点击查看效果](/playground/threejs/shadow?step=1)
+[👉点击查看效果](/playground/threejs/shadow)
 
 在例子中可以看见阴影的效果其实并不好，非常的模糊，需要优化。
 
@@ -62,7 +62,7 @@ directionalLight.shadow.mapSize.width = 1024;
 directionalLight.shadow.mapSize.height = 1024;
 ```
 
-[👉点击查看效果](/playground/threejs/shadow?step=2)
+[👉点击查看效果](/playground/threejs/shadow?step=mapSize)
 
 #### ## 0.2.2 对阴影相机进行优化
 
@@ -77,7 +77,7 @@ scene.add(helper);
 
 相机的优化是修改相机的近平面和远平面以及相机的视野范围，将这些值修改的小一点会提高阴影的清晰度，因为这个相机专门用于渲染阴影，所以在例子中只需要将相机的视野范围缩小到和产生阴影物体的尺寸大小相近的范围即可，但是要注意较小的值可能会导致物体或者远处的物体失去阴影。
 
-[👉点击查看效果](/playground/threejs/shadow?step=3)
+[👉点击查看效果](/playground/threejs/shadow?step=camera)
 
 #### ## 0.2.3 优化阴影细节
 
@@ -87,7 +87,7 @@ scene.add(helper);
 directionalLight.shadow.radius = 10;
 ```
 
-[👉点击查看效果](/playground/threejs/shadow?step=4)
+[👉点击查看效果](/playground/threejs/shadow?step=radius)
 
 #### ## 0.2.4 修改阴影贴图算法
 

@@ -386,7 +386,7 @@ const material = new THREE.MeshStandardMaterial({ aoMap: texture });
 
 geometry.setAttribute(
   "uv2",
-  new THREE.BufferAttribute(door.geometry.attributes.uv.array, 2),
+  new THREE.BufferAttribute(geometry.attributes.uv.array, 2),
 );
 
 const door = new THREE.Mesh(geometry, material);
