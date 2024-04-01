@@ -2,7 +2,7 @@
 layout: ../../../layouts/Markdown.astro
 title: 九. 阴影
 author: Caisr
-description: 阴影是增强场景逼真度的重要因素，记录一下如何在 Three.js 中开启阴影功能。
+description: 阴影是增强场景真实度的重要因素，记录一下如何在 Three.js 中使用阴影功能。
 createdAt: 2024-01-15T02:14:00.000Z
 updatedAt: 2024-01-16T02:33:00.000Z
 tags: [Three.js, Shadow]

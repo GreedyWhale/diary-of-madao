@@ -1,0 +1,243 @@
+---
+import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
+---
+
+<FullScreenCanvas />
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+  import starTexturePath from '/static/textures/particles/star_07.png?url';
+
+  import { getSearchParams } from "~/utils/url";
+  import { isGreaterOrEqual } from "~/utils/math";
+
+  const root = document.querySelector(".app")!;
+  const canvas = document.createElement("canvas");
+  root.appendChild(canvas);
+
+  const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+
+  const { step } = getSearchParams();
+  const steps: Record<string, number> = {
+    sphereWithParticles: 1,
+    customParticles: 2,
+    texture: 3,
+    alphaTest: 4,
+    depthTest: 5,
+    depthWrite: 6,
+    blending: 7,
+    colors: 9,
+    animation: 10,
+    wave: 10,
+  };
+
+  const currentStep = steps[step] ?? Infinity;
+
+  const textureLoader = new THREE.TextureLoader();
+  const verticesLength = 5000;
+  const vertices = new Float32Array(verticesLength * 3).map(() => (Math.random() - 0.5) * 10);
+  const clock = new THREE.Clock();
+  let scene: THREE.Scene;
+  let camera: THREE.PerspectiveCamera;
+  let renderer: THREE.WebGLRenderer;
+  let control: OrbitControls;
+  let wave: THREE.Points;
+
+
+  const initCamera = () => {
+    camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+    camera.position.z = 4;
+  };
+
+  const initScene = () => {
+    scene = new THREE.Scene();
+    scene.add(camera);
+  };
+
+  const initRenderer = () => {
+    renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.shadowMap.enabled = true;
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.render(scene, camera);
+  };
+
+  const initControl = () => {
+    control = new OrbitControls(camera, renderer.domElement);
+    control.enableDamping = true;
+    control.update();
+  };
+
+
+  const createSphereWithParticles = () => {
+    if (currentStep !== steps.sphereWithParticles) {
+      return;
+    }
+
+    const geometry = new THREE.SphereGeometry(1);
+    const material = new THREE.PointsMaterial({
+      size: 0.01,
+      sizeAttenuation: true,
+    });
+
+    const points = new THREE.Points(geometry, material);
+
+    scene.add(points);
+  };
+
+  const createCustomGeometryWithParticles = () => {
+    if (!isGreaterOrEqual(currentStep, steps.customParticles) || currentStep === steps.animation) {
+      return;
+    }
+
+    const alphaTexture = textureLoader.load(starTexturePath);
+    const verticesLength = isGreaterOrEqual(currentStep, steps.texture) ? 50000 : 1500;
+    const vertices = new Float32Array(verticesLength * 3)
+      .map(() => (Math.random() - 0.5) * 10);
+    // 颜色由 rgb 组成，所以也是每三个一组
+    // 颜色的取值在 0 ~ 1 之间，具体查看 https://threejs.org/docs/index.html?q=color#api/en/math/Color
+    const colors = new Float32Array(verticesLength * 3).map(() => Math.random());
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+    const material = new THREE.PointsMaterial({
+      size: 0.01,
+      sizeAttenuation: true,
+    });
+
+    if (isGreaterOrEqual(currentStep, steps.texture)) {
+      material.size = 0.05;
+      material.alphaMap = alphaTexture;
+      material.color = new THREE.Color('#FAEF5D');
+      material.transparent = true;
+    }
+
+    if (currentStep === steps.alphaTest) {
+      material.alphaTest = 0.01;
+    }
+
+    if (currentStep === steps.depthTest) {
+      material.depthTest = false;
+    }
+
+    if (currentStep === steps.depthWrite) {
+      material.depthWrite = false;
+    }
+
+    if (currentStep === steps.blending) {
+      material.depthWrite = false;
+      material.blending = THREE.AdditiveBlending;
+    }
+
+    if ([steps.depthTest, steps.depthWrite, steps.blending].includes(currentStep)) {
+      const mesh = new THREE.Mesh(
+        new THREE.SphereGeometry(2),
+        new THREE.MeshBasicMaterial({
+          color: '#FA7070'
+        })
+      );
+
+      scene.add(mesh);
+    }
+
+    if (currentStep === steps.colors) {
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      material.color = new THREE.Color('#ffffff');
+      material.vertexColors = true;
+      material.alphaTest = 0.01;
+    }
+
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+  };
+
+  const createWave = () => {
+    if (currentStep !== steps.wave) {
+      return;
+    }
+
+    const alphaTexture = textureLoader.load(starTexturePath);
+    const colors = new Float32Array(verticesLength * 3).map(() => Math.random());
+
+    const material = new THREE.PointsMaterial({
+      size: 0.1,
+      sizeAttenuation: true,
+      alphaMap: alphaTexture,
+      transparent: true,
+    });
+    material.vertexColors = true;
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    wave = new THREE.Points(geometry, material);
+    scene.add(wave);
+  };
+
+  const waveAnimation = () => {
+    if (currentStep !== steps.wave) {
+      return;
+    }
+
+    const getElapsedTime = clock.getElapsedTime();
+    for (let index = 0; index < verticesLength; index++) {
+      const i3 = index * 3;
+      const x = wave.geometry.attributes.position.array[i3];
+      wave.geometry.attributes.position.array[i3 + 1] = Math.sin(getElapsedTime + x);
+    }
+
+    wave.geometry.attributes.position.needsUpdate = true;
+  };
+
+  const bindListeners = () => {
+    window.addEventListener("resize", () => {
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+
+      // 更新相机;
+      if (camera) {
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix(); // 修改完相机参数后需要更新一下相机的投影矩阵
+      }
+
+      // 更新渲染器
+      if (renderer) {
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.render(scene, camera);
+      }
+    });
+
+    window.addEventListener("dblclick", () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        canvas.requestFullscreen();
+      }
+    });
+  };
+
+  const tick = () => {
+    waveAnimation();
+    control.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  };
+
+  initCamera();
+  initScene();
+  createSphereWithParticles();
+  createCustomGeometryWithParticles();
+  createWave();
+  initRenderer();
+  initControl();
+  bindListeners();
+  tick();
+</script>
