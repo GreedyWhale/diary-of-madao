@@ -3,11 +3,13 @@ import { Image } from "astro:assets";
 
 import Layout from "~/layouts/Layout.astro";
 import FeatureCard from "~/components/FeatureCard.astro";
+import HomeCard from "~/components/HomeCard.astro";
 
 import monsterIcon from "~/assets/images/loch-ness-monster.png";
 import unicornIcon from "~/assets/images/unicorn.png";
 import frogIcon from "~/assets/images/frog.png";
 import post1 from "~/assets/images/poster-1.jpg";
+import post2 from "~/assets/images/poster-2.jpg";
 ---
 
 <Layout>
@@ -40,23 +42,28 @@ import post1 from "~/assets/images/poster-1.jpg";
     />
   </div>
 
-  <div
-    class="glass-block mt-12 flex bg-gradient-to-br from-[#1C512C] to-[#95B579]"
-  >
-    <div class="relative flex-1">
-      <div class="absolute bottom-[20%] right-[20%] text-white">
-        <h4 class="mb-2 text-2xl">教练，我想学 Three.js！</h4>
-        <p class="mb-8">零图形知识的前端学习 Three.js 的笔记</p>
-        <ul class="mb-4 flex text-base">
-          <li class="mr-4"># Three.js</li>
-          <li class="mr-4"># WebGL</li>
-        </ul>
+  <HomeCard
+    className="bg-gradient-to-br from-[#1C512C] to-[#95B579]"
+    title="教练，我想学 Three.js！"
+    description="零图形知识的前端学习 Three.js 的笔记"
+    labels={['Three.js', 'WebGL']}
+    link="/notes/threejs"
+    imgInfo={{
+      src: post1,
+      alt: 'Three.js Poster Image'
+    }}
+  />
 
-        <a href="/notes/threejs" class="underline">查看详情 👈</a>
-      </div>
-    </div>
-    <div>
-      <Image src={post1} alt="Three.js Poster Image" />
-    </div>
-  </div>
+  <HomeCard
+    className="bg-gradient-to-br from-[#3F0A4F] to-[#0C3668]"
+    title="Hello, Web3!"
+    description="没想到程序员也是吃青春饭的职业，我想要当数字游民！"
+    labels={['Web3', 'blockchain', 'Solidity', 'Ethereum', 'DeFi', 'GameFi']}
+    link="/notes/web3"
+    imgInfo={{
+      src: post2,
+      alt: 'Web3 Poster Image',
+      position: 'left'
+    }}
+  />
 </Layout>

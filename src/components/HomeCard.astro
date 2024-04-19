@@ -1,0 +1,48 @@
+---
+import { Image } from "astro:assets";
+import clsx from "clsx";
+
+interface Props {
+  className?: string;
+  title: string;
+  description: string;
+  labels: string[];
+  link: string;
+  imgInfo: {
+    src: ImageMetadata;
+    alt: string;
+    position?: "left" | "right";
+  };
+}
+
+const { className, title, description, labels, link, imgInfo } = Astro.props;
+---
+
+<div
+  class={clsx(
+    "glass-block mt-12 flex",
+    className
+  )}
+>
+  <div class={clsx(imgInfo.position === 'left' && 'order-1', "relative flex-1")}>
+    <div
+      class={clsx(
+        "absolute bottom-[20%] right-[20%] text-white",
+        imgInfo.position === 'left' && '!left-[20%] !top-[20%] !bottom-auto',
+      )}
+    >
+      <h4 class="mb-2 text-2xl">{title}</h4>
+      <p class="mb-8">{description}</p>
+      <ul class="mb-4 flex text-base flex-wrap">
+        {labels.map(lable => (
+          <li class="mr-4 flex-none mb-2"># {lable}</li>
+        ))}
+      </ul>
+
+      <a href={link} class="underline">查看详情 👈</a>
+    </div>
+  </div>
+  <div>
+    <Image src={imgInfo.src} alt={imgInfo.alt} />
+  </div>
+</div>
