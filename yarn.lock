@@ -1121,6 +1121,13 @@ astro-eslint-parser@^0.16.0:
     espree "^9.0.0"
     semver "^7.3.8"
 
+astro-relative-links@^0.3.9:
+  version "0.3.9"
+  resolved "https://registry.yarnpkg.com/astro-relative-links/-/astro-relative-links-0.3.9.tgz#2878b0ef32870f7b16f0a65ba39e342906a5308a"
+  integrity sha512-4CdLBRI7aU/Irb2BYdicHpBf+9n0SsrN02Yu/P7b3Y1i4AZQTHCtcq044egan83Y8ORU6i5fc2hFVmXeAFlKkw==
+  dependencies:
+    glob "^10.3.10"
+
 astro@^4.2.6:
   version "4.2.6"
   resolved "https://registry.yarnpkg.com/astro/-/astro-4.2.6.tgz#14d05b0635daa71a6a1652a9022be0b4207ad62d"

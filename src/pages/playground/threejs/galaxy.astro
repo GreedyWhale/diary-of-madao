@@ -1,0 +1,194 @@
+---
+import FullScreenCanvas from "~/layouts/FullScreenCanvas.astro";
+---
+
+<FullScreenCanvas />
+
+<script>
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import { gsap } from "gsap";
+
+  import { GUI } from "lil-gui";
+
+
+  import { getSearchParams } from "~/utils/url";
+  import { isGreaterOrEqual, generatePoints } from "~/utils/math";
+
+  const gui = new GUI();
+  const root = document.querySelector(".app")!;
+  const canvas = document.createElement("canvas");
+  root.appendChild(canvas);
+
+  const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+
+  const { step } = getSearchParams();
+  const steps: Record<string, number> = {
+    line: 1,
+    branches: 2,
+  };
+  const currentStep = steps[step] ?? Infinity;
+
+  const config = {
+    count: 1500,
+    radius: 5,
+    branches: 3,
+    spin: 1,
+  };
+
+  const geometry = new THREE.BufferGeometry();
+  const material = new THREE.PointsMaterial({
+    size: 0.01,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    sizeAttenuation: true,
+  });
+  const galaxy = new THREE.Points(geometry, material);
+  galaxy.name = 'galaxy';
+
+  let scene: THREE.Scene;
+  let camera: THREE.PerspectiveCamera;
+  let renderer: THREE.WebGLRenderer;
+  let controls: OrbitControls;
+
+  const initCamera = () => {
+    camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+    camera.position.z = 5;
+    camera.position.y = 5;
+  };
+
+  const initScene = () => {
+    scene = new THREE.Scene();
+    scene.add(camera);
+  };
+
+  const initRenderer = () => {
+    renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.render(scene, camera);
+  };
+
+  const initControl = () => {
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.update();
+  };
+
+  const createLine = () => {
+    const position = new Float32Array(config.count * 3);
+
+    for (let index = 0; index < config.count; index++) {
+      // 一个粒子3个坐标
+      const i3 = index * 3;
+      const currentBranch = index % config.branches;
+      const radius = (Math.random() * config.radius);
+      const spinAngle = radius * config.spin;
+
+      // 每个分支需要旋转的角度
+      const branchAngle = (currentBranch / config.branches) * (Math.PI * 2);
+
+      // X轴
+      position[i3] = Math.cos(branchAngle + spinAngle) * radius;
+      // Y轴
+      position[i3 + 1] = 0;
+      // Z轴
+      position[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius;
+    }
+
+    return position;
+  };
+
+  const generateGalaxy = () => {
+    const position = createLine();
+
+    if (scene.getObjectByName('galaxy')) {
+      const positionSttribute = galaxy.geometry.getAttribute('position');
+      for (let index = 0; index < positionSttribute.count; index++) {
+        const i3 = index * 3;
+
+        positionSttribute.setXYZ(
+          index,
+          position[i3],
+          position[i3 + 1],
+          position[i3 + 2],
+        );
+      }
+    }
+
+    galaxy.geometry.setAttribute('position', new THREE.BufferAttribute(position, 3));
+    scene.add(galaxy);
+  };
+
+  const bindListeners = () => {
+    window.addEventListener("resize", () => {
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+
+      // 更新相机;
+      if (camera) {
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix(); // 修改完相机参数后需要更新一下相机的投影矩阵
+      }
+
+      // 更新渲染器
+      if (renderer) {
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.render(scene, camera);
+      }
+    });
+
+    window.addEventListener("dblclick", () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        canvas.requestFullscreen();
+      }
+    });
+  };
+
+  const tick = () => {
+    controls.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  };
+
+  const initGUI = () => {
+    gui
+      .add(config, 'radius')
+      .min(2)
+      .max(15)
+      .step(1)
+      .onChange(generateGalaxy)
+      .name('radius');
+
+    gui
+      .add(config, 'count')
+      .min(100)
+      .max(100000)
+      .step(1)
+      .onChange(generateGalaxy)
+      .name('count');
+
+    gui
+      .add(config, 'spin')
+      .min(1)
+      .max(10)
+      .step(0.01)
+      .onChange(generateGalaxy)
+      .name('spin');
+  };
+
+  initCamera();
+  initScene();
+  generateGalaxy();
+  initRenderer();
+  initControl();
+  initGUI();
+  bindListeners();
+  tick();
+</script>
