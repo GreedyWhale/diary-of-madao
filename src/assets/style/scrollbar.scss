@@ -1,0 +1,25 @@
+
+
+/* 滚动条样式 */
+.scrollbar::-webkit-scrollbar {
+  width: 10px;               /* 设置滚动条宽度 */
+}
+
+/* 滚动条轨道 */
+.scrollbar::-webkit-scrollbar-track {
+  background: #1A1A1A;       /* theme-black */
+  border-radius: 6px;        /* 圆角轨道 */
+}
+
+/* 滚动条滑块 */
+.scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(204, 204, 204, 0.3);
+  border-radius: 6px;        /* 滑块圆角 */
+  border: 2px solid #1A1A1A; /* 在滑块周围留出一些空间 */
+}
+
+/* 滑块 Hover 状态 */
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgb(163, 163, 163);
+}
+

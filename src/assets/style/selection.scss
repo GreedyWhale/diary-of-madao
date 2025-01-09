@@ -1,0 +1,45 @@
+.selection-prefix,
+.selection-suffix {
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    background: black;
+  }
+  &::before {
+    top: 0;
+    bottom: 0;
+    height: 105%;
+    width: 2px;
+  }
+  &::after {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+}
+
+.selection-prefix {
+  &::before,
+  &::after {
+    left: -4px;
+  }
+
+  &::after {
+    top: 0;
+    transform: translate(-2px, 0);
+  }
+}
+
+.selection-suffix {
+  &::before,
+  &::after {
+    right: -4px;
+  }
+  &::after {
+    bottom: 0;
+    transform: translate(2px, 2px);
+  }
+}
