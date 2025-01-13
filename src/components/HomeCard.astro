@@ -1,0 +1,16 @@
+---
+import clsx from "clsx";
+
+interface Props {
+  classNames?: Partial<{
+    container: string;
+  }>;
+}
+
+const { classNames } = Astro.props;
+---
+
+<div class={clsx("p-8 relative overflow-hidden cursor-pointer text-black rounded-xl border-[2px] border-white", classNames?.container)}>
+  <div class="absolute inset-0 backdrop-blur-sm"></div>
+  <slot />
+</div>
