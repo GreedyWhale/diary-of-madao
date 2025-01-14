@@ -1,0 +1,36 @@
+@use 'sass:list';
+
+:root {
+  --var-theme-rainbow-color: #ff033e;
+  --var-theme-rainbow-color-light: #ff3f6c;
+  --var-theme-rainbow-color-lighter: #ff7797;
+  --var-theme-rainbow-color-dark: #e10244;
+  --var-theme-rainbow-color-darker: #c3024b;
+}
+
+$colors: (
+  #003366, #00377d, #003994, #0041ab, #0045c2, #0048d9, #004bed, #0050f1,
+  #0054f5, #0058f9, #005cfb, #0060fd, #0064fe, #0068ff, #006cff, #0070ff,
+  #0074ff, #0078ff, #007cff, #0080ff, #0084ff, #0088ff, #008cff, #0090ff,
+  #0094ff, #0098ff, #009cff, #00a0ff, #00a4ff, #00a8ff, #00acff, #00b0ff,
+  #00b4ff, #00b8ff, #00bcff, #00c0ff, #00c4ff, #00c8ff, #00ccff, #00d0ff,
+  #00d4ff, #00d8ff, #00dcff, #00e0ff, #00e4ff, #00e8ff, #00ecff, #00f0ff,
+  #00f4ff, #00f8ff, #00f8e1, #00f4c6, #00f2aa, #00f08f, #00ee73, #00ec58,
+  #00ea3d, #00e822, #00e607, #00e200, #00df00, #00dd00, #00db00, #00d900,
+  #00d600, #00d400, #00d200, #00d000, #00cf00, #00cd00, #00cb00, #00c900,
+  #00c700, #00c500, #00c300, #00c100, #00bf00, #00bd00, #00bb00, #00b900
+);
+
+@keyframes rainbow {
+  @for $i from 1 through list.length($colors) {
+    $keyframe: $i * 1.25 + '%';
+    #{$keyframe} {
+      background-color: list.nth($colors, $i);
+    }
+  }
+}
+
+.rainbow {
+  animation: rainbow 40s linear infinite;
+  background-color: var(--vp-c-brand-1);
+}

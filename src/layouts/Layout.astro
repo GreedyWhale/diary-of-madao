@@ -1,6 +1,7 @@
 ---
 import '~/assets/style/global.scss';
 import '~/assets/style/scrollbar.scss';
+import '~/assets/style/rainbow.scss';
 
 import { TITLE } from '~/utils/constant';
 
@@ -19,7 +20,7 @@ import Header from '~/components/Header.astro';
     <title>{TITLE}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@callmebill/lxgw-wenkai-web@latest/style.css">
   </head>
-  <body class="bg-theme-black scrollbar">
+  <body class="scrollbar rainbow">
     <Header />
     <slot />
   </body>
