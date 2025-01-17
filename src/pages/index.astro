@@ -8,21 +8,22 @@ import HomeCard from "~/components/HomeCard.astro";
 <Layout>
   <main class="py-8 mx-auto w-main">
     <div class="grid grid-flow-row-dense grid-cols-3 gap-4">
-      <HomeCard classNames={{ container: "bg-gradient-to-r from-theme-red-light to-[#00b395] col-span-2" }}>
-        <h2 class="relative z-10 mb-12 text-3xl">
-          <span class="px-1 rounded-lg bg-theme-red selection-prefix">React</span>
-          <br />
-          <span class="px-1 rounded-lg bg-theme-red selection-suffix">从入门到放弃</span>
+      <HomeCard classNames={{ container: "col-span-2" }}>
+        <h2 class="relative z-10 mb-12 text-3xl text-black">
+          <span class="selection-prefix"></span>
+          <span class="px-1 rounded-lg bg-theme-red">React 从入门到放弃</span>
+          <span class="selection-suffix"></span>
         </h2>
-        <p>The library for web and native user interfaces.</p>
+        <p>Hooks: The thing that makes React simpler... by making it more complicated first.</p>
         <br />
-        <p>React is an essential part of my frontend development toolkit. It’s simple and flexible, yet capable of solving complex UI challenges. </p>
+        <p>React: Write once, rerender forever</p>
+        <p>"Frontend developers: Why is this component re-rendering? <br/> React: 🤷‍♂️ It’s a feature, not a bug."</p>
       </HomeCard>
 
-      <HomeCard classNames={{ container: 'bg-theme-yellow-light row-span-2' }}>
-        <p class="mt-4 mb-16">JavaScript 是一种用于网页开发的编程语言，能够使网页实现动态交互和复杂功能。它广泛用于前端开发，也可以在服务器端运行。</p>
-        <div class="relative z-10 mb-4">
-          <h2 class="mb-8 text-3xl">
+      <HomeCard classNames={{ container: 'row-span-2' }}>
+        <p class="mt-4 mb-16">JavaScript: The only language where [] + [] equals an empty string, and we’re all fine with it.</p>
+        <div class="relative z-10 mb-4 text-black">
+          <h2 class="mb-8 text-2xl">
             <span class="px-1 rounded-lg bg-theme-yellow selection-prefix">大家都知道的 JavaScript</span>
           </h2>
 
@@ -31,34 +32,39 @@ import HomeCard from "~/components/HomeCard.astro";
           <span class="px-1 rounded-lg bg-theme-yellow">Any application that can be written in JavaScript, will eventually be written in JavaScript.</span>
           <span class="selection-suffix"></span>
         </div>
+        <p class="mt-24 mb-2">
+          JavaScript is like a magician: one minute it’s undefined, the next minute it’s working perfectly... and no one knows why.
+        </p>
+
+        <p>
+          Frontend in JavaScript: Write once, debug everywhere.
+        </p>
       </HomeCard>
 
-      <HomeCard classNames={{ container: 'bg-theme-blue-light' }}>
-        <p class="mt-4 mb-16">JavaScript 是一种用于网页开发的编程语言，能够使网页实现动态交互和复杂功能。它广泛用于前端开发，也可以在服务器端运行。</p>
-        <div class="relative z-10 mb-4">
+      <HomeCard>
+        <p class="mb-4">CSS: The art of spending hours aligning a button... only to find it breaks in Internet</p>
+        <p class="mb-8">"CSS: Centering a div is easy! <br />Also CSS: Good luck figuring out how."</p>
+        <div class="relative z-10 text-black">
           <h2 class="mb-8 text-3xl">
-            <span class="px-1 rounded-lg bg-theme-yellow selection-prefix">JavaScript 基础篇</span>
+            <span class="selection-prefix"></span>
+            <span class="px-1 rounded-lg bg-theme-blue">CSS 魔法</span>
           </h2>
 
-          <h4 class="inline-block px-1 mb-4 font-bold rounded-lg bg-theme-yellow">Atwood's Law</h4>
-          <br />
-          <span class="px-1 rounded-lg bg-theme-yellow">Any application that can be written in JavaScript, will eventually be written in JavaScript.</span>
-          <span class="selection-suffix"></span>
+          <span class="px-1 rounded-lg bg-theme-blue selection-suffix">前端真正的护城河</span>
         </div>
       </HomeCard>
 
-      <HomeCard classNames={{ container: 'bg-theme-green-light' }}>
-        <p class="mt-4 mb-16">JavaScript 是一种用于网页开发的编程语言，能够使网页实现动态交互和复杂功能。它广泛用于前端开发，也可以在服务器端运行。</p>
-        <div class="relative z-10 mb-4">
+      <HomeCard>
+        <div class="relative z-10 mb-4 text-black">
           <h2 class="mb-8 text-3xl">
-            <span class="px-1 rounded-lg bg-theme-yellow selection-prefix">JavaScript 基础篇</span>
+            <span class="px-1 rounded-lg bg-theme-green selection-prefix">全干工程师养成计划</span>
           </h2>
 
-          <h4 class="inline-block px-1 mb-4 font-bold rounded-lg bg-theme-yellow">Atwood's Law</h4>
-          <br />
-          <span class="px-1 rounded-lg bg-theme-yellow">Any application that can be written in JavaScript, will eventually be written in JavaScript.</span>
+          <span class="px-1 rounded-lg bg-theme-green">"Full Stack Developer: Writes APIs that nobody uses and CSS that nobody understands."</span>
           <span class="selection-suffix"></span>
         </div>
+
+        <p>"Full Stack Developer's prayer: <br />'Please let my frontend talk to my backend without a CORS error today.' Amen."</p>
       </HomeCard>
     </div>
   </main>
