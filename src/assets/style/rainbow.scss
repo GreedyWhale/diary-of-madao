@@ -2,11 +2,12 @@
 @use 'sass:math';
 
 :root {
-  --var-theme-rainbow-color: #ff033e;
-  --var-theme-rainbow-color-light: #ff3f6c;
-  --var-theme-rainbow-color-lighter: #ff7797;
-  --var-theme-rainbow-color-dark: #e10244;
-  --var-theme-rainbow-color-darker: #c3024b;
+  --theme-rainbow-color: #9CF0F0;
+  --theme-rainbow-color-light: #B4F4F4;
+  --theme-rainbow-color-lighter: #CAF7F7;
+  --theme-rainbow-color-dark: #7CD6DB;
+  --theme-rainbow-color-darker: #5BBBC6;
+  --theme-rainbow-color-next: #FFC0CB;
 }
 
 
@@ -108,11 +109,21 @@ $colors: (
     $keyframe: $i * 1.25 + "%";
     $colorIndex: 1 + 6 * $i;
     #{$keyframe} {
-      background-color: list.nth($colors, $colorIndex);
+      --theme-rainbow-color: #{list.nth($colors, $colorIndex)};
+      --theme-rainbow-color-light: #{list.nth($colors, $colorIndex + 1)};
+      --theme-rainbow-color-lighter: #{list.nth($colors, $colorIndex + 2)};
+      --theme-rainbow-color-dark: #{list.nth($colors, $colorIndex + 3)};
+      --theme-rainbow-color-darker: #{list.nth($colors, $colorIndex + 4)};
+      --theme-rainbow-color-next: #{list.nth($colors, $colorIndex + 5)};
     }
   }
 }
 
 .rainbow {
   animation: rainbow 40s linear infinite;
+}
+
+.rainbow-border {
+  background: linear-gradient(to right, transparent 50%, black 50%), linear-gradient(to right, var(--theme-rainbow-color), var(--theme-rainbow-color-next));
+  background-size: 8px 2px, 100% 2px;
 }
