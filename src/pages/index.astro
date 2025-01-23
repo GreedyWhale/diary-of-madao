@@ -6,7 +6,7 @@ import HomeCard from "~/components/HomeCard.astro";
 ---
 
 <Layout>
-  <main class="py-8 mx-auto w-main">
+  <div class="py-8 mx-auto w-main">
     <div class="grid grid-flow-row-dense grid-cols-3 gap-4">
       <HomeCard classNames={{ container: "col-span-2" }} link="/notes/react">
         <h2 class="relative z-10 mb-12 text-3xl text-black">
@@ -67,5 +67,5 @@ import HomeCard from "~/components/HomeCard.astro";
         <p>"Full Stack Developer's prayer: <br />'Please let my frontend talk to my backend without a CORS error today.' Amen."</p>
       </HomeCard>
     </div>
-  </main>
+  </div>
 </Layout>
