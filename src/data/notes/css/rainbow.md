@@ -37,7 +37,7 @@ cover: '~/assets/images/rainbow.webp'
 
 当我看到上面这段代码的时候才知道原来 CSS 变量也能在 @keyframes 里面使用。
 
-接下来分析一下这 @keyframes 的代码。
+接下来分析一下代码。
 
 1. 每一帧的步长是 `1.25%`。
 2. 完整的一次动画需要有5个颜色进行渐变

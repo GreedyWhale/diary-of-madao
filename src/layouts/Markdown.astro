@@ -22,11 +22,11 @@ const noteMetaInfo = [
 ];
 ---
 <Layout title={frontmatter.title}>
-  <main class="mx-auto w-main text-theme-white">
-    <div class="flex items-stretch mb-8">
-      <div class="flex flex-col justify-between flex-1 mr-4">
+  <main class="mx-auto xl:w-main text-theme-white">
+    <div class="flex flex-col items-stretch mb-8 xl:flex-row">
+      <div class="flex flex-col justify-between flex-1 mb-16 mr-4 xl:mb-0">
         <!-- 为了让table的宽度不撑满父元素 -->
-        <div class="inline-block">
+        <div class="inline-block mb-16 xl:mb-0">
           <table class="rainbow-text">
             <tbody>
               {noteMetaInfo.map(meta => (

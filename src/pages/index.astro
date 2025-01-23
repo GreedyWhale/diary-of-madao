@@ -6,9 +6,9 @@ import HomeCard from "~/components/HomeCard.astro";
 ---
 
 <Layout>
-  <div class="py-8 mx-auto w-main">
-    <div class="grid grid-flow-row-dense grid-cols-3 gap-4">
-      <HomeCard classNames={{ container: "col-span-2" }} link="/notes/react">
+  <div class="py-8 mx-auto xl:w-main">
+    <div class="xl:grid xl:grid-flow-row-dense xl:grid-cols-3 xl:gap-4">
+      <HomeCard classNames={{ container: "xl:col-span-2" }} link="/notes/react">
         <h2 class="relative z-10 mb-12 text-3xl text-black">
           <span class="selection-prefix"></span>
           <span class="px-1 rounded-lg bg-theme-red">React 从入门到放弃</span>
@@ -20,7 +20,7 @@ import HomeCard from "~/components/HomeCard.astro";
         <p>"Frontend developers: Why is this component re-rendering? <br/> React: 🤷‍♂️ It’s a feature, not a bug."</p>
       </HomeCard>
 
-      <HomeCard classNames={{ container: 'row-span-2' }} link="/notes/javascript">
+      <HomeCard classNames={{ container: 'xl:row-span-2' }} link="/notes/javascript">
         <p class="mt-4 mb-16">JavaScript: The only language where [] + [] equals an empty string, and we’re all fine with it.</p>
         <div class="relative z-10 mb-4 text-black">
           <h2 class="mb-8 text-2xl">

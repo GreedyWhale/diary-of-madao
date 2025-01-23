@@ -11,7 +11,13 @@ interface Props {
 const { classNames, link } = Astro.props;
 ---
 
-<a href={link} class={clsx("p-8 relative overflow-hidden cursor-pointer text-theme-white rounded-xl bg-theme-black/70", classNames?.container)}>
+<a
+  href={link}
+  class={clsx(
+    "p-8 relative overflow-hidden cursor-pointer text-theme-white rounded-xl bg-theme-black/70 block mb-4 xl:mb-0",
+    classNames?.container
+  )}
+>
   <div class="absolute inset-0 backdrop-blur-sm"></div>
   <slot />
 </a>

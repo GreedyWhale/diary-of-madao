@@ -27,7 +27,7 @@ const { title } = Astro.props;
     <title>{title ?? TITLE}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@callmebill/lxgw-wenkai-web@latest/lxgwwenkaimono-regular/result.css">
   </head>
-  <body class="flex flex-col h-[vh] bg-black scrollbar rainbow">
+  <body class="flex flex-col min-h-[100vh] bg-black scrollbar rainbow px-4 xl:px-0">
     <Header />
     <main class="flex-1">
       <slot />
