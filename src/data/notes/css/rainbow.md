@@ -177,7 +177,3 @@ cover: '~/assets/images/rainbow.webp'
 第一个渐变：`linear-gradient(to right, transparent 50%, black 50%)` 用来创建虚线的效果，从透明渐变到`black`, 之所以是`black`是因为我的页面背景色是`black`，这个渐变对应的是`background-size: 8px 2px`，意思就是虚线的间隔是 `8px`，高`2px`。
 
 第二个渐变：`linear-gradient(to right, var(--vp-c-brand-1), var(--vp-c-brand-1-next))`，这是一条完整的渐变，它填充的就是第一个渐变的透明部分。
-
-### bla bla bla...
-
-终于在今年结束前写了一篇笔记，今年过的真是乱七八糟，希望明年还能保持对编程的热爱，只是我并不期待明年的到来~
