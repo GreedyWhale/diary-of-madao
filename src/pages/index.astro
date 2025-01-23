@@ -8,7 +8,7 @@ import HomeCard from "~/components/HomeCard.astro";
 <Layout>
   <main class="py-8 mx-auto w-main">
     <div class="grid grid-flow-row-dense grid-cols-3 gap-4">
-      <HomeCard classNames={{ container: "col-span-2" }}>
+      <HomeCard classNames={{ container: "col-span-2" }} link="/notes/react">
         <h2 class="relative z-10 mb-12 text-3xl text-black">
           <span class="selection-prefix"></span>
           <span class="px-1 rounded-lg bg-theme-red">React 从入门到放弃</span>
@@ -20,7 +20,7 @@ import HomeCard from "~/components/HomeCard.astro";
         <p>"Frontend developers: Why is this component re-rendering? <br/> React: 🤷‍♂️ It’s a feature, not a bug."</p>
       </HomeCard>
 
-      <HomeCard classNames={{ container: 'row-span-2' }}>
+      <HomeCard classNames={{ container: 'row-span-2' }} link="/notes/javascript">
         <p class="mt-4 mb-16">JavaScript: The only language where [] + [] equals an empty string, and we’re all fine with it.</p>
         <div class="relative z-10 mb-4 text-black">
           <h2 class="mb-8 text-2xl">
@@ -41,7 +41,7 @@ import HomeCard from "~/components/HomeCard.astro";
         </p>
       </HomeCard>
 
-      <HomeCard>
+      <HomeCard link="/notes/css">
         <p class="mb-4">CSS: The art of spending hours aligning a button... only to find it breaks in Internet</p>
         <p class="mb-8">"CSS: Centering a div is easy! <br />Also CSS: Good luck figuring out how."</p>
         <div class="relative z-10 text-black">
@@ -54,7 +54,7 @@ import HomeCard from "~/components/HomeCard.astro";
         </div>
       </HomeCard>
 
-      <HomeCard>
+      <HomeCard link="/notes/fullstack">
         <div class="relative z-10 mb-4 text-black">
           <h2 class="mb-8 text-3xl">
             <span class="px-1 rounded-lg bg-theme-green selection-prefix">全干工程师养成计划</span>

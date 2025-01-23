@@ -5,5 +5,5 @@ export const NOTES_TYPE = [
   'javascript',
   'css',
   'fullstack'
-];
+] as const;
 

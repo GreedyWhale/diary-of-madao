@@ -104,7 +104,6 @@ $colors: (
  * 80% 的时候需要渐变回到第一个颜色
 */
 @keyframes rainbow {
-  $length: math.div(list.length($colors), 6);
   @for $i from 0 through 80 {
     $keyframe: $i * 1.25 + "%";
     $colorIndex: 1 + 6 * $i;
@@ -123,7 +122,15 @@ $colors: (
   animation: rainbow 40s linear infinite;
 }
 
-.rainbow-border {
+.rainbow-border-dashed {
   background: linear-gradient(to right, transparent 50%, black 50%), linear-gradient(to right, var(--theme-rainbow-color), var(--theme-rainbow-color-next));
   background-size: 8px 2px, 100% 2px;
+}
+
+.rainbow-text {
+  color: rgba(0,0,0,0);
+  background: linear-gradient(120deg, var(--theme-rainbow-color) 30%, var(--theme-rainbow-color-next));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: linear-gradient(120deg, var(--theme-rainbow-color) 30%, var(--theme-rainbow-color-next));
 }

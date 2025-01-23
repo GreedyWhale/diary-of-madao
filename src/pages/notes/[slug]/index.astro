@@ -1,0 +1,40 @@
+---
+import type { MarkdownCollectionData } from '~/types/markdown';
+
+import { getCollection } from 'astro:content';
+
+import Layout from "~/layouts/Layout.astro";
+import { NOTES_TYPE } from '~/utils/constant';
+
+type Notes = Array<{id: string; collection: string;} & MarkdownCollectionData>
+
+export function getStaticPaths() {
+  const paths = NOTES_TYPE.map(item => ({ params: { slug: item } }));
+
+  return paths;
+}
+
+const { slug } = Astro.params;
+const notes = (await getCollection(slug)).map(note => ({
+  id: note.id,
+  collection: note.collection,
+  ...note.data as MarkdownCollectionData
+})) as unknown as Notes;
+---
+
+<Layout>
+  <div class="mx-auto w-main text-theme-white">
+    <ol>
+      {notes.map(note => (
+        <li class="relative py-8 mb-8">
+          <a href=`/notes/${note.collection}/${note.id}` class="cursor-pointer">
+            <h3 class="mb-4 text-2xl">{note.title}</h3>
+            <p class="text-base italic">{note.subtitle}</p>
+
+            <div class="absolute bottom-0 left-0 right-0 rainbow-border-dashed h-[2px]" />
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Layout>

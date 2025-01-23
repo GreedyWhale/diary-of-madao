@@ -1,0 +1,29 @@
+---
+import type { MarkdownFrontmatter, MarkdownCollectionData } from '~/types/markdown';
+
+import { getCollection, render } from 'astro:content';
+import MarkdownLayout from '~/layouts/Markdown.astro';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('all');
+
+  return notes.map(note => {
+    const [collection, id] = note.id.split('/');
+    return {
+      params: { id, slug: collection },
+      props: { note },
+    }
+  });
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+const frontmatter = {
+  ...(note.rendered!.metadata!.frontmatter as unknown as MarkdownFrontmatter),
+  cover: (note.data as MarkdownCollectionData).cover,
+}
+---
+
+<MarkdownLayout frontmatter={frontmatter}>
+  <Content />
+</MarkdownLayout>

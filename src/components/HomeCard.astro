@@ -5,12 +5,13 @@ interface Props {
   classNames?: Partial<{
     container: string;
   }>;
+  link: string;
 }
 
-const { classNames } = Astro.props;
+const { classNames, link } = Astro.props;
 ---
 
-<div class={clsx("p-8 relative overflow-hidden cursor-pointer text-theme-white rounded-xl bg-theme-black/70", classNames?.container)}>
+<a href={link} class={clsx("p-8 relative overflow-hidden cursor-pointer text-theme-white rounded-xl bg-theme-black/70", classNames?.container)}>
   <div class="absolute inset-0 backdrop-blur-sm"></div>
   <slot />
-</div>
+</a>
