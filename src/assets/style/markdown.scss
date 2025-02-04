@@ -9,4 +9,17 @@
   ol, ul, li {
     list-style: revert;
   }
+
+  h1, h2, h3, h4, h5 {
+    color: #FFD700;
+  }
+
+  h4 {
+    display: flex;
+    font-size: 1.1rem;
+    &::before {
+      content: '#';
+      margin-right: 0.5rem;
+    }
+  }
 }
