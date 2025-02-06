@@ -24,7 +24,7 @@ const noteMetaInfo = [
 <Layout title={frontmatter.title}>
   <main class="mx-auto xl:w-main text-theme-white">
     <div class="flex flex-col items-stretch mb-8 xl:flex-row">
-      <div class="flex flex-col justify-between flex-1 mb-16 mr-4 xl:mb-0">
+      <div class="flex flex-col flex-1 justify-between mr-4 mb-16 xl:mb-0">
         <!-- 为了让table的宽度不撑满父元素 -->
         <div class="inline-block mb-16 xl:mb-0">
           <table class="rainbow-text">
@@ -45,7 +45,7 @@ const noteMetaInfo = [
         </div>
       </div>
 
-      <Image src={frontmatter.cover} alt="notes cover"/>
+      <Image src={frontmatter.cover} alt="notes cover" class="max-w-[60%] max-h-[85vh] object-cover" />
     </div>
     <article class="p-8 markdown-body">
       <slot />
