@@ -209,4 +209,258 @@ React Hooks 是 React 16.8 版本新增的功能，它允许你在函数组件�
 
 4. **useReducer**
 
+    useReducer 更像是 useState 的升级版本，比较适合复杂的状态更新，比如表单数据的管理（用 use-immer 也可以）：
+
+    ```javascript
+    const [formData, setFormData] = useState({ name: '', age: 0 });
+
+    // 更新的时候需要这样写
+    setFormData(prev => ({ ...prev, age: 10 }));
+
+    // 用 useReducer 可以这样写
+    const initialState = { name: '', age: 0 };
+    const reducer = (state, action) => {
+      switch(action.type) {
+        case 'updateName':
+          return { ...state, name: action.payload }
+        case 'updateAge':
+          return { ...state, age: action.payload }
+        default:
+          return state;
+      }
+    }
+
+    const [state, dispatch] = useReducer(initialState, reducer);
+
+    // 更新
+    dispatch({ type: 'updateName', payload: 'jack' });
+    ```
+
+    还有一个使用场景：当设置状态变量取决于另一个状态变量的当前值时非常适合使用 useReducer。
+
+    比如：
+
+    ```javascript
+      const [count, setCount] = useState(0);
+      const [step, setStep] = useState(1);
+
+      useEffect(() => {
+        const id = setInterval(() => {
+          setCount(prev => prev + step);
+        }, 1000);
+        return () => clearInterval(id);
+      }, [step]);
+    ```
+
+    这段代码是可以正常运行的，但是有一个问题在于 step 改变时，会触发 `clearInterval`，使用 useReducer 可以避免这种情况：
+
+    ```javascript
+    const initialState = { count: 0, step: 1 };
+    const reducer = (state, action) => {
+      switch(action.type) {
+        case 'tick':
+          return { ...state, count: state.step + state.count }
+        case 'step':
+          return { ...state, step: action.payload }
+        default:
+          return state;
+      }
+    }
+
+    const [state, dispatch] = useReducer(initialState, reducer);
+    useEffect(() => {
+      const id = setInterval(() => {
+        dispatch({ type: 'tick' })
+      }, 1000);
+      return () => clearInterval(id);
+    }, [dispatch]);
+    ```
+
+    React 会保证 dispatch 函数在每次渲染之间稳定，你甚至可以在 useEffect 中忽略 dispatch，所以改变 step 的时候并不会触发 `clearInterval`，然后这样写还有一个非常好的地方：减少了 useEffect 的依赖项，如果你在工作中用 React 你就知道 useEffect 的依赖项很容易出现爆炸式的增长，随着依赖项越来越多 useEffect 也会变得不可控。
+
+5. **useContext**
+
+    useContext 用于跨组件的状态传递，尤其是嵌套过深的组件和兄弟组件之间的状态传递，如果不是一级一级传递就要用一些第三方的状态管理库，比如：React Redux、jotai、zustand，而 React Redux 以非常难用而出名，写起来很复杂。
+
+    useContext + useReducer 可以在很大程度上代替这些第三方库。
+
+    ```jsx
+    import { createContext, useContext, useReducer } from 'react';
+
+    const initialState = {
+      id: 0,
+      username: '',
+    };
+
+    const UserContext = createContext({
+      userInfo: initialState,
+      dispatch: (action) => {},
+    });
+
+    const reducer = (state, action) => {
+      switch(action.type) {
+        case 'updateUserInfo':
+          return action.payload;
+        default:
+          return state;
+      }
+    };
+
+    const useUserContext = () => React.useContext(UserContext);
+
+    const UserContextProvider = (props) => {
+      const [state, dispatch] = React.useReducer(reducer, initialState);
+
+      return (
+        <UserContext.Provider value={{ userInfo: state, dispatch }}>
+          {props.children}
+        </UserContext.Provider>
+      );
+    };
+
+    // 在父组件中
+    const Parent = () => {
+      return (
+        <UserContextProvider>
+          <ChildOne />
+          <ChildTwo />
+        </UserContextProvider>
+      )
+    };
+
+    // 子组件
+    const ChildOne = () => {
+      const { userInfo } = useUserContext();
+      return (
+        <div>
+          <p>{userInfo.username}</p>
+        </div>
+      )
+    };
+
+    const ChildTwo = () => {
+      const { userInfo } = useUserContext();
+      return (
+        <div>
+          <p>{userInfo.age}</p>
+        </div>
+      )
+    };
+    ```
+
+    这样就不用一级一级传递状态了，当 useContext 中的状态发生改变的时候，使用到这些状态的组件也会同步更新。
+
+6. **useMemo** 和 **useCallback**
+
+    这两个 hook 都是用于性能优化相关的，它们会缓存计算结果直到依赖发生变化，在 React 中有很多多余的渲染，比如这种情况：
+
+    ```jsx
+    const App = () => {
+      const [a, setA] = useState(0);
+      const [b, setB] = useState(0);
+
+      return (
+        <div>
+          <p>a: {a}</p>
+          <Child b={b} />
+          <button onClick={() => setA(prev => prev + 1)}>Change A</button>
+          <button onClick={() => setB(prev => prev + 1)}>Change B</button>
+        </div>
+      )
+    };
+
+    const Child = (props) => {
+      console.log('render');
+      return <p>b: {props.b}</p>
+    };
+    ```
     
+    当 A 发生变化的时候，Child 组件也触发了重新渲染，但是 Child 组件并没有依赖 A，这种就属于多余的渲染，可以通过 useMemo 进行优化：
+
+    ```jsx
+    export const App = () => {
+      const [a, setA] = useState(0);
+      const [b, setB] = useState(0);
+  
+      const CachedChild = useMemo(() => <Child b={b} />, [b]);
+    
+      return (
+        <div>
+          <p>b: {a}</p>
+          {CachedChild}
+    
+          <button onClick={() => setA(prev => prev + 1)}>Change A</button>
+          <button onClick={() => setB(prev => prev + 1)}>Change B</button>
+        </div>
+      );
+    };
+    ```
+
+    当然一般不会这样写，组件的缓存用 [memo](https://react.dev/reference/react/memo)，这里只是举一个例子。
+
+    useMemo 是缓存一个值，useCallback 则是缓存一个函数，比如上面的例子：
+
+    ```jsx
+    export const App = () => {
+      const [a, setA] = useState(0);
+      const [b, setB] = useState(0);
+    
+      const sayName = () => console.log('app');
+
+      return (
+        <div>
+          <p>a: {a}</p>
+          <Child b={b} sayName={sayName} />
+    
+          <button onClick={() => setA(prev => prev + 1)}>Change A</button>
+          <button onClick={() => setB(prev => prev + 1)}>Change B</button>
+        </div>
+      );
+    };
+    
+    const Child = memo(props => {
+      console.log('render');
+      return <p>b: {props.b}</p>;
+    });
+    ```
+
+    当传递一个函数给子组件的时候，缓存就会失效，原因就是每次重新渲染创建的函数都是新函数，用 useCallback 可以避免这种情况:
+
+    ```jsx
+    export const App = () => {
+      const [a, setA] = useState(0);
+      const [b, setB] = useState(0);
+    
+      const sayName = useCallback(() => () => console.log('app'), []);
+      return (
+        <div>
+          <p>a: {a}</p>
+          <Child b={b} sayName={sayName} />
+    
+          <button onClick={() => setA(prev => prev + 1)}>Change A</button>
+          <button onClick={() => setB(prev => prev + 1)}>Change B</button>
+        </div>
+      );
+    };
+    ```
+
+7. useRef
+
+    useRef 是定义一个不会触发渲染的对象，一般用来存储 DOM 的引用或者定时器之类的值，useRef 创建的对象可以保证每次渲染都是同一个对象，修改它的值也不会触发重新渲染。
+
+    比如说你想要保存输入框的值，但是又不想存在 state 中，因为输入框的值改变十分频繁，每次输入都 setState 的话，性能肯定会受到影响，这时候就可以放在 useRef 中。
+
+    ```jsx
+    const inputValue = useRef('');
+
+    <input type="text" onInput={event => inputValue.current = event.target.value} />
+    ```
+
+最后还要说的几点是：
+
+1. 不要在循环或者条件判断中使用 hooks
+2. 不要在 return 语句后面使用 hooks
+3. 不要在事件处理函数中使用 hooks
+4. 不要在类组件中使用 hooks
+5. 不要在 useMemo, useReducer 或 useEffect 的函数内调用 hooks
+6. 不要在 try/catch/finally 语句中调用 hooks
