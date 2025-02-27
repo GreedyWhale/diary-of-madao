@@ -5,7 +5,7 @@ description: '终于来到了背 API 的环节，用好工具的前提一定是�
 author: 'Caisr'
 tags: ["React"]
 type: 'react'
-cover: '~/assets/images/if-banner-1.webp'
+cover: '~/assets/images/interview-questions-2-banner.webp'
 ---
 
 ### 1. React Hooks 是什么
