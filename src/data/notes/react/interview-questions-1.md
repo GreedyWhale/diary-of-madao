@@ -5,7 +5,7 @@ description: '打算写一些关于 React 的笔记，但写着写着感觉越�
 author: 'Caisr'
 tags: ["React"]
 type: 'react'
-cover: '~/assets/images/if-banner-1.webp'
+cover: '~/assets/images/react-base.jpg'
 ---
 
 ### 1. 什么是 Fiber
