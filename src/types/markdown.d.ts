@@ -6,7 +6,6 @@ export interface MarkdownFrontmatter {
   subtitle: string;
   birthtime: string;
   lastModified: string;
-  description: string;
   author: string;
   tags: string[];
   type: string;

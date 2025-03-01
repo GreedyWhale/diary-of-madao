@@ -1,7 +1,6 @@
 ---
 title: 'React Hooks'
 subtitle: '哦，所以你是说你连最基本的 Hooks 都没搞明白，就敢来面试了？'
-description: '终于来到了背 API 的环节，用好工具的前提一定是懂工具原理么 :-('
 author: 'Caisr'
 tags: ["React"]
 type: 'react'

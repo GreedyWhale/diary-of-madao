@@ -1,7 +1,6 @@
 ---
 title: 'React - Server Components'
 subtitle: 'React: I’m evolving! Vercel: No, you’re becoming Next.js. I’ve got the team to prove it.'
-description: '我想了解 Server Components 的原因在于我用上 Next.js 的 App 目录模式后，我竟然不知道应该在什么地方进行接口的请求了，这让我很困惑。我查阅了一些文档后对 Server Components 越来越不理解了。'
 author: 'Caisr'
 tags: ["React"]
 type: 'react'

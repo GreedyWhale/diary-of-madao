@@ -1,7 +1,6 @@
 ---
 title: '原型链'
 subtitle: 'Tracing the prototype chain is like calling customer support—every level just redirects you to someone else.'
-description: '前端面试八股文，建议每日背诵三遍'
 author: 'Caisr'
 tags: ["javascript", "prototype"]
 type: 'javascript'

@@ -1,7 +1,6 @@
 ---
 title: 'IF 打卡应用开发笔记（一）'
-subtitle: '搭建开发环境'
-description: '这是我使用 React Native 开发打卡应用的系列笔记的第一篇，主要记录了开发环境的搭建过程。'
+subtitle: '搭建 React Native 开发环境'
 author: 'Caisr'
 tags: ["React Native", "Fullstack"]
 type: 'fullstack'

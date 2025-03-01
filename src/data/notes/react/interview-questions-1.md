@@ -1,7 +1,6 @@
 ---
 title: 'React - Fiber, Virtual DOM, Diffing Algorithm'
-subtitle: '就从 Fiber 开始吧'
-description: '打算写一些关于 React 的笔记，但写着写着感觉越来越混乱。不如直接从面试题入手，用简洁的语言给自己讲解一遍，理清思路。'
+subtitle: 'React Fiber: Re-renders everything because one prop changed.'
 author: 'Caisr'
 tags: ["React"]
 type: 'react'
