@@ -1,4 +1,5 @@
 ---
+import type { GetStaticPaths } from 'astro';
 import type { MarkdownCollectionData } from '~/types/markdown';
 
 import { getCollection } from 'astro:content';
@@ -8,14 +9,26 @@ import { NOTES_TYPE } from '~/utils/constant';
 
 type Notes = Array<{id: string; collection: string;} & MarkdownCollectionData>
 
-export function getStaticPaths() {
-  const paths = NOTES_TYPE.map(item => ({ params: { slug: item } }));
 
-  return paths;
-}
+export const getStaticPaths: GetStaticPaths = ({ paginate }) => {
+  const allNotes = Object.values(import.meta.glob('~/data/notes/**/*.md', { eager: true })) as Array<{
+    frontmatter: MarkdownCollectionData;
+  }>;
+
+  return NOTES_TYPE.flatMap((slug) => {
+    const filteredNotes = allNotes.filter((note) => note.frontmatter.type === (slug as unknown as typeof NOTES_TYPE[number]));
+
+    return paginate(filteredNotes, {
+      params: { slug },
+      pageSize: 15,
+    });
+  });
+};
 
 const { slug } = Astro.params;
-const notes = (await getCollection(slug)).map(note => ({
+
+
+const notes = (await getCollection(slug as typeof NOTES_TYPE[number])).map(note => ({
   id: note.id,
   collection: note.collection,
   ...note.data as MarkdownCollectionData
@@ -27,7 +40,7 @@ const notes = (await getCollection(slug)).map(note => ({
     <ol>
       {notes.map(note => (
         <li class="relative py-8 mb-8">
-          <a href=`/notes/${note.collection}/${note.id}` class="cursor-pointer">
+          <a href=`/notes/${note.collection}/details/${note.id}` class="cursor-pointer">
             <h3 class="mb-4 text-2xl">{note.title}</h3>
             <p class="text-base italic">{note.subtitle}</p>
 

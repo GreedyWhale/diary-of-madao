@@ -21,7 +21,7 @@ const { Content } = await render(note);
 const frontmatter = {
   ...(note.rendered!.metadata!.frontmatter as unknown as MarkdownFrontmatter),
   cover: (note.data as MarkdownCollectionData).cover,
-}
+};
 ---
 
 <MarkdownLayout frontmatter={frontmatter}>
