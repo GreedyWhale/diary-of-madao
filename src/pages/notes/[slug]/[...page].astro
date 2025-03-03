@@ -1,6 +1,6 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import type { MarkdownCollectionData } from '~/types/markdown';
+import type { MarkdownCollectionData, MarkdownInstance } from '~/types/markdown';
 
 import { getCollection } from 'astro:content';
 
@@ -11,9 +11,7 @@ type Notes = Array<{id: string; collection: string;} & MarkdownCollectionData>
 
 
 export const getStaticPaths: GetStaticPaths = ({ paginate }) => {
-  const allNotes = Object.values(import.meta.glob('~/data/notes/**/*.md', { eager: true })) as Array<{
-    frontmatter: MarkdownCollectionData;
-  }>;
+  const allNotes = Object.values(import.meta.glob('~/data/notes/**/*.md', { eager: true })) as Array<MarkdownInstance>;
 
   return NOTES_TYPE.flatMap((slug) => {
     const filteredNotes = allNotes.filter((note) => note.frontmatter.type === (slug as unknown as typeof NOTES_TYPE[number]));
