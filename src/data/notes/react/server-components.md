@@ -4,7 +4,7 @@ subtitle: 'React: I’m evolving! Vercel: No, you’re becoming Next.js. I’ve 
 author: 'Caisr'
 tags: ["React"]
 type: 'react'
-cover: '~/assets/images/server-components.jpg'
+cover: '~/assets/images/cover/cover-4.jpg'
 ---
 
 自从 Next.js 推出 App Router 后，我对 Next.js 的评价越来越差，原因就在于我不知道在 Next.js 中的什么地方进行接口的请求，再加上它那让人抓狂的缓存机制，让我越来越对它的印象越来越差。

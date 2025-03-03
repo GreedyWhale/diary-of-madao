@@ -4,7 +4,7 @@ subtitle: '搭建 React Native 开发环境'
 author: 'Caisr'
 tags: ["React Native", "Fullstack"]
 type: 'fullstack'
-cover: '~/assets/images/if-banner-1.webp'
+cover: '~/assets/images/cover/cover-7.webp'
 ---
 
 ### 前言

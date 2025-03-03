@@ -4,7 +4,7 @@ subtitle: 'React Fiber: Re-renders everything because one prop changed.'
 author: 'Caisr'
 tags: ["React"]
 type: 'react'
-cover: '~/assets/images/react-base.jpg'
+cover: '~/assets/images/cover/cover-2.jpg'
 ---
 
 ### 1. 什么是 Fiber

@@ -4,7 +4,7 @@ subtitle: 'Tracing the prototype chain is like calling customer support—every 
 author: 'Caisr'
 tags: ["javascript", "prototype"]
 type: 'javascript'
-cover: '~/assets/images/js-prototype.webp'
+cover: '~/assets/images/cover/cover-5.webp'
 ---
 
 原型链是前端面试的高频问题，基本都会被问到，所以我个人认为理解的还算不错，直到最近看了一篇文章才发现我之前理解有点问题。

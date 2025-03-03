@@ -4,7 +4,7 @@ subtitle: 'JavaScript scope: Where a variable lives. this: Where your sanity die
 author: 'Caisr'
 tags: ["javascript", "scope", "this"]
 type: 'javascript'
-cover: '~/assets/images/thisAndScope.jpg'
+cover: '~/assets/images/cover/cover-6.jpg'
 ---
 
 ### 一. 作用域
