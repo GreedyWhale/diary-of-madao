@@ -1,11 +1,10 @@
 ---
 title: '实现 UnoCSS 网站的颜色渐变效果'
 subtitle: 'CSS Animation: When you spend hours on keyframes, but end up making a button bounce.'
-description: '实现（抄袭）一款类似 UnoCSS 网站的颜色渐变效果，这个效果也应用在了我自己的网站上，说是实现其实还是看了 UnoCSS 网站的源代码才明白怎么实现的，不过在实现过程中还是有一点自己的心得，所以记录一下。'
 author: 'Caisr'
 tags: ["CSS", "Animation"]
 type: 'css'
-cover: '~/assets/images/rainbow.webp'
+cover: '~/assets/images/cover/cover-1.webp'
 ---
 
 ### 一. 原来 CSS 变量也可以用于 @keyframes

@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2025-01-21 15:39:05
  * @LastEditors: MADAO
- * @LastEditTime: 2025-01-22 10:32:14
+ * @LastEditTime: 2025-03-01 16:23:40
  */
 import type { CollectionConfig } from 'astro:content';
 
@@ -21,7 +21,6 @@ const createNoteCollection = (type?: typeof NOTES_TYPE[number]) => defineCollect
   schema: ({ image }) => z.object({
     title: z.string(),
     subtitle: z.string(),
-    description: z.string(),
     author: z.string(),
     tags: z.array(z.string()),
     type: z.string(),
