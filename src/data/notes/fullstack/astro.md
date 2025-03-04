@@ -170,3 +170,66 @@ cover 可以直接传给 `<Image />` 组件。
 ```tsx
 <Image src={cover} alt="notes cover" />
 ```
+
+### 二. 给 Markdown 文件添加更新时间
+
+这个功能也是属于自定义字段，但是是通过插件的方式进行添加的，官方文档有详细介绍：
+
+[modified-time](https://docs.astro.build/en/recipes/modified-time/)
+
+我也用了这种方式实现，不过我是添加了2个时间字段，一个是更新时间，一个是创建时间。
+
+```typescript
+import { statSync } from "fs";
+
+export function remarkModifiedTime() {
+  return function (tree, file) {
+    const filepath = file.history[0];
+    const result = statSync(filepath);
+    file.data.astro.frontmatter.lastModified = result.mtime.toISOString();
+    file.data.astro.frontmatter.birthtime = result.birthtime.toISOString();
+  };
+};
+```
+
+添加完成之后记得要更新类型文件：
+
+```typescript
+export interface MarkdownFrontmatter {
+  title: string;
+  subtitle: string;
+  birthtime: string;
+  lastModified: string;
+  author: string;
+  tags: string[];
+  type: string;
+  cover: ImageMetadata;
+}
+```
+
+用法需要用一些日期的库进行处理：
+
+```typescript
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
+// frontmatter 就是获取到的 markdown 文件的 frontmatter
+const birthtime =  dayjs(frontmatter.birthtime).format("YYYY-MM-DD HH:mm:ss")
+```
+
+到这里前端的部分基本没有什么问题了，剩下的问题看文档基本都能解决，接下来就是部署了。
+
+### 部署至服务器
+
+这里采用 docker 的方式部署，同时还要配置 nginx，为了之后有可能添加数据库或者部署其他应用（一台服务器上部署多个应用），首先要改造一下目录结构:
+
+```
+|- projects
+  |- diary-of-madao (当前个人博客网站代码目录)
+  |- nginx （nginx相关的配置）
+  |- docker-compose.yaml （docker-compose的配置）
+```
+
+#### 1. 创建网站的 Dockerfile
+
