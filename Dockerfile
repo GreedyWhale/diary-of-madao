@@ -51,20 +51,5 @@ ENV NODE_ENV=production
 # 暴露应用端口
 EXPOSE 4321
 
-# 添加调试命令的脚本
-RUN echo '#!/bin/bash\n\
-echo "=== 当前工作目录 ==="\n\
-pwd\n\
-echo "=== 目录内容 ==="\n\
-ls -la\n\
-echo "=== 检查入口文件 ==="\n\
-ls -la /app/dist/server/entry.mjs\n\
-echo "=== Node.js 版本 ==="\n\
-node -v\n\
-echo "=== PM2 配置文件内容 ==="\n\
-cat /app/pm2.config.mjs\n\
-echo "=== 启动应用 ==="\n\
-cd /app && /root/.local/share/pnpm/global/5/.pnpm/pm2@5.4.3/node_modules/.bin/pm2-runtime dist/server/entry.mjs' > /app/start.sh && chmod +x /app/start.sh
-
-# 使用调试脚本启动应用
-CMD ["/app/start.sh"]
+# 使用 PM2 启动应用
+CMD ["pm2-runtime", "pm2.config.mjs", "--env", "production"]
