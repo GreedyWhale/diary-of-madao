@@ -63,10 +63,8 @@ echo "=== Node.js 版本 ==="\n\
 node -v\n\
 echo "=== PM2 配置文件内容 ==="\n\
 cat /app/pm2.config.mjs\n\
-echo "=== 尝试直接运行应用 ==="\n\
-node /app/dist/server/entry.mjs\n\
-echo "=== 如果直接运行成功，再尝试 PM2 ==="\n\
-/root/.local/share/pnpm/global/5/.pnpm/pm2@5.4.3/node_modules/.bin/pm2-runtime /app/dist/server/entry.mjs' > /app/start.sh && chmod +x /app/start.sh
+echo "=== 启动应用 ==="\n\
+cd /app && /root/.local/share/pnpm/global/5/.pnpm/pm2@5.4.3/node_modules/.bin/pm2-runtime dist/server/entry.mjs' > /app/start.sh && chmod +x /app/start.sh
 
 # 使用调试脚本启动应用
 CMD ["/app/start.sh"]
