@@ -4,6 +4,7 @@ WORKDIR /app
 
 # 启用 pnpm 包管理器并复制依赖文件
 RUN corepack enable pnpm
+RUN pnpm setup
 COPY package.json pnpm-lock.yaml ./
 
 # 生产依赖阶段：只安装生产环境需要的依赖
