@@ -2,7 +2,7 @@
 title: '作用域和 This'
 subtitle: 'JavaScript scope: Where a variable lives. this: Where your sanity dies.'
 author: 'Caisr'
-tags: ["javascript", "scope", "this"]
+tags: ["JavaScript", "scope", "this"]
 type: 'javascript'
 cover: '~/assets/images/cover/cover-6.jpg'
 ---

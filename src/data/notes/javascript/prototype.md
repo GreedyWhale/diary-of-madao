@@ -2,7 +2,7 @@
 title: '原型链'
 subtitle: 'Tracing the prototype chain is like calling customer support—every level just redirects you to someone else.'
 author: 'Caisr'
-tags: ["javascript", "prototype"]
+tags: ["JavaScript", "prototype"]
 type: 'javascript'
 cover: '~/assets/images/cover/cover-5.webp'
 ---
