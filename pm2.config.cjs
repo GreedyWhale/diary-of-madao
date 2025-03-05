@@ -3,9 +3,9 @@
  * @Author: MADAO
  * @Date: 2025-03-05 20:04:58
  * @LastEditors: MADAO
- * @LastEditTime: 2025-03-05 23:02:46
+ * @LastEditTime: 2025-03-05 23:17:13
  */
-export default {
+module.exports = {
   apps: [{
     name: 'diary-of-madao',
     script: './dist/server/entry.mjs',

@@ -9,7 +9,7 @@
     "astro": "astro",
     "lint": "eslint src/**/*.{js,astro}",
     "prettier": "prettier . --write",
-    "start:pm2": "pm2-runtime start ./pm2.config.mjs"
+    "start:pm2": "pm2-runtime start ./pm2.config.cjs"
   },
   "dependencies": {
     "@astrojs/node": "^9.1.2",
@@ -19,6 +19,7 @@
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "github-markdown-css": "^5.8.1",
+    "pm2": "^5.4.3",
     "tailwindcss": "^3.4.17"
   },
   "packageManager": "pnpm@10.5.2+sha256.79a98daa90248b50815e31460790f118c56fe099113370826caa0153be6daba5",

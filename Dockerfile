@@ -35,7 +35,7 @@ RUN pnpm setup
 RUN corepack enable pnpm
 
 # 安装 PM2 进程管理器
-RUN pnpm add -g pm2
+# RUN pnpm add -g pm2
 
 # 从之前的阶段复制必要文件
 COPY --from=prod-deps /app/node_modules ./node_modules
