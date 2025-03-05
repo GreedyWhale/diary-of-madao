@@ -64,7 +64,7 @@ node -v\n\
 echo "=== PM2 版本 ==="\n\
 pm2 -v\n\
 echo "=== 启动应用 ==="\n\
-pm2-runtime pm2.config.mjs --env production' > /app/start.sh && chmod +x /app/start.sh
+/root/.local/share/pnpm/global/5/.pnpm/pm2@5.4.3/node_modules/.bin/pm2-runtime start /app/pm2.config.mjs' > /app/start.sh && chmod +x /app/start.sh
 
 # 使用调试脚本启动应用
 CMD ["/app/start.sh"]
