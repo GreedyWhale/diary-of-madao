@@ -20,7 +20,7 @@
     "github-markdown-css": "^5.8.1",
     "tailwindcss": "^3.4.17"
   },
-  "packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c",
+  "packageManager": "pnpm@10.5.2+sha256.79a98daa90248b50815e31460790f118c56fe099113370826caa0153be6daba5",
   "devDependencies": {
     "@types/node": "^22.10.7",
     "@typescript-eslint/parser": "^8.19.0",
