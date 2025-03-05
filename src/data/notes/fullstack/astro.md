@@ -222,14 +222,21 @@ const birthtime =  dayjs(frontmatter.birthtime).format("YYYY-MM-DD HH:mm:ss")
 
 ### 部署至服务器
 
-这里采用 docker 的方式部署，同时还要配置 nginx，为了之后有可能添加数据库或者部署其他应用（一台服务器上部署多个应用），首先要改造一下目录结构:
+我的部署方案是采用 docker 的方式，有可能还要部署其他应用到同一台服务器，所以需要 nginx 进行请求的转发，那么就需要一个管理所有应用的地方，首先改写一下目录结构：
+
 
 ```
 |- projects
   |- diary-of-madao (当前个人博客网站代码目录)
   |- nginx （nginx相关的配置）
+    |- conf.d
+      |- default.conf // 默认配置
+    |- shared // 共享的配置
+    |- ssl // 证书存放的位置
   |- docker-compose.yaml （docker-compose的配置）
 ```
 
 #### 1. 创建网站的 Dockerfile
 
+```dockerfile
+```
