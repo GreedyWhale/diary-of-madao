@@ -47,8 +47,9 @@ COPY pm2.config.js .
 # 配置环境变量
 ENV HOST=0.0.0.0
 ENV PORT=4321
+ENV NODE_ENV=production
 # 暴露应用端口
 EXPOSE 4321
 
-# 使用 PM2 启动应用
-CMD ["pm2-runtime", "start", "pm2.config.js"]
+# 使用 PM2 启动应用并启用日志
+CMD ["pm2-runtime", "start", "pm2.config.js", "--env", "production", "--no-daemon"]
