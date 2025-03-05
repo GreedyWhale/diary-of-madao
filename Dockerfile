@@ -32,14 +32,11 @@ COPY --from=build /app/dist ./dist
 # 复制 PM2 配置文件
 COPY pm2.config.js .
 
-# 声明构建参数
-ARG PORT=4321
-
 # 配置环境变量
 ENV HOST=0.0.0.0
-ENV PORT=$PORT
+ENV PORT=4321
 # 暴露应用端口
-EXPOSE $PORT
+EXPOSE 4321
 
 # 使用 PM2 启动应用
 CMD ["pm2-runtime", "start", "pm2.config.js"]
