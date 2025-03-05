@@ -2,12 +2,9 @@
 FROM node:lts AS base
 WORKDIR /app
 
-# 设置 SHELL 环境变量
-ENV SHELL=/bin/bash
-
 # 启用 pnpm 包管理器并复制依赖文件
 RUN corepack enable pnpm
-RUN pnpm setup
+RUN pnpm config set registry https://mirrors.cloud.tencent.com/npm/
 COPY package.json pnpm-lock.yaml ./
 
 # 生产依赖阶段：只安装生产环境需要的依赖
@@ -25,17 +22,6 @@ RUN pnpm run build
 
 # 运行时阶段：设置生产环境
 FROM base AS runtime
-# 设置 SHELL 和 PNPM_HOME 环境变量
-ENV SHELL=/bin/bash
-ENV PNPM_HOME=/root/.local/share/pnpm
-ENV PATH=$PNPM_HOME:$PATH
-
-# 初始化 pnpm
-RUN pnpm setup
-RUN corepack enable pnpm
-
-# 安装 PM2 进程管理器
-# RUN pnpm add -g pm2
 
 # 从之前的阶段复制必要文件
 COPY --from=prod-deps /app/node_modules ./node_modules
