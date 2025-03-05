@@ -1,4 +1,11 @@
-module.exports = {
+/*
+ * @Description: pm2 配置
+ * @Author: MADAO
+ * @Date: 2025-03-05 20:04:58
+ * @LastEditors: MADAO
+ * @LastEditTime: 2025-03-05 22:11:07
+ */
+export default {
   apps: [{
     name: 'diary-of-madao',
     script: './dist/server/entry.mjs',
