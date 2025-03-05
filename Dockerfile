@@ -52,4 +52,4 @@ ENV NODE_ENV=production
 EXPOSE 4321
 
 # 使用 PM2 启动应用
-CMD ["pwd"]
+CMD ["pm2-runtime", "start", "./dist/server/entry.mjs"]
