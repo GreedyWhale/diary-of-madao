@@ -42,7 +42,7 @@ COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 
 # 复制 PM2 配置文件
-COPY pm2.config.mjs .
+COPY pm2.config.mjs ./pm2.config.mjs
 
 # 配置环境变量
 ENV HOST=0.0.0.0
@@ -52,4 +52,4 @@ ENV NODE_ENV=production
 EXPOSE 4321
 
 # 使用 PM2 启动应用
-CMD ["pm2-runtime", "start", "pm2.config.mjs", "--env", "production"]
+CMD ["pm2-runtime", "pm2.config.mjs", "--env", "production"]
