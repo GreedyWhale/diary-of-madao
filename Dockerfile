@@ -2,6 +2,9 @@
 FROM node:lts AS base
 WORKDIR /app
 
+# 设置 SHELL 环境变量
+ENV SHELL=/bin/bash
+
 # 启用 pnpm 包管理器并复制依赖文件
 RUN corepack enable pnpm
 RUN pnpm setup
