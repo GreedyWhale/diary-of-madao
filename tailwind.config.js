@@ -15,6 +15,10 @@ export default {
         'theme-blue-light': '#A1C4D8',
         'theme-green': '#B5D27F',
         'theme-green-light': '#C6E298',
+        'theme-purple': '#9B6B9E',
+        'theme-purple-light': '#C190C5',
+        'theme-pink': '#FF69B4',
+        'theme-pink-light': '#FFB6C1',
         'theme-white': '#FAFAFA',
       },
       width: {

@@ -66,6 +66,36 @@ import HomeCard from "~/components/HomeCard.astro";
 
         <p>"Full Stack Developer's prayer: <br />'Please let my frontend talk to my backend without a CORS error today.' Amen."</p>
       </HomeCard>
+
+      <div class="col-span-3 xl:grid xl:grid-cols-2 xl:gap-4">
+        <HomeCard link="/notes/tools">
+          <div class="relative z-10 mb-4 text-black">
+            <h2 class="mb-8 text-3xl">
+              <span class="px-1 rounded-lg bg-theme-purple selection-prefix">四次元口袋</span>
+            </h2>
+
+            <span class="px-1 rounded-lg bg-theme-purple">"你知道的好多，我也能像你一样厉害吗？"</span>
+            <span class="selection-suffix"></span>
+          </div>
+
+          <p>"Me: I know React, Vue, Svelte, Tailwind, Webpack, Vite, Rspack, and Rust!"</p>
+          <p>"Recruiter: Do you have 5 years of enterprise experience with PHP?"</p>
+        </HomeCard>
+
+        <HomeCard link="/notes/ai">
+          <p>"AI can replace artists, writers, and programmers. But not the guy who approves budgets."</p>
+
+          <div class="relative z-10 mt-4 text-black">
+            <h2 class="mb-8 text-3xl">
+              <span class="px-1 rounded-lg bg-theme-pink selection-prefix">AI 观察日记</span>
+            </h2>
+
+            <p class="px-1 rounded-lg bg-theme-pink">"AI: I can generate art, music, and even code!" </p>
+            <br />
+            <span class="px-1 rounded-lg bg-theme-pink selection-suffix">"Me: Can you generate me a job?"</span>
+          </div>
+        </HomeCard>
+      </div>
     </div>
   </div>
 </Layout>
