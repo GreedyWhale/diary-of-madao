@@ -577,4 +577,91 @@ docker exec -it 容器id bash # 进入容器内部
 
 #### 自动部署项目
 
+自动部署我目前还是用的 `bash` 脚本，而且只能在上传了 ssh 密钥的设备上执行，所以不是很方便，后面再看看还有什么其他方式。
 
+首先添加在 `package.json` 中添加一个命令：
+
+```json
+"scripts": {
+  "deploy": "ssh 用户名@服务器地址 'bash -s' < bin/deploy.sh"
+},
+```
+
+这个命令添加了之后，就来实现 `deploy.sh` 脚本
+
+```bash
+#!/bin/bash
+
+# 设置错误时退出
+set -e
+
+# 输出时间戳的函数
+timestamp() {
+    date "+%Y-%m-%d %H:%M:%S"
+}
+
+# 输出日志的函数
+log() {
+    echo "[$(timestamp)] $1"
+}
+
+# 检查命令是否执行成功
+check_result() {
+    if [ $? -eq 0 ]; then
+        log "✅ $1 成功"
+    else
+        log "❌ $1 失败"
+        exit 1
+    fi
+}
+
+# 开始部署
+log "开始部署 diary-of-madao..."
+
+# 进入项目目录
+cd /home/caisr/oh-my-docker-greed.icu/diary-of-madao
+check_result "切换到项目目录"
+
+# 拉取最新代码
+log "拉取最新代码..."
+git pull
+check_result "代码拉取"
+
+# 构建镜像
+log "构建 Docker 镜像..."
+docker compose build diary-of-madao
+check_result "镜像构建"
+
+# 启动服务
+log "启动服务..."
+docker compose up -d --no-deps diary-of-madao
+check_result "服务启动"
+
+# 检查容器状态
+log "检查容器状态..."
+sleep 5  # 等待容器完全启动
+container_status=$(docker compose ps diary-of-madao --format json | grep -o '"State":"[^"]*"' | cut -d'"' -f4)
+
+if [ "$container_status" = "running" ]; then
+    log "🚀 容器运行状态: $container_status"
+    
+    # 显示容器日志
+    log "最近的容器日志:"
+    docker compose logs --tail=10 diary-of-madao
+    
+    # 显示容器信息
+    log "容器详细信息:"
+    docker compose ps diary-of-madao
+else
+    log "⚠️ 容器状态异常: $container_status"
+    log "错误日志:"
+    docker compose logs --tail=20 diary-of-madao
+    exit 1
+fi
+
+log "部署完成！"
+```
+
+然后给这个脚本执行权限 `chmod +x 文件路径`。
+
+这个脚本也是 AI 帮我写的，自从有了 AI 后确实极大的改变了我的开发方式，也许应该去学学其他技能了，感觉这些都是过时的知识了 (ㆆᴗㆆ)
