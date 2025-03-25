@@ -528,9 +528,9 @@ adduser admin # 创建 admin 用户，然后根据提示完成后续操作
 
 cat /etc/group # 查看当前所有的分组
 
-usermod -a -G docker admin # 将blog用户添加到docker组
+usermod -a -G docker admin # 将admin用户添加到docker组
 
-su - admin # 切换回blog用户
+su - admin # 切换回admin用户
 
 docker -v # 测试是否可以使用docker
 ```
