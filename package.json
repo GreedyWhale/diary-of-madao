@@ -10,7 +10,8 @@
     "lint": "eslint src/**/*.{js,astro}",
     "prettier": "prettier . --write",
     "start:pm2": "pm2-runtime start ./pm2.config.cjs",
-    "deploy": "ssh caisr@taurus 'bash -s' < bin/deploy.sh"
+    "deploy": "ssh caisr@taurus 'bash -s' < bin/deploy.sh",
+    "deploy:js": "node bin/deploy.js"
   },
   "dependencies": {
     "@astrojs/node": "^9.1.3",
