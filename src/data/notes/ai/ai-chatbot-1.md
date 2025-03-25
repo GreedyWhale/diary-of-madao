@@ -256,3 +256,133 @@ AUTH_SECRET=****
       迁移文件（Migration Files）是用于管理数据库结构变更的脚本文件。在这个项目中位于 `/lib/db/migrations` 下，点开查看可以看到这些文件的内容是一些 `sql` 语句
 
 
+## 三. drizzle-orm
+
+1. `uuid('id')`
+
+    - 定义一个 UUID 类型的字段。
+    - 字段名为 'id'
+    - UUID 是一个 32 位的唯一标识符
+    - 以此类推 `varchar('name')` 定义一个字符串类型的字段，`timestamp('created_at')` 定义一个时间戳类型的字段。
+
+2. primaryKey
+
+    - 将此字段设置为主键
+    - 用于唯一标识表中的每条记录
+    - 确保每条记录的 id 都是唯一的
+
+3. notNull
+
+    - 设置字段不允许为空
+
+4. defaultRandom
+
+    - 自动生成随机的 UUID 值
+
+5. references
+
+    - 用来定义外键关系（Foreign Key）的方法，比如：
+    
+        ```typescript
+        userId: uuid('userId')
+          .notNull()
+          .references(() => user.id),
+        ```
+        
+        它的作用是：
+
+        1. 建立表关系 ：
+           
+           - 将 Chat 表的 userId 字段与 User 表的 id 字段关联
+           - 表示每个聊天都属于一个用户
+        2. 数据完整性 ：
+           
+           - 确保 userId 必须是 User 表中存在的 id
+           - 防止创建指向不存在用户的聊天记录
+           - 当删除用户时，可以触发相关聊天记录的处理（如级联删除）
+        3. 查询优化 ：
+           
+           - 便于进行表连接查询
+           - 数据库可以使用这个关系优化查询性能
+
+6. 复合主键
+
+    ```typescript
+    (table) => {
+        return {
+          pk: primaryKey({ columns: [table.id, table.createdAt] }),
+        };
+      }
+    ```
+
+    这意味着：
+
+   1. 复合主键 ：
+      
+      - 使用两个字段作为主键： id 和 createdAt
+      - 这两个字段的组合必须是唯一的
+      - 任何一个字段单独都可能重复，但组合必须唯一
+   2. 用途 ：
+      
+      - 可以存在相同的 id ，只要 createdAt 不同
+      - 可以存在相同的 createdAt ，只要 id 不同
+      - 但不能同时存在相同的 id 和 createdAt
+
+7. 外键
+
+    - 外键是一个表中的字段，它指向另一个表的主键
+    - 用于建立表之间的关联关系
+
+        ```typescript
+        // Suggestion 表中的外键定义
+        documentRef: foreignKey({
+          // Suggestion 表中的字段
+          columns: [table.documentId, table.documentCreatedAt],
+          // 关联到 Document 表的字段
+          foreignColumns: [document.id, document.createdAt],
+        })
+        ```
+    
+        这表示：
+    
+           - 建立 Suggestion 和 Document 表的关联
+           - 使用两个字段组合作为关联条件：
+             - documentId 对应 Document 表的 id
+             - documentCreatedAt 对应 Document 表的 createdAt
+        
+            - Suggestion 表的每条记录必须对应到 Document 表中的一条有效记录
+            - 关联条件是 documentId 和 documentCreatedAt 必须匹配 Document 表中的 id 和 createdAt
+
+    Suggestion 表和 Document 表的关系：
+
+    1. 数据插入顺序 ：
+        - 必须先有 Document 记录，才能创建对应的 Suggestion
+        - 不需要同时插入，但 Document 必须先存在
+        - 这是因为 Suggestion 表通过外键引用了 Document 表
+
+    2. 实际场景举例 ：
+
+        ```typescript
+        // 1. 先创建一个文档
+        const document = await db.insert(Document).values({
+          id: 'doc-123',
+          createdAt: new Date(),
+          title: '示例文档',
+          content: '原始内容',
+          kind: 'text',
+          userId: 'user-123'
+        });
+        
+        // 2. 之后才能创建对应的建议
+        const suggestion = await db.insert(Suggestion).values({
+          id: 'sug-123',
+          documentId: 'doc-123',              // 必须是已存在的文档ID
+          documentCreatedAt: document.createdAt, // 必须匹配文档的创建时间
+          originalText: '原始文本',
+          suggestedText: '建议修改为...',
+          userId: 'user-456',
+          createdAt: new Date()
+        });
+        ```
+
+以上是在项目中 `drizzle-orm` 的一些使用方法，这些都是我不太清楚的，所以做个记录。
