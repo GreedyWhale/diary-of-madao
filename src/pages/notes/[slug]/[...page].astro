@@ -1,14 +1,17 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import type { MarkdownCollectionData, MarkdownInstance } from '~/types/markdown';
+import type { MarkdownInstance, MarkdownFrontmatter } from '~/types/markdown';
 
 import { getCollection } from 'astro:content';
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 
 import Layout from "~/layouts/Layout.astro";
 import { NOTES_TYPE } from '~/utils/constant';
 
-type Notes = Array<{id: string; collection: string;} & MarkdownCollectionData>
+type Notes = Array<{id: string; collection: string;} & MarkdownFrontmatter>
 
+dayjs.extend(utc);
 
 export const getStaticPaths: GetStaticPaths = ({ paginate }) => {
   const allNotes = Object.values(import.meta.glob('~/data/notes/**/*.md', { eager: true })) as Array<MarkdownInstance>;
@@ -26,11 +29,14 @@ export const getStaticPaths: GetStaticPaths = ({ paginate }) => {
 const { slug } = Astro.params;
 
 
-const notes = (await getCollection(slug as typeof NOTES_TYPE[number])).map(note => ({
-  id: note.id,
-  collection: note.collection,
-  ...note.data as MarkdownCollectionData
-})) as unknown as Notes;
+const notes = (await getCollection(slug as typeof NOTES_TYPE[number]))
+  .map(note => ({
+    id: note.id,
+    collection: note.collection,
+    ...note.rendered!.metadata!.frontmatter as unknown as MarkdownFrontmatter
+  }))
+  .sort((a, b) => dayjs(a.birthtime).millisecond() - dayjs(b.birthtime).millisecond()) as unknown as Notes
+;
 ---
 
 <Layout>

@@ -1,5 +1,5 @@
 ---
-import type { MarkdownFrontmatter, MarkdownCollectionData } from '~/types/markdown';
+import type { MarkdownFrontmatter } from '~/types/markdown';
 
 import { getCollection, render } from 'astro:content';
 import MarkdownLayout from '~/layouts/Markdown.astro';
@@ -20,7 +20,7 @@ const { note } = Astro.props;
 const { Content } = await render(note);
 const frontmatter = {
   ...(note.rendered!.metadata!.frontmatter as unknown as MarkdownFrontmatter),
-  cover: (note.data as MarkdownCollectionData).cover,
+  cover: (note.data as MarkdownFrontmatter).cover,
 };
 ---
 

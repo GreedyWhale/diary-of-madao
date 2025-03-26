@@ -30,7 +30,3 @@ export interface MarkdownInstance {
   getHeadings(): Promise<{ depth: number; slug: string; text: string }[]>;
   default: AstroComponentFactory;
 }
-
-
-// birthtime 和 lastModified 使用插件添加，不知道如何同步到 Collection
-export type MarkdownCollectionData = Omit<MarkdownInstance['frontmatter'], 'lastModified' | 'birthtime'>;
