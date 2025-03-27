@@ -8,7 +8,7 @@ cover: '~/assets/images/cover/cover-11.jpg'
 ---
 
 
-这个 hook 是我在看 [ai-chatbot](https://github.com/vercel/ai-chatbot) 项目的源码时看到的，我从来没有用过这个 hook。而且看了下文档还是没看太懂，所以有必要记录一下。
+这个 hook 是我在看 [ai-chatbot](https://github.com/vercel/ai-chatbot) 项目的源码时看到的，我从来没有用过这个 hook。而且看了下文档还是没看太懂，所以记录一下。
 
 首先来看下官网对它的描述：
 
