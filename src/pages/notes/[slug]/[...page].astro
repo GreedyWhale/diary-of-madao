@@ -35,7 +35,7 @@ const notes = (await getCollection(slug as typeof NOTES_TYPE[number]))
     collection: note.collection,
     ...note.rendered!.metadata!.frontmatter as unknown as MarkdownFrontmatter
   }))
-  .sort((a, b) => dayjs(a.birthtime).millisecond() - dayjs(b.birthtime).millisecond()) as unknown as Notes
+  .sort((a, b) => dayjs(b.birthtime).unix() - dayjs(a.birthtime).unix()) as unknown as Notes
 ;
 ---
 
