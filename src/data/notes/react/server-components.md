@@ -6,7 +6,7 @@ tags: ["React"]
 type: 'react'
 cover: {
   image: '~/assets/images/cover/cover-4.jpg',
-  source: 'Tejas Prajapati',
+  source: 'Tejas Prajapati (Pexels.com)',
   sourceUrl: 'https://www.pexels.com/photo/assorted-lighted-string-lights-721247/'
 }
 ---

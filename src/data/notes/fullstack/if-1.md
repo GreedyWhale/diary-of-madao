@@ -6,7 +6,7 @@ tags: ["React Native", "Fullstack"]
 type: 'fullstack'
 cover: {
   image: '~/assets/images/cover/cover-7.webp',
-  source: 'Caner Demiroğlu',
+  source: 'Caner Demiroğlu (Pexels.com)',
   sourceUrl: 'https://www.pexels.com/photo/orange-traffic-cone-on-urban-street-30544238'
 }
 ---

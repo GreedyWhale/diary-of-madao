@@ -6,7 +6,7 @@ tags: ["CSS", "Animation"]
 type: 'css'
 cover: {
   image: '~/assets/images/cover/cover-1.webp',
-  source: 'Lisa from Pexels',
+  source: 'Lisa from Pexels (Pexels.com)',
   sourceUrl: 'https://www.pexels.com/photo/photo-of-rainbow-colored-flower-in-glass-jar-2430934/'
 }
 ---

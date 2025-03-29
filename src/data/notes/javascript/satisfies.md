@@ -6,7 +6,7 @@ tags: ["JavaScript", "prototype"]
 type: 'javascript'
 cover: {
   image: '~/assets/images/cover/cover-9.jpg',
-  source: 'lexi lauwers',
+  source: 'lexi lauwers (Pexels.com)',
   sourceUrl: 'https://www.pexels.com/photo/blue-fluorescent-jelly-fish-floating-in-dark-water-17876381/',
 }
 ---

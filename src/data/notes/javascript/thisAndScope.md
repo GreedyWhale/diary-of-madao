@@ -6,7 +6,7 @@ tags: ["JavaScript", "scope", "this"]
 type: 'javascript'
 cover: {
   image: '~/assets/images/cover/cover-6.jpg',
-  source: 'Furknsaglam',
+  source: 'Furknsaglam (Pexels.com)',
   sourceUrl: 'https://www.pexels.com/photo/city-street-with-cars-and-buildings-at-night-3109671/'
 }
 ---

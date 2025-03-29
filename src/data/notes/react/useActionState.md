@@ -6,7 +6,7 @@ tags: ["React"]
 type: 'react'
 cover: {
   image: '~/assets/images/cover/cover-11.jpg',
-  source: 'Vova Kras',
+  source: 'Vova Kras (Pexels.com)',
   sourceUrl: 'https://www.pexels.com/photo/orange-jellyfish-photo-2698688/'
 }
 ---

@@ -6,7 +6,7 @@ tags: ["Astro", "Fullstack"]
 type: 'fullstack'
 cover: {
   image: '~/assets/images/cover/cover-8.jpg',
-  source: 'João  Jesus',
+  source: 'João  Jesus (Pexels.com)',
   sourceUrl: '~/assets/images/cover/cover-8.jpg'
 }
 ---

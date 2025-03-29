@@ -6,7 +6,7 @@ tags: ["React"]
 type: 'react'
 cover: {
   image: '~/assets/images/cover/cover-3.webp',
-  source: 'Efe Ersoy',
+  source: 'Efe Ersoy (Pexels.com)',
   sourceUrl: 'https://www.pexels.com/photo/vintage-newspaper-stand-in-lisbon-alleyway-30820524/',
 }
 ---

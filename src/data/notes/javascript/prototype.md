@@ -6,7 +6,7 @@ tags: ["JavaScript", "prototype"]
 type: 'javascript'
 cover: {
   image: '~/assets/images/cover/cover-5.webp',
-  source: 'Ivan Bertolazzi',
+  source: 'Ivan Bertolazzi (Pexels.com)',
   sourceUrl: 'https://www.pexels.com/photo/neon-signage-2681319/',
 }
 ---

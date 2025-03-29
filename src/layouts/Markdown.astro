@@ -26,7 +26,7 @@ const noteMetaInfo = [
     <div class="flex flex-col items-stretch mb-8 xl:flex-row">
       <div class="flex flex-col flex-1 justify-between mr-4 mb-16 xl:mb-0">
         <!-- 为了让table的宽度不撑满父元素 -->
-        <div class="inline-block mb-16 xl:mb-0">
+        <div class="inline-block mb-16">
           <table class="rainbow-text">
             <tbody>
               {noteMetaInfo.map(meta => (
@@ -45,7 +45,12 @@ const noteMetaInfo = [
         </div>
       </div>
 
-      <Image src={frontmatter.cover.image} alt="notes cover" class="max-w-[60%] max-h-[85vh] object-cover" />
+      <div class="max-w-[60%]">
+        <Image src={frontmatter.cover.image} alt="notes cover" class="object-cover max-h-[80vh] mb-8 w-full black" />
+        <a href={frontmatter.cover.sourceUrl} class="text-base text-gray-400 underline">
+          <i>Image courtesy of {frontmatter.cover.source}</i>
+        </a>
+      </div>
     </div>
     <article class="p-8 markdown-body">
       <slot />

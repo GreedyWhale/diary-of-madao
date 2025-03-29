@@ -6,7 +6,7 @@ tags: ["React"]
 type: 'react'
 cover: {
   image: '~/assets/images/cover/cover-2.jpg',
-  source: 'Isaque Pereira',
+  source: 'Isaque Pereira (Pexels.com)',
   sourceUrl: 'https://www.pexels.com/photo/gray-feather-on-tree-stem-394376/',
 }
 ---

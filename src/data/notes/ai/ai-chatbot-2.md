@@ -6,7 +6,7 @@ tags: ["AI", "Source Code"]
 type: 'ai'
 cover: {
   image: '~/assets/images/cover/cover-12.jpg',
-  source: 'George Becker',
+  source: 'George Becker (Pexels.com)',
   sourceUrl: 'https://www.pexels.com/photo/silhouette-photo-of-person-holding-door-knob-792032/'
 }
 ---
