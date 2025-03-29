@@ -4,7 +4,11 @@ subtitle: '登录流程的实现'
 author: 'Caisr'
 tags: ["AI", "Source Code"]
 type: 'ai'
-cover: '~/assets/images/cover/cover-10.webp'
+cover: {
+  image: '~/assets/images/cover/webp',
+  source: 'Tara Winstead',
+  sourceUrl: 'https://www.pexels.com/photo/artificial-hand-on-light-8849288/'
+}
 ---
 
 [ai-chatbot](https://github.com/vercel/ai-chatbot) 是一个开源的 AI 聊天机器人网站模板，这个项目有从登录到对话以及 AI SDK 交互的完整流程，非常适合用来学习。

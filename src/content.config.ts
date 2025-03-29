@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2025-01-21 15:39:05
  * @LastEditors: MADAO
- * @LastEditTime: 2025-03-01 16:23:40
+ * @LastEditTime: 2025-03-29 11:14:36
  */
 import type { CollectionConfig } from 'astro:content';
 
@@ -24,7 +24,11 @@ const createNoteCollection = (type?: typeof NOTES_TYPE[number]) => defineCollect
     author: z.string(),
     tags: z.array(z.string()),
     type: z.string(),
-    cover: image(),
+    cover: z.object({
+      image: image(),
+      source: z.string(),
+      sourceUrl: z.string(),
+    }),
   }),
 });
 
@@ -33,9 +37,9 @@ const notes: Partial<Record<typeof NOTES_TYPE[number] | 'all', CollectionConfig<
   all: createNoteCollection()
 };
 
-NOTES_TYPE.forEach(type => {
+for (const type of NOTES_TYPE) {
   notes[type] = createNoteCollection(type);
-});
+};
 
 export const collections = {
   ...notes

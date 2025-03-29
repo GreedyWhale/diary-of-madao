@@ -4,7 +4,11 @@ subtitle: '我在 JavaScript 分类中放一些 TypeScript 的笔记大家没意
 author: 'Caisr'
 tags: ["JavaScript", "prototype"]
 type: 'javascript'
-cover: '~/assets/images/cover/cover-9.jpg'
+cover: {
+  image: '~/assets/images/cover/cover-9.jpg',
+  source: 'lexi lauwers',
+  sourceUrl: 'https://www.pexels.com/photo/blue-fluorescent-jelly-fish-floating-in-dark-water-17876381/',
+}
 ---
 
 使用过 TypeScript 的人一定遇到过以下情况：

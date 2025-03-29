@@ -4,7 +4,11 @@ subtitle: 'JavaScript scope: Where a variable lives. this: Where your sanity die
 author: 'Caisr'
 tags: ["JavaScript", "scope", "this"]
 type: 'javascript'
-cover: '~/assets/images/cover/cover-6.jpg'
+cover: {
+  image: '~/assets/images/cover/cover-6.jpg',
+  source: 'Furknsaglam',
+  sourceUrl: 'https://www.pexels.com/photo/city-street-with-cars-and-buildings-at-night-3109671/'
+}
 ---
 
 ### 一. 作用域

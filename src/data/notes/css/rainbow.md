@@ -4,7 +4,11 @@ subtitle: 'CSS Animation: When you spend hours on keyframes, but end up making a
 author: 'Caisr'
 tags: ["CSS", "Animation"]
 type: 'css'
-cover: '~/assets/images/cover/cover-1.webp'
+cover: {
+  image: '~/assets/images/cover/cover-1.webp',
+  source: 'Lisa from Pexels',
+  sourceUrl: 'https://www.pexels.com/photo/photo-of-rainbow-colored-flower-in-glass-jar-2430934/'
+}
 ---
 
 ### 一. 原来 CSS 变量也可以用于 @keyframes

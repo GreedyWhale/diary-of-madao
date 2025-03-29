@@ -4,7 +4,11 @@ subtitle: '从零开始的博客网站搭建流程，包括部署'
 author: 'Caisr'
 tags: ["Astro", "Fullstack"]
 type: 'fullstack'
-cover: '~/assets/images/cover/cover-8.jpg'
+cover: {
+  image: '~/assets/images/cover/cover-8.jpg',
+  source: 'João  Jesus',
+  sourceUrl: '~/assets/images/cover/cover-8.jpg'
+}
 ---
 
 ### 前言

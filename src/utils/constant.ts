@@ -3,7 +3,7 @@
  * @Author: MADAO
  * @Date: 2025-01-06 11:45:50
  * @LastEditors: MADAO
- * @LastEditTime: 2025-03-19 17:03:46
+ * @LastEditTime: 2025-03-29 11:05:50
  */
 export const TITLE = '牢騷百物語';
 
@@ -12,6 +12,7 @@ export const NOTES_TYPE = [
   'javascript',
   'css',
   'fullstack',
-  'ai'
+  'ai',
+  'tools'
 ] as const;
 

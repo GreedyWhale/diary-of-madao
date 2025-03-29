@@ -4,7 +4,11 @@ subtitle: '搭建 React Native 开发环境'
 author: 'Caisr'
 tags: ["React Native", "Fullstack"]
 type: 'fullstack'
-cover: '~/assets/images/cover/cover-7.webp'
+cover: {
+  image: '~/assets/images/cover/cover-7.webp',
+  source: 'Caner Demiroğlu',
+  sourceUrl: 'https://www.pexels.com/photo/orange-traffic-cone-on-urban-street-30544238'
+}
 ---
 
 ### 前言

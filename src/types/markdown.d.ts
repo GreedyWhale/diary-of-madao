@@ -1,5 +1,5 @@
-import type { AstroComponentFactory } from 'astro/runtime/server/index.d.ts';
 import type { ImageMetadata } from 'astro';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.d.ts';
 
 export interface MarkdownFrontmatter {
   title: string;
@@ -9,7 +9,11 @@ export interface MarkdownFrontmatter {
   author: string;
   tags: string[];
   type: string;
-  cover: ImageMetadata;
+  cover: {
+    image: ImageMetadata;
+    source: string;
+    sourceUrl: string;
+  };
 }
 
 

@@ -4,7 +4,11 @@ subtitle: '一个我从来没有用过的 React Hook'
 author: 'Caisr'
 tags: ["React"]
 type: 'react'
-cover: '~/assets/images/cover/cover-11.jpg'
+cover: {
+  image: '~/assets/images/cover/cover-11.jpg',
+  source: 'Vova Kras',
+  sourceUrl: 'https://www.pexels.com/photo/orange-jellyfish-photo-2698688/'
+}
 ---
 
 

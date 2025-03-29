@@ -4,7 +4,11 @@ subtitle: 'AI SDK'
 author: 'Caisr'
 tags: ["AI", "Source Code"]
 type: 'ai'
-cover: '~/assets/images/cover/cover-12.jpg'
+cover: {
+  image: '~/assets/images/cover/cover-12.jpg',
+  source: 'George Becker',
+  sourceUrl: 'https://www.pexels.com/photo/silhouette-photo-of-person-holding-door-knob-792032/'
+}
 ---
 
 ## 一. AI SDK

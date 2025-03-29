@@ -4,7 +4,11 @@ subtitle: '哦，所以你是说你连最基本的 Hooks 都没搞明白，就�
 author: 'Caisr'
 tags: ["React"]
 type: 'react'
-cover: '~/assets/images/cover/cover-3.webp'
+cover: {
+  image: '~/assets/images/cover/cover-3.webp',
+  source: 'Efe Ersoy',
+  sourceUrl: 'https://www.pexels.com/photo/vintage-newspaper-stand-in-lisbon-alleyway-30820524/',
+}
 ---
 
 ### 1. React Hooks 是什么
