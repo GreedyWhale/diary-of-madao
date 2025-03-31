@@ -22,4 +22,12 @@
       margin-right: 0.5rem;
     }
   }
+
+  blockquote {
+    $color: #57B4BA;
+    background: #202627;
+    color: $color;
+    padding: 1em;
+    border-left: 5px solid $color;
+  }
 }
