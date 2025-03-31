@@ -5,7 +5,7 @@ author: 'Caisr'
 tags: ["AI", "Source Code"]
 type: 'ai'
 cover: {
-  image: '~/assets/images/cover/webp',
+  image: '~/assets/images/cover/cover-10.webp',
   source: 'Tara Winstead (Pexels.com)',
   sourceUrl: 'https://www.pexels.com/photo/artificial-hand-on-light-8849288/'
 }
