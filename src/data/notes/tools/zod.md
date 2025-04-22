@@ -161,7 +161,11 @@ const userSchema = z.object({
 
 ```typescript
 // 每一项都验证失败
-const user = { username: "A", password: "weakpass", email: "notanemail", birthday: "2000-02-30" };
+const user = { username: 123, password: "weakpass", email: "notanemail", birthday: "2000-02-30" };
+
+const result = userSchema.safeParse(user);
+
+console.log(JSON.stringify(result.error?.format()));
 
 // 会得到这样一个对象
 {
